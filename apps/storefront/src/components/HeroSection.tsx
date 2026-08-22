@@ -40,7 +40,7 @@ export const HeroSection: React.FC = () => {
       return (
         <>
           {parts[0]}
-          <span className="font-cloister-black text-slate-950 font-normal tracking-normal inline-block">
+          <span className="font-cloister-black text-slate-950 font-normal tracking-normal inline-block text-[2.6rem] sm:text-6xl lg:text-7xl my-0.5">
             Art Fashion
           </span>
           <br />

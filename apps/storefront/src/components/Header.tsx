@@ -294,7 +294,7 @@ export const Header: React.FC = () => {
 
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative min-h-[44px] px-3.5 py-2 rounded-2xl bg-slate-950 text-white hover:bg-slate-900 transition-all flex items-center gap-2.5 shadow-md cursor-pointer focus:ring-2 focus:ring-slate-900 border border-slate-800"
+              className="hidden sm:flex relative min-h-[44px] px-3.5 py-2 rounded-2xl bg-slate-950 text-white hover:bg-slate-900 transition-all items-center gap-2.5 shadow-md cursor-pointer focus:ring-2 focus:ring-slate-900 border border-slate-800"
               aria-label="Ouvrir le panier"
               id="header-cart-btn"
             >
