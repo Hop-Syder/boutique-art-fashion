@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "pnpm install --no-frozen-lockfile",
-  "buildCommand": "pnpm --filter @ayele/storefront build && cp -r apps/storefront/dist ./dist",
+  "buildCommand": "pnpm build",
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
