@@ -1,7 +1,7 @@
 /**
  * @author @hopsyder
  * @organization Nexus Partners
- * @description MobileBottomNav — Barre de navigation mobile haute couture avec encoche courbée (Curved Notch), panier central grand format en relief et icônes micro-animées 21st UI
+ * @description MobileBottomNav — Barre de navigation mobile haute couture avec encoche courbée (Curved Notch), panier central grand format en relief et accès direct WhatsApp & Maison
  * @created 2026-08-19
  * @updated 2026-08-22
  * 🌐 nexus-partners.xyz
@@ -82,42 +82,6 @@ const IconCatalog = ({ active }: { active: boolean }) => (
   </svg>
 );
 
-const IconTracking = ({ active }: { active: boolean }) => (
-  <svg
-    viewBox="0 0 24 24"
-    className={`w-5 h-5 transition-all duration-300 ${active ? 'scale-110 text-red-500' : 'text-slate-400 group-hover:text-slate-200'}`}
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M16.5 9.4 7.55 4.24M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill={active ? 'currentColor' : 'none'}
-      fillOpacity={active ? '0.15' : '0'}
-    />
-    <polyline
-      points="3.29 7 12 12 20.71 7"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <line
-      x1="12"
-      y1="22"
-      x2="12"
-      y2="12"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
 const IconAbout = ({ active }: { active: boolean }) => (
   <svg
     viewBox="0 0 24 24"
@@ -136,13 +100,28 @@ const IconAbout = ({ active }: { active: boolean }) => (
   </svg>
 );
 
+const IconWhatsApp = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className="w-5 h-5 text-emerald-400 group-hover:scale-110 transition-transform"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z" />
+  </svg>
+);
+
 export const MobileBottomNav: React.FC = () => {
-  const { currentView, setCurrentView, cartItemCount, setIsCartOpen, setIsTrackingOpen, language, t } = useStore();
+  const { currentView, setCurrentView, cartItemCount, setIsCartOpen, settings, language, t } = useStore();
 
   const handleNav = (view: AppView) => {
     setCurrentView(view);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const whatsappUrl = `https://wa.me/${settings.whatsapp_number.replace(/\D/g, '')}?text=${encodeURIComponent(
+    'Bonjour Maison Art Fashion, je souhaite être conseillé pour un article.'
+  )}`;
 
   return (
     <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 pointer-events-none pb-safe">
@@ -157,7 +136,7 @@ export const MobileBottomNav: React.FC = () => {
             preserveAspectRatio="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* Découpe géométrique concave au centre (de x=148 à x=242) */}
+            {/* Découpe géométrique concave au centre (de x=142 à x=248) */}
             <path
               d="M 0,16 
                  L 142,16 
@@ -242,20 +221,9 @@ export const MobileBottomNav: React.FC = () => {
           {/* Espace vide central réservé au panier */}
           <div className="w-[20%]" />
 
-          {/* Côté Droit : Suivi & À Propos */}
+          {/* Côté Droit : À Propos & WhatsApp Direct */}
           <div className="flex items-center justify-around w-[40%]">
             
-            {/* Suivi de Commande */}
-            <button
-              onClick={() => setIsTrackingOpen(true)}
-              className="flex flex-col items-center justify-center gap-0.5 py-1 px-2 text-slate-400 hover:text-slate-200 transition-all duration-200 cursor-pointer rounded-xl group relative"
-              aria-label="Suivre ma commande"
-              id="mobile-nav-tracking"
-            >
-              <IconTracking active={false} />
-              <span className="text-[10px] tracking-tight">{language === 'en' ? 'Track' : 'Suivi'}</span>
-            </button>
-
             {/* À Propos */}
             <button
               onClick={() => handleNav('about')}
@@ -273,6 +241,19 @@ export const MobileBottomNav: React.FC = () => {
                 <span className="w-3 h-0.5 bg-red-500 rounded-full shadow-[0_0_6px_rgba(239,68,68,0.8)] mt-0.5" />
               )}
             </button>
+
+            {/* WhatsApp Direct */}
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex flex-col items-center justify-center gap-0.5 py-1 px-2 text-slate-400 hover:text-emerald-400 transition-all duration-200 cursor-pointer rounded-xl group relative"
+              aria-label="Contacter sur WhatsApp"
+              id="mobile-nav-whatsapp"
+            >
+              <IconWhatsApp />
+              <span className="text-[10px] tracking-tight">WhatsApp</span>
+            </a>
 
           </div>
 

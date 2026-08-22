@@ -87,7 +87,7 @@ export const Header: React.FC = () => {
             </span>
           </div>
 
-          <div className="flex items-center gap-4 text-slate-300">
+          <div className="flex items-center gap-3 text-slate-300">
             <a
               href={`tel:${settings.phone_number}`}
               className="hidden md:flex items-center gap-1.5 hover:text-white transition-colors"
@@ -96,16 +96,6 @@ export const Header: React.FC = () => {
               <Phone className="w-3.5 h-3.5 text-red-500" />
               <span className="font-mono text-[11px] font-bold">{settings.phone_number}</span>
             </a>
-
-            <button
-              onClick={() => setIsTrackingOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-600/20 hover:bg-red-600/30 text-red-300 hover:text-white text-[11px] font-bold border border-red-500/30 transition-all cursor-pointer min-h-[32px]"
-              title="Suivre votre commande"
-              id="header-tracking-btn"
-            >
-              <Package className="w-3.5 h-3.5 text-red-400" />
-              <span>Suivre ma commande</span>
-            </button>
 
             <button
               onClick={toggleLanguage}

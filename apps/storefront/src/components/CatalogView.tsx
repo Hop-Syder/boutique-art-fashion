@@ -223,10 +223,9 @@ export const CatalogView: React.FC = () => {
 
       {/* Main Body */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8">
-        <aside
-          className={`lg:col-span-3 space-y-6 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm h-fit ${mobileFilterOpen ? 'block fixed inset-4 z-50 overflow-y-auto shadow-2xl' : 'hidden lg:block'
-            }`}
-        >
+        
+        {/* ── Desktop Filter Sidebar (Sticky & Scrollable) ── */}
+        <aside className="hidden lg:block lg:col-span-3 space-y-6 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2">
               <Filter className="w-4 h-4 text-red-600" />
@@ -234,14 +233,10 @@ export const CatalogView: React.FC = () => {
                 {language === 'en' ? 'Search Filters' : 'Filtres de recherche'}
               </h3>
             </div>
-            {mobileFilterOpen && (
-              <button
-                onClick={() => setMobileFilterOpen(false)}
-                className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 cursor-pointer"
-                aria-label="Fermer filtres"
-              >
-                <X className="w-5 h-5" />
-              </button>
+            {activeFilterCount > 0 && (
+              <span className="bg-red-50 text-red-600 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-red-200">
+                {activeFilterCount}
+              </span>
             )}
           </div>
 
@@ -320,7 +315,7 @@ export const CatalogView: React.FC = () => {
             </div>
           </div>
 
-          {/* DYNAMIC FILTER GROUPS (Mapped to selected Category) */}
+          {/* DYNAMIC FILTER GROUPS */}
           {visibleFilterGroups.map((fGroup) => {
             if (fGroup.id === 'taille' || fGroup.id === 'pointure') {
               return (
@@ -482,12 +477,9 @@ export const CatalogView: React.FC = () => {
           </div>
 
           {/* Reset Filters */}
-          <div className="pt-4 border-t border-slate-100">
+          <div className="pt-4 border-t border-slate-100 pb-2">
             <button
-              onClick={() => {
-                resetFilters();
-                setMobileFilterOpen(false);
-              }}
+              onClick={() => resetFilters()}
               className="w-full min-h-[44px] py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
             >
               <RotateCcw className="w-4 h-4 text-slate-500" />
@@ -495,6 +487,230 @@ export const CatalogView: React.FC = () => {
             </button>
           </div>
         </aside>
+
+        {/* ── Mobile Filter Modal Drawer (Full Screen, Scrollable & Fixed Controls) ── */}
+        {mobileFilterOpen && (
+          <div className="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex justify-end animate-fadeIn">
+            <div className="w-full max-w-md bg-white h-full flex flex-col shadow-2xl animate-slideInRight">
+              
+              {/* Header Fixe */}
+              <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-white z-10">
+                <div className="flex items-center gap-2">
+                  <SlidersHorizontal className="w-5 h-5 text-red-600" />
+                  <h3 className="font-serif font-bold text-slate-900 text-base">
+                    {language === 'en' ? 'Filters' : 'Filtres de recherche'}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setMobileFilterOpen(false)}
+                  className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 cursor-pointer"
+                  aria-label="Fermer filtres"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Corps Défilant (Scrollable Body avec padding bas pour le confort) */}
+              <div className="flex-1 overflow-y-auto p-5 space-y-6 pb-28">
+                
+                {/* Catégories */}
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
+                    {language === 'en' ? 'Category' : 'Rayons & Catégories'}
+                  </label>
+                  <div className="space-y-1">
+                    <button
+                      onClick={() => setFilters((p) => ({ ...p, category: 'all' }))}
+                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium transition-colors flex items-center justify-between min-h-[42px] cursor-pointer ${
+                        filters.category === 'all'
+                          ? 'bg-slate-900 text-white font-bold'
+                          : 'text-slate-700 bg-slate-50'
+                      }`}
+                    >
+                      <span>{language === 'en' ? 'All Categories' : 'Toutes les pièces'}</span>
+                      {filters.category === 'all' && <Check className="w-4 h-4 text-red-500" />}
+                    </button>
+
+                    {mainCategories.map((cat) => {
+                      const isCatSelected = filters.category === cat.id;
+                      const subs = getSubcategories(cat.id);
+                      return (
+                        <div key={cat.id} className="space-y-1">
+                          <button
+                            onClick={() => setFilters((p) => ({ ...p, category: cat.id }))}
+                            className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium transition-colors flex items-center justify-between min-h-[42px] cursor-pointer ${
+                              isCatSelected ? 'bg-slate-900 text-white font-bold' : 'text-slate-700 bg-slate-50'
+                            }`}
+                          >
+                            <span>{cat.name}</span>
+                            {isCatSelected && <Check className="w-4 h-4 text-red-500" />}
+                          </button>
+                          {subs.length > 0 && (
+                            <div className="ml-3 pl-2 border-l-2 border-slate-200 space-y-1">
+                              {subs.map((sub) => (
+                                <button
+                                  key={sub.id}
+                                  onClick={() => setFilters((p) => ({ ...p, category: sub.id }))}
+                                  className={`w-full text-left px-2.5 py-2 rounded-lg text-xs font-medium flex items-center justify-between cursor-pointer ${
+                                    filters.category === sub.id ? 'bg-red-50 text-red-700 font-bold' : 'text-slate-600 bg-white border border-slate-100'
+                                  }`}
+                                >
+                                  <span>{sub.name}</span>
+                                  {filters.category === sub.id && <Check className="w-3.5 h-3.5 text-red-600" />}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Filtres de tailles */}
+                {visibleFilterGroups
+                  .filter((f) => f.id === 'taille' || f.id === 'pointure')
+                  .map((fGroup) => (
+                    <div key={fGroup.id} className="space-y-2 pt-3 border-t border-slate-100">
+                      <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
+                        {fGroup.name}
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          onClick={() => setFilters((p) => ({ ...p, size: 'all' }))}
+                          className={`min-h-[38px] px-3.5 py-1.5 rounded-xl text-xs font-bold border cursor-pointer ${
+                            filters.size === 'all' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-200 text-slate-700'
+                          }`}
+                        >
+                          Toutes
+                        </button>
+                        {fGroup.options.map((opt) => (
+                          <button
+                            key={opt.id}
+                            onClick={() => setFilters((p) => ({ ...p, size: opt.value }))}
+                            className={`min-h-[38px] px-3.5 py-1.5 rounded-xl text-xs font-bold border cursor-pointer ${
+                              filters.size === opt.value ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-200 text-slate-700'
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+
+                {/* Filtres de couleurs */}
+                {visibleFilterGroups
+                  .filter((f) => f.type === 'color')
+                  .map((fGroup) => (
+                    <div key={fGroup.id} className="space-y-2 pt-3 border-t border-slate-100">
+                      <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
+                        {fGroup.name}
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          onClick={() => setFilters((p) => ({ ...p, color: 'all' }))}
+                          className={`min-h-[38px] px-3 py-1.5 rounded-xl text-xs font-bold border cursor-pointer ${
+                            filters.color === 'all' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-200 text-slate-700'
+                          }`}
+                        >
+                          Toutes
+                        </button>
+                        {fGroup.options.map((opt) => (
+                          <button
+                            key={opt.id}
+                            onClick={() => setFilters((p) => ({ ...p, color: opt.value }))}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer min-h-[38px] ${
+                              filters.color === opt.value ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-200 text-slate-700'
+                            }`}
+                          >
+                            {opt.color_hex && (
+                              <span className="w-3.5 h-3.5 rounded-full border border-slate-300 shrink-0" style={{ backgroundColor: opt.color_hex }} />
+                            )}
+                            <span>{opt.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+
+                {/* Sélections spéciales */}
+                <div className="space-y-2 pt-3 border-t border-slate-100">
+                  <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
+                    {language === 'en' ? 'Special Selection' : 'Sélections Spéciales'}
+                  </label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-3 text-xs text-slate-700 cursor-pointer min-h-[40px] p-2 bg-slate-50 rounded-xl">
+                      <input
+                        type="checkbox"
+                        checked={filters.onlyPromo}
+                        onChange={(e) => setFilters((p) => ({ ...p, onlyPromo: e.target.checked }))}
+                        className="rounded text-red-600 focus:ring-slate-900 w-5 h-5"
+                      />
+                      <span className="flex items-center gap-1.5 font-bold">
+                        <Tag className="w-4 h-4 text-rose-600" />
+                        {language === 'en' ? 'Special Offers' : 'Articles en promotion'}
+                      </span>
+                    </label>
+
+                    <label className="flex items-center gap-3 text-xs text-slate-700 cursor-pointer min-h-[40px] p-2 bg-slate-50 rounded-xl">
+                      <input
+                        type="checkbox"
+                        checked={filters.onlyNew}
+                        onChange={(e) => setFilters((p) => ({ ...p, onlyNew: e.target.checked }))}
+                        className="rounded text-red-600 focus:ring-slate-900 w-5 h-5"
+                      />
+                      <span className="flex items-center gap-1.5 font-bold">
+                        <Sparkles className="w-4 h-4 text-red-600" />
+                        {language === 'en' ? 'New Arrivals' : 'Nouveautés 2026'}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Prix Max */}
+                <div className="space-y-2 pt-3 border-t border-slate-100">
+                  <div className="flex items-center justify-between text-xs">
+                    <label className="font-bold text-slate-800 uppercase tracking-wider">
+                      {language === 'en' ? 'Max Price' : 'Prix Maximum'}
+                    </label>
+                    <span className="font-bold text-red-600">
+                      {new Intl.NumberFormat('fr-FR').format(filters.maxPrice)} FCFA
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min={20000}
+                    max={300000}
+                    step={5000}
+                    value={filters.maxPrice}
+                    onChange={(e) => setFilters((p) => ({ ...p, maxPrice: Number(e.target.value) }))}
+                    className="w-full accent-slate-900 cursor-pointer h-2"
+                  />
+                </div>
+
+              </div>
+
+              {/* Footer Fixe avec bouton d'action */}
+              <div className="p-4 bg-white/95 backdrop-blur-md border-t border-slate-100 flex gap-3 shadow-lg">
+                <button
+                  onClick={() => resetFilters()}
+                  className="px-4 py-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <RotateCcw className="w-4 h-4 text-slate-500" />
+                  <span>Réinitialiser</span>
+                </button>
+                <button
+                  onClick={() => setMobileFilterOpen(false)}
+                  className="flex-1 py-3 px-4 bg-slate-950 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-md text-center"
+                >
+                  Voir les articles ({filteredProducts.length})
+                </button>
+              </div>
+
+            </div>
+          </div>
+        )}
 
         {/* Product Cards Grid */}
         <main className="lg:col-span-9">

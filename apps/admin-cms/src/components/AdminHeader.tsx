@@ -48,10 +48,6 @@ export const AdminHeader: React.FC = () => {
           {/* Quick Metrics */}
           <div className="flex items-center gap-3 text-xs">
             <div className="bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700">
-              <span className="text-slate-400 block text-[10px]">Commandes en cours</span>
-              <span className="font-bold text-amber-400">{pendingOrdersCount} à traiter</span>
-            </div>
-            <div className="bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700">
               <span className="text-slate-400 block text-[10px]">Alertes Stock</span>
               <span className="font-bold text-rose-400">{lowStockCount} produits bas</span>
             </div>
@@ -104,18 +100,6 @@ export const AdminHeader: React.FC = () => {
           >
             <ImageIcon className="w-4 h-4 text-red-300" />
             <span>Éditeur de Sections (CMS)</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('orders')}
-            className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'orders'
-                ? 'bg-red-700 text-white shadow-md'
-                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-            }`}
-          >
-            <ShoppingBag className="w-4 h-4" />
-            <span>Commandes ({orders.length})</span>
           </button>
 
           <button
