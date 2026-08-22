@@ -8,7 +8,6 @@ import { ProductDetailModal } from './components/ProductDetailModal';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { OrderTrackingModal } from './components/OrderTrackingModal';
-import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { Footer } from './components/Footer';
 
@@ -140,8 +139,7 @@ const AppContent: React.FC = () => {
       <CheckoutModal />
       <OrderTrackingModal isOpen={isTrackingOpen} onClose={() => setIsTrackingOpen(false)} />
 
-      {/* Global Quick Action Floating Buttons */}
-      <WhatsAppFloatingButton />
+      {/* Global Bottom Navigation */}
       <MobileBottomNav />
 
       {/* Footer */}

@@ -72,22 +72,51 @@ export const Header: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-200/90 shadow-md transition-all">
-      {/* Top Announcement Bar */}
-      <div className="bg-slate-950 text-slate-300 py-2 px-4 text-xs border-b border-slate-800">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="hidden sm:flex items-center gap-2.5 font-medium tracking-wide">
+      {/* Top Announcement Bar avec Ticker Défilant Infini & Sélecteur de Langue */}
+      <div className="bg-slate-950 text-slate-300 py-1.5 px-3 sm:px-4 text-xs border-b border-slate-800/90 overflow-hidden select-none">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2.5 sm:gap-4">
+          
+          {/* Desktop Left Branding Badge */}
+          <div className="hidden lg:flex items-center gap-2 shrink-0 font-medium tracking-wide">
             <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-            <span className="font-bold text-red-500">
-              Art Fashion :
-            </span>
-            <span className="text-slate-200 font-semibold">
-              {language === 'en'
-                ? 'Prêt-à-Porter de Luxe • Cotonou'
-                : 'Prêt-à-Porter de Luxe • Cotonou'}
+            <span className="font-bold text-red-500">Art Fashion :</span>
+            <span className="text-slate-200 font-semibold text-[11px]">
+              {language === 'en' ? 'Luxury Ready-to-Wear • Cotonou' : 'Prêt-à-Porter de Luxe • Cotonou'}
             </span>
           </div>
 
-          <div className="flex items-center gap-3 text-slate-300">
+          {/* Marquee Ticker Défilant Infini (3/4 sur mobile, centre spacieux sur desktop) */}
+          <div className="flex-1 min-w-0 overflow-hidden relative [mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)]">
+            <div className="animate-ticker flex items-center gap-8 py-0.5 whitespace-nowrap text-[10px] sm:text-xs">
+              {[1, 2].map((loopIdx) => (
+                <div key={loopIdx} className="flex items-center gap-6 sm:gap-8 shrink-0">
+                  <span className="flex items-center gap-1.5 text-amber-300 font-bold">
+                    <span>🔥</span>
+                    <span>{language === 'en' ? 'Special Promo: Up to -30% on Luxury Suits & Blazers' : 'Vente Privée : Jusqu’à -30% sur les Costumes & Blazers'}</span>
+                  </span>
+                  <span className="text-slate-600 font-bold">•</span>
+                  <span className="flex items-center gap-1.5 text-slate-200 font-medium">
+                    <span>🚚</span>
+                    <span>{language === 'en' ? 'Express Home Delivery in Cotonou & Calavi (2h-4h)' : 'Livraison Express à Domicile Cotonou & Calavi (2h à 4h)'}</span>
+                  </span>
+                  <span className="text-slate-600 font-bold">•</span>
+                  <span className="flex items-center gap-1.5 text-red-400 font-semibold">
+                    <span>✨</span>
+                    <span>{language === 'en' ? 'New 2026 Collection Now in Store' : 'Nouvelle Collection Cérémonie & Soirée 2026'}</span>
+                  </span>
+                  <span className="text-slate-600 font-bold">•</span>
+                  <span className="flex items-center gap-1.5 text-slate-200 font-medium">
+                    <span>👑</span>
+                    <span>{language === 'en' ? 'Boubous Bazin Riche & Custom Tailoring' : 'Boubous Bazin Riche & Retouches Sur-Mesure'}</span>
+                  </span>
+                  <span className="text-slate-600 font-bold">•</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Controls: Phone (Desktop) + Language Selector (1/4 mobile, droit) */}
+          <div className="shrink-0 flex items-center gap-2 sm:gap-3 text-slate-300">
             <a
               href={`tel:${settings.phone_number}`}
               className="hidden md:flex items-center gap-1.5 hover:text-white transition-colors"
@@ -99,15 +128,16 @@ export const Header: React.FC = () => {
 
             <button
               onClick={toggleLanguage}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-100 text-[11px] font-bold border border-slate-700 transition-all cursor-pointer min-h-[32px]"
+              className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-100 text-[10px] sm:text-[11px] font-bold border border-slate-700/80 transition-all cursor-pointer min-h-[28px] shrink-0"
               title="Changer de langue / Switch Language"
               aria-label="Changer de langue"
               id="header-lang-toggle"
             >
-              <Globe className="w-3.5 h-3.5 text-red-500" />
+              <Globe className="w-3 h-3 text-red-500" />
               <span>{language === 'fr' ? 'FR 🇫🇷' : 'EN 🇬🇧'}</span>
             </button>
           </div>
+
         </div>
       </div>
 

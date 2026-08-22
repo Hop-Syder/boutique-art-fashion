@@ -59,3 +59,19 @@
 .animate-marquee-right:hover {
   animation-play-state: paused;
 }
+
+/* Ticker Top Announcement Bar */
+@keyframes ticker-slide {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-ticker {
+  display: flex;
+  width: max-content;
+  animation: ticker-slide 26s linear infinite;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
+}

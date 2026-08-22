@@ -1,7 +1,7 @@
 /**
  * @author @hopsyder
  * @organization Nexus Partners
- * @description MobileBottomNav — Barre de navigation mobile haute couture avec encoche courbée (Curved Notch), panier central grand format en relief et accès direct WhatsApp & Maison
+ * @description MobileBottomNav — Barre de navigation mobile haute couture avec encoche courbée (Curved Notch), bouton FAB panier surélevé ajusté, icône officielle WhatsApp et finitions UI/UX Pro Max
  * @created 2026-08-19
  * @updated 2026-08-22
  * 🌐 nexus-partners.xyz
@@ -11,6 +11,7 @@
 import React from 'react';
 import { useStore, AppView } from '../context/StoreContext';
 import { CartIcon } from './CartIcon';
+import { WhatsAppIcon } from './WhatsAppIcon';
 
 // ─── ICÔNES VECTORIELLES MODERNES STYLE 21ST DEV UI ─────────────────
 
@@ -100,17 +101,6 @@ const IconAbout = ({ active }: { active: boolean }) => (
   </svg>
 );
 
-const IconWhatsApp = () => (
-  <svg
-    viewBox="0 0 24 24"
-    className="w-5 h-5 text-emerald-400 group-hover:scale-110 transition-transform"
-    fill="currentColor"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z" />
-  </svg>
-);
-
 export const MobileBottomNav: React.FC = () => {
   const { currentView, setCurrentView, cartItemCount, setIsCartOpen, settings, language, t } = useStore();
 
@@ -127,24 +117,24 @@ export const MobileBottomNav: React.FC = () => {
     <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 pointer-events-none pb-safe">
       <div className="relative max-w-lg mx-auto w-full pointer-events-auto">
         
-        {/* ── 1. FOND AVEC ENCOCHE COURBÉE (Curved Notch SVG Background) ── */}
-        <div className="relative w-full h-[72px] filter drop-shadow-[0_-8px_20px_rgba(0,0,0,0.45)]">
+        {/* ── 1. FOND AVEC ENCOCHE COURBÉE PLUS HAUTE & RAFFINÉE (Curved Notch SVG Background) ── */}
+        <div className="relative w-full h-[80px] filter drop-shadow-[0_-8px_24px_rgba(0,0,0,0.5)]">
           <svg
             className="w-full h-full"
-            viewBox="0 0 390 72"
+            viewBox="0 0 390 80"
             fill="none"
             preserveAspectRatio="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* Découpe géométrique concave au centre (de x=142 à x=248) */}
+            {/* Découpe concave resserrée (distance réduite de moitié entre l'encoche et le bouton) */}
             <path
               d="M 0,16 
-                 L 142,16 
-                 C 156,16 160,54 195,54 
-                 C 230,54 234,16 248,16 
+                 L 146,16 
+                 C 158,16 163,44 195,44 
+                 C 227,44 232,16 244,16 
                  L 390,16 
-                 L 390,72 
-                 L 0,72 
+                 L 390,80 
+                 L 0,80 
                  Z"
               fill="#090d16"
               stroke="rgba(255, 255, 255, 0.12)"
@@ -153,8 +143,8 @@ export const MobileBottomNav: React.FC = () => {
           </svg>
         </div>
 
-        {/* ── 2. GROS BOUTON PANIER CENTRAL SURÉLEVÉ (Flottant dans l'encoche) ── */}
-        <div className="absolute left-1/2 -translate-x-1/2 -top-5 z-50 flex flex-col items-center">
+        {/* ── 2. GROS BOUTON PANIER CENTRAL SURÉLEVÉ (Flottant dans l'encoche, sans texte) ── */}
+        <div className="absolute left-1/2 -translate-x-1/2 -top-4.5 z-50 flex items-center justify-center">
           <button
             onClick={() => setIsCartOpen(true)}
             className="relative flex items-center justify-center w-15 h-15 rounded-full bg-gradient-to-tr from-red-700 via-red-600 to-red-500 text-white shadow-[0_10px_25px_rgba(220,38,38,0.55)] border-[3.5px] border-[#090d16] active:scale-95 transition-all duration-200 cursor-pointer group hover:shadow-[0_12px_30px_rgba(239,68,68,0.7)]"
@@ -169,13 +159,10 @@ export const MobileBottomNav: React.FC = () => {
               </span>
             )}
           </button>
-          <span className="text-[9px] font-extrabold uppercase tracking-wider text-red-400 mt-1 font-mono">
-            {language === 'en' ? 'Cart' : 'Panier'}
-          </span>
         </div>
 
         {/* ── 3. ONGLETS DE NAVIGATION LATÉRAUX ── */}
-        <div className="absolute inset-0 pt-3 px-3 flex items-center justify-between text-white">
+        <div className="absolute inset-0 pt-4 px-3 flex items-center justify-between text-white">
           
           {/* Côté Gauche : Accueil & Catalogue */}
           <div className="flex items-center justify-around w-[40%]">
@@ -183,7 +170,7 @@ export const MobileBottomNav: React.FC = () => {
             {/* Accueil */}
             <button
               onClick={() => handleNav('home')}
-              className={`flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-xl transition-all duration-200 cursor-pointer group relative ${
+              className={`flex flex-col items-center justify-center gap-1 py-1.5 px-2 rounded-xl transition-all duration-200 cursor-pointer group relative min-h-[44px] ${
                 currentView === 'home'
                   ? 'text-red-400 font-extrabold'
                   : 'text-slate-400 hover:text-slate-200'
@@ -194,14 +181,14 @@ export const MobileBottomNav: React.FC = () => {
               <IconHome active={currentView === 'home'} />
               <span className="text-[10px] tracking-tight">{t('nav.home')}</span>
               {currentView === 'home' && (
-                <span className="w-3 h-0.5 bg-red-500 rounded-full shadow-[0_0_6px_rgba(239,68,68,0.8)] mt-0.5" />
+                <span className="w-3.5 h-0.5 bg-red-500 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.8)] mt-0.5" />
               )}
             </button>
 
             {/* Catalogue */}
             <button
               onClick={() => handleNav('catalog')}
-              className={`flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-xl transition-all duration-200 cursor-pointer group relative ${
+              className={`flex flex-col items-center justify-center gap-1 py-1.5 px-2 rounded-xl transition-all duration-200 cursor-pointer group relative min-h-[44px] ${
                 currentView === 'catalog'
                   ? 'text-red-400 font-extrabold'
                   : 'text-slate-400 hover:text-slate-200'
@@ -212,7 +199,7 @@ export const MobileBottomNav: React.FC = () => {
               <IconCatalog active={currentView === 'catalog'} />
               <span className="text-[10px] tracking-tight">{t('nav.catalog')}</span>
               {currentView === 'catalog' && (
-                <span className="w-3 h-0.5 bg-red-500 rounded-full shadow-[0_0_6px_rgba(239,68,68,0.8)] mt-0.5" />
+                <span className="w-3.5 h-0.5 bg-red-500 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.8)] mt-0.5" />
               )}
             </button>
 
@@ -227,7 +214,7 @@ export const MobileBottomNav: React.FC = () => {
             {/* À Propos */}
             <button
               onClick={() => handleNav('about')}
-              className={`flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-xl transition-all duration-200 cursor-pointer group relative ${
+              className={`flex flex-col items-center justify-center gap-1 py-1.5 px-2 rounded-xl transition-all duration-200 cursor-pointer group relative min-h-[44px] ${
                 currentView === 'about'
                   ? 'text-red-400 font-extrabold'
                   : 'text-slate-400 hover:text-slate-200'
@@ -238,21 +225,21 @@ export const MobileBottomNav: React.FC = () => {
               <IconAbout active={currentView === 'about'} />
               <span className="text-[10px] tracking-tight">{t('nav.about')}</span>
               {currentView === 'about' && (
-                <span className="w-3 h-0.5 bg-red-500 rounded-full shadow-[0_0_6px_rgba(239,68,68,0.8)] mt-0.5" />
+                <span className="w-3.5 h-0.5 bg-red-500 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.8)] mt-0.5" />
               )}
             </button>
 
-            {/* WhatsApp Direct */}
+            {/* WhatsApp Direct avec Logo Officiel */}
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noreferrer"
-              className="flex flex-col items-center justify-center gap-0.5 py-1 px-2 text-slate-400 hover:text-emerald-400 transition-all duration-200 cursor-pointer rounded-xl group relative"
+              className="flex flex-col items-center justify-center gap-1 py-1.5 px-2 text-slate-400 hover:text-emerald-400 transition-all duration-200 cursor-pointer rounded-xl group relative min-h-[44px]"
               aria-label="Contacter sur WhatsApp"
               id="mobile-nav-whatsapp"
             >
-              <IconWhatsApp />
-              <span className="text-[10px] tracking-tight">WhatsApp</span>
+              <WhatsAppIcon className="w-5 h-5 text-[#25D366] group-hover:scale-110 transition-transform" />
+              <span className="text-[10px] tracking-tight text-slate-300 group-hover:text-emerald-400 font-medium">WhatsApp</span>
             </a>
 
           </div>
