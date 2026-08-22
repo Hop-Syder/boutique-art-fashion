@@ -1,3 +1,13 @@
+/**
+ * @author @hopsyder
+ * @organization Nexus Partners
+ * @description helpers — Fonctions utilitaires : formatage monétaire FCFA, génération N° commande AF, message WhatsApp enrichi avec Lieu de Livraison explicite, persistance LocalStorage
+ * @created 2026-08-19
+ * @updated 2026-08-22
+ * 🌐 nexus-partners.xyz
+ * 📧 daoudaabassichristian@gmail.com
+ */
+// ──────────────────────────────────
 import { CartItem, Order, Product, ProductVariant, SectionsConfig, StoreSettings } from '../types';
 
 export const formatFCFA = (amount: number): string => {
@@ -12,7 +22,7 @@ export const formatFCFA = (amount: number): string => {
 
 export const generateOrderNumber = (): string => {
   const randomNum = Math.floor(10000 + Math.random() * 90000);
-  return `AY-${randomNum}`;
+  return `AF-${randomNum}`;
 };
 
 export const calculateCartSubtotal = (cart: CartItem[]): number => {
@@ -33,29 +43,30 @@ export const generateWhatsAppMessage = (
     )
     .join('\n\n');
 
-  const rawMessage = `✨ *NOUVELLE COMMANDE AYÉLÉ MAISON DE MODE* ✨
+  const rawMessage = `👑 *NOUVELLE COMMANDE ART FASHION COTONOU* 👑
 -----------------------------------------
 🔖 *N° de Commande :* \`${order.order_number}\`
 📅 *Date :* ${new Date(order.created_at).toLocaleDateString('fr-FR')}
 
-👤 *INFORMATIONS CLIENT :*
-• Nom : *${order.customer_name}*
-• Téléphone : ${order.customer_phone}
-• Ville : *${order.delivery_city}*
-• Quartier / Adresse : ${order.delivery_address}
-${order.delivery_landmark ? `• Repère : ${order.delivery_landmark}\n` : ''}${order.delivery_notes ? `• Note : ${order.delivery_notes}\n` : ''}
-🚚 *ZONES DE LIVRAISON :*
-• ${order.delivery_zone} (${formatFCFA(order.delivery_fee)})
+👤 *INFORMATIONS DU CLIENT :*
+• Nom & Prénom : *${order.customer_name}*
+• Téléphone Appel / WhatsApp : *${order.customer_phone}*
 
-🛍️ *DÉTAIL DE LA COMMANDE :*
+📍 *LIEU & ADRESSE DE LIVRAISON :*
+• Ville : *${order.delivery_city}*
+• Quartier / Rue / Domicile : *${order.delivery_address}*
+• Repère / Indication : *${order.delivery_landmark || 'Près de chez le client'}*
+• Zone tarifaire : ${order.delivery_zone} (${formatFCFA(order.delivery_fee)})
+${order.delivery_notes ? `• Note spéciale pour la livraison : ${order.delivery_notes}\n` : ''}
+🛍️ *DÉTAIL DES ARTICLES COMMANDÉS :*
 ${itemsText}
 
 -----------------------------------------
-💰 *Sous-Total :* ${formatFCFA(order.subtotal)}
+💰 *Sous-Total Articles :* ${formatFCFA(order.subtotal)}
 🚚 *Frais de Livraison :* ${formatFCFA(order.delivery_fee)}
-🔥 *TOTAL À PAYER :* *${formatFCFA(order.total)}*
+🔥 *TOTAL À PAYER À LA LIVRAISON :* *${formatFCFA(order.total)}*
 
-Merci de me confirmer la disponibilité et les modalités de livraison !`;
+Merci de me confirmer la disponibilité des articles et le créneau de livraison !`;
 
   const cleanPhone = settings.whatsapp_number.replace(/[^0-9]/g, '');
   const encodedText = encodeURIComponent(rawMessage);
