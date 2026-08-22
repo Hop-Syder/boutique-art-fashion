@@ -4,7 +4,7 @@
  * @description HeroSection — Section héro principale du storefront Art Fashion : titre, description, CTAs WhatsApp/Maps/Collection, badges de garanties
  * @created 2026-08-19
  * @updated 2026-08-22
- * 🌐 nexuspartners.xyz
+ * 🌐 nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
 // ──────────────────────────────────

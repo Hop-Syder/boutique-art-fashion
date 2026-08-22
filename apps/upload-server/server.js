@@ -9,7 +9,7 @@
  *   GET  /api/health      → healthcheck
  * @created 2026-08-21
  * @updated 2026-08-21
- * 🌐 ceo.nexuspartners.xyz
+ * 🌐 ceo.nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
 

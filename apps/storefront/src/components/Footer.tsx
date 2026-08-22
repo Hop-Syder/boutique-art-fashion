@@ -4,7 +4,7 @@
  * @description Footer — Pied de page du storefront Art Fashion : réseaux sociaux, liens rapides, SEO local Cotonou, crédits Nexus Partners
  * @created 2026-08-19
  * @updated 2026-08-22
- * 🌐 nexuspartners.xyz
+ * 🌐 nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
 // ──────────────────────────────────
@@ -215,9 +215,14 @@ export const Footer: React.FC = () => {
           <div className="flex flex-col md:flex-row items-center justify-start gap-3 text-[10px] text-slate-600">
             <p>© 2026 ART FASHION Cotonou — Maison de Prêt-à-Porter Masculin.</p>
             <p className="flex items-center gap-1">
-              Conçu avec <Heart className="w-3 h-3 text-rose-500 fill-rose-500" /> par{' '}
-              <a href="https://nexuspartners.xyz/" target="_blank" rel="noreferrer" className="text-slate-400 font-bold hover:underline">
-                Nexus Partners
+              Développé par{' '}
+              <a
+                href="https://nexus-partners.xyz/"
+                target="_blank"
+                rel="noreferrer"
+                className="text-slate-400 font-bold hover:underline"
+              >
+                Nexus Partners | @HOP-SYDER
               </a>
             </p>
           </div>

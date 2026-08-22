@@ -4,7 +4,7 @@
  * @description CategoryPills — Carousel 3D Coverflow des univers de catégories du storefront Art Fashion
  * @created 2026-08-19
  * @updated 2026-08-22
- * 🌐 nexuspartners.xyz
+ * 🌐 nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
 // ──────────────────────────────────

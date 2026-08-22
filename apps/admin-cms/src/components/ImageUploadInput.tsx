@@ -5,7 +5,7 @@
  *              fallback base64 si le serveur est indisponible (dev local).
  * @created 2026-08-19
  * @updated 2026-08-21
- * 🌐 ceo.nexuspartners.xyz
+ * 🌐 ceo.nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
 

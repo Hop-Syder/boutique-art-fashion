@@ -4,7 +4,7 @@
  * @description Universal Persistent Local Storage Engine with Real-Time BroadcastChannel for ART FASHION Cotonou
  * @created 2026-08-19
  * @updated 2026-08-19
- * 🌐 ceo.nexuspartners.xyz
+ * 🌐 ceo.nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
 

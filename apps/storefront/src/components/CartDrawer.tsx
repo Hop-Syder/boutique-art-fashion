@@ -4,7 +4,7 @@
  * @description CartDrawer — Tiroir panier latéral : liste articles, quantités, total, commande WhatsApp
  * @created 2026-08-19
  * @updated 2026-08-22
- * 🌐 nexuspartners.xyz
+ * 🌐 nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
 // ──────────────────────────────────

@@ -4,7 +4,7 @@
  * @description CoverflowCarousel — Composant carousel 3D avec effet coverflow, drag/touch, pagination et captions overlay sur image
  * @created 2026-08-19
  * @updated 2026-08-22
- * 🌐 nexuspartners.xyz
+ * 🌐 nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
 // ──────────────────────────────────

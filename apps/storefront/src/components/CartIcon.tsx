@@ -4,7 +4,7 @@
  * @description CartIcon — Icône panier personnalisée SVG (fidèle au design fourni par le client)
  * @created 2026-08-22
  * @updated 2026-08-22
- * 🌐 ceo.nexuspartners.xyz
+ * 🌐 ceo.nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
 

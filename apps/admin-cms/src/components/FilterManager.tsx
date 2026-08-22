@@ -4,7 +4,7 @@
  * @description Dynamic Filter & Attribute Manager Component for ART FASHION Admin CMS
  * @created 2026-08-19
  * @updated 2026-08-19
- * 🌐 ceo.nexuspartners.xyz
+ * 🌐 ceo.nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
 

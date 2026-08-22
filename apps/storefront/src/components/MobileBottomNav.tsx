@@ -4,7 +4,7 @@
  * @description MobileBottomNav — Barre de navigation mobile flottante haute couture : icônes modernes 21st UI, capsule glassmorphism, micro-interactions et badge panier dynamique
  * @created 2026-08-19
  * @updated 2026-08-22
- * 🌐 nexuspartners.xyz
+ * 🌐 nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
 // ──────────────────────────────────

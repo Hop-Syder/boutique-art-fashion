@@ -4,7 +4,7 @@
  * @description AboutView — Page À Propos ART FASHION Cotonou : Notre Maison, Vision, Engagements, Savoir-Faire, Carte & Carrousel Infini Preuves de Livraisons
  * @created 2026-08-19
  * @updated 2026-08-22
- * 🌐 nexuspartners.xyz
+ * 🌐 nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
 // ──────────────────────────────────────────────────────────────────────
