@@ -1,7 +1,7 @@
 /**
  * @author @hopsyder
  * @organization Nexus Partners
- * @description MobileBottomNav — Barre de navigation mobile flottante haute couture : icônes modernes 21st UI, capsule glassmorphism, micro-interactions et badge panier dynamique
+ * @description MobileBottomNav — Barre de navigation mobile haute couture avec encoche courbée (Curved Notch), panier central grand format en relief et icônes micro-animées 21st UI
  * @created 2026-08-19
  * @updated 2026-08-22
  * 🌐 nexus-partners.xyz
@@ -12,12 +12,12 @@ import React from 'react';
 import { useStore, AppView } from '../context/StoreContext';
 import { CartIcon } from './CartIcon';
 
-// ─── ICÔNES MODERNES 21ST DEV UI STYLE ───────────────────────────────
+// ─── ICÔNES VECTORIELLES MODERNES STYLE 21ST DEV UI ─────────────────
 
 const IconHome = ({ active }: { active: boolean }) => (
   <svg
     viewBox="0 0 24 24"
-    className={`w-5 h-5 transition-transform duration-300 ${active ? 'scale-110' : 'group-hover:scale-105'}`}
+    className={`w-5 h-5 transition-all duration-300 ${active ? 'scale-110 text-red-500' : 'text-slate-400 group-hover:text-slate-200'}`}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -35,7 +35,7 @@ const IconHome = ({ active }: { active: boolean }) => (
 const IconCatalog = ({ active }: { active: boolean }) => (
   <svg
     viewBox="0 0 24 24"
-    className={`w-5 h-5 transition-transform duration-300 ${active ? 'scale-110' : 'group-hover:scale-105'}`}
+    className={`w-5 h-5 transition-all duration-300 ${active ? 'scale-110 text-red-500' : 'text-slate-400 group-hover:text-slate-200'}`}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -85,7 +85,7 @@ const IconCatalog = ({ active }: { active: boolean }) => (
 const IconTracking = ({ active }: { active: boolean }) => (
   <svg
     viewBox="0 0 24 24"
-    className={`w-5 h-5 transition-transform duration-300 ${active ? 'scale-110' : 'group-hover:scale-105'}`}
+    className={`w-5 h-5 transition-all duration-300 ${active ? 'scale-110 text-red-500' : 'text-slate-400 group-hover:text-slate-200'}`}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -121,7 +121,7 @@ const IconTracking = ({ active }: { active: boolean }) => (
 const IconAbout = ({ active }: { active: boolean }) => (
   <svg
     viewBox="0 0 24 24"
-    className={`w-5 h-5 transition-transform duration-300 ${active ? 'scale-110' : 'group-hover:scale-105'}`}
+    className={`w-5 h-5 transition-all duration-300 ${active ? 'scale-110 text-red-500' : 'text-slate-400 group-hover:text-slate-200'}`}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -145,95 +145,139 @@ export const MobileBottomNav: React.FC = () => {
   };
 
   return (
-    <nav
-      className="lg:hidden fixed bottom-3 left-3 right-3 z-40 bg-slate-950/95 text-slate-300 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl px-2 py-1.5 transition-all duration-300"
-      aria-label="Navigation mobile"
-    >
-      <div className="flex items-center justify-around relative">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 pointer-events-none pb-safe">
+      <div className="relative max-w-lg mx-auto w-full pointer-events-auto">
         
-        {/* 1. Accueil */}
-        <button
-          onClick={() => handleNav('home')}
-          className={`min-w-[48px] min-h-[46px] flex flex-col items-center justify-center gap-1 text-[10px] font-bold transition-all duration-200 cursor-pointer rounded-xl group relative ${
-            currentView === 'home'
-              ? 'text-red-400 font-extrabold'
-              : 'text-slate-400 hover:text-slate-200'
-          }`}
-          aria-label={language === 'en' ? 'Home' : 'Accueil'}
-          id="mobile-nav-home"
-        >
-          <IconHome active={currentView === 'home'} />
-          <span className="tracking-tight">{t('nav.home')}</span>
-          {currentView === 'home' && (
-            <span className="absolute -bottom-1 w-4 h-0.5 bg-red-500 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
-          )}
-        </button>
+        {/* ── 1. FOND AVEC ENCOCHE COURBÉE (Curved Notch SVG Background) ── */}
+        <div className="relative w-full h-[72px] filter drop-shadow-[0_-8px_20px_rgba(0,0,0,0.45)]">
+          <svg
+            className="w-full h-full"
+            viewBox="0 0 390 72"
+            fill="none"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* Découpe géométrique concave au centre (de x=148 à x=242) */}
+            <path
+              d="M 0,16 
+                 L 142,16 
+                 C 156,16 160,54 195,54 
+                 C 230,54 234,16 248,16 
+                 L 390,16 
+                 L 390,72 
+                 L 0,72 
+                 Z"
+              fill="#090d16"
+              stroke="rgba(255, 255, 255, 0.12)"
+              strokeWidth="1.2"
+            />
+          </svg>
+        </div>
 
-        {/* 2. Rayons / Catalogue */}
-        <button
-          onClick={() => handleNav('catalog')}
-          className={`min-w-[48px] min-h-[46px] flex flex-col items-center justify-center gap-1 text-[10px] font-bold transition-all duration-200 cursor-pointer rounded-xl group relative ${
-            currentView === 'catalog'
-              ? 'text-red-400 font-extrabold'
-              : 'text-slate-400 hover:text-slate-200'
-          }`}
-          aria-label={language === 'en' ? 'Catalog' : 'Catalogue'}
-          id="mobile-nav-catalog"
-        >
-          <IconCatalog active={currentView === 'catalog'} />
-          <span className="tracking-tight">{t('nav.catalog')}</span>
-          {currentView === 'catalog' && (
-            <span className="absolute -bottom-1 w-4 h-0.5 bg-red-500 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
-          )}
-        </button>
-
-        {/* 3. Center Cart Trigger (Capsule Flottante Carmin) */}
-        <div className="relative -mt-6">
+        {/* ── 2. GROS BOUTON PANIER CENTRAL SURÉLEVÉ (Flottant dans l'encoche) ── */}
+        <div className="absolute left-1/2 -translate-x-1/2 -top-5 z-50 flex flex-col items-center">
           <button
             onClick={() => setIsCartOpen(true)}
-            className="relative flex items-center justify-center w-13 h-13 rounded-full bg-gradient-to-tr from-red-700 via-red-600 to-red-500 text-white shadow-[0_8px_20px_rgba(220,38,38,0.45)] border-2 border-slate-950 active:scale-95 transition-transform duration-200 cursor-pointer group"
+            className="relative flex items-center justify-center w-15 h-15 rounded-full bg-gradient-to-tr from-red-700 via-red-600 to-red-500 text-white shadow-[0_10px_25px_rgba(220,38,38,0.55)] border-[3.5px] border-[#090d16] active:scale-95 transition-all duration-200 cursor-pointer group hover:shadow-[0_12px_30px_rgba(239,68,68,0.7)]"
             aria-label={language === 'en' ? 'Cart' : 'Panier'}
             id="mobile-nav-cart"
           >
-            <CartIcon className="w-5 h-5 text-white drop-shadow-sm group-hover:scale-110 transition-transform" />
+            <CartIcon className="w-6 h-6 text-white drop-shadow-md group-hover:scale-110 transition-transform" />
+            
             {cartItemCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-white text-red-600 text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow-lg border border-red-600 animate-pulse">
+              <span className="absolute -top-1 -right-1 bg-white text-red-600 text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-lg border-2 border-red-600 animate-bounce">
                 {cartItemCount}
               </span>
             )}
           </button>
+          <span className="text-[9px] font-extrabold uppercase tracking-wider text-red-400 mt-1 font-mono">
+            {language === 'en' ? 'Cart' : 'Panier'}
+          </span>
         </div>
 
-        {/* 4. Suivi de Commande */}
-        <button
-          onClick={() => setIsTrackingOpen(true)}
-          className="min-w-[48px] min-h-[46px] flex flex-col items-center justify-center gap-1 text-[10px] font-bold text-slate-400 hover:text-slate-200 transition-all duration-200 cursor-pointer rounded-xl group relative"
-          aria-label="Suivre ma commande"
-          id="mobile-nav-tracking"
-        >
-          <IconTracking active={false} />
-          <span className="tracking-tight">{language === 'en' ? 'Track' : 'Suivi'}</span>
-        </button>
+        {/* ── 3. ONGLETS DE NAVIGATION LATÉRAUX ── */}
+        <div className="absolute inset-0 pt-3 px-3 flex items-center justify-between text-white">
+          
+          {/* Côté Gauche : Accueil & Catalogue */}
+          <div className="flex items-center justify-around w-[40%]">
+            
+            {/* Accueil */}
+            <button
+              onClick={() => handleNav('home')}
+              className={`flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-xl transition-all duration-200 cursor-pointer group relative ${
+                currentView === 'home'
+                  ? 'text-red-400 font-extrabold'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+              aria-label={language === 'en' ? 'Home' : 'Accueil'}
+              id="mobile-nav-home"
+            >
+              <IconHome active={currentView === 'home'} />
+              <span className="text-[10px] tracking-tight">{t('nav.home')}</span>
+              {currentView === 'home' && (
+                <span className="w-3 h-0.5 bg-red-500 rounded-full shadow-[0_0_6px_rgba(239,68,68,0.8)] mt-0.5" />
+              )}
+            </button>
 
-        {/* 5. À Propos / Maison */}
-        <button
-          onClick={() => handleNav('about')}
-          className={`min-w-[48px] min-h-[46px] flex flex-col items-center justify-center gap-1 text-[10px] font-bold transition-all duration-200 cursor-pointer rounded-xl group relative ${
-            currentView === 'about'
-              ? 'text-red-400 font-extrabold'
-              : 'text-slate-400 hover:text-slate-200'
-          }`}
-          aria-label={t('nav.about')}
-          id="mobile-nav-about"
-        >
-          <IconAbout active={currentView === 'about'} />
-          <span className="tracking-tight">{t('nav.about')}</span>
-          {currentView === 'about' && (
-            <span className="absolute -bottom-1 w-4 h-0.5 bg-red-500 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
-          )}
-        </button>
+            {/* Catalogue */}
+            <button
+              onClick={() => handleNav('catalog')}
+              className={`flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-xl transition-all duration-200 cursor-pointer group relative ${
+                currentView === 'catalog'
+                  ? 'text-red-400 font-extrabold'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+              aria-label={language === 'en' ? 'Catalog' : 'Catalogue'}
+              id="mobile-nav-catalog"
+            >
+              <IconCatalog active={currentView === 'catalog'} />
+              <span className="text-[10px] tracking-tight">{t('nav.catalog')}</span>
+              {currentView === 'catalog' && (
+                <span className="w-3 h-0.5 bg-red-500 rounded-full shadow-[0_0_6px_rgba(239,68,68,0.8)] mt-0.5" />
+              )}
+            </button>
 
+          </div>
+
+          {/* Espace vide central réservé au panier */}
+          <div className="w-[20%]" />
+
+          {/* Côté Droit : Suivi & À Propos */}
+          <div className="flex items-center justify-around w-[40%]">
+            
+            {/* Suivi de Commande */}
+            <button
+              onClick={() => setIsTrackingOpen(true)}
+              className="flex flex-col items-center justify-center gap-0.5 py-1 px-2 text-slate-400 hover:text-slate-200 transition-all duration-200 cursor-pointer rounded-xl group relative"
+              aria-label="Suivre ma commande"
+              id="mobile-nav-tracking"
+            >
+              <IconTracking active={false} />
+              <span className="text-[10px] tracking-tight">{language === 'en' ? 'Track' : 'Suivi'}</span>
+            </button>
+
+            {/* À Propos */}
+            <button
+              onClick={() => handleNav('about')}
+              className={`flex flex-col items-center justify-center gap-0.5 py-1 px-2 rounded-xl transition-all duration-200 cursor-pointer group relative ${
+                currentView === 'about'
+                  ? 'text-red-400 font-extrabold'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+              aria-label={t('nav.about')}
+              id="mobile-nav-about"
+            >
+              <IconAbout active={currentView === 'about'} />
+              <span className="text-[10px] tracking-tight">{t('nav.about')}</span>
+              {currentView === 'about' && (
+                <span className="w-3 h-0.5 bg-red-500 rounded-full shadow-[0_0_6px_rgba(239,68,68,0.8)] mt-0.5" />
+              )}
+            </button>
+
+          </div>
+
+        </div>
       </div>
-    </nav>
+    </div>
   );
 };

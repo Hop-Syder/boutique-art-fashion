@@ -44,13 +44,11 @@ export const Header: React.FC = () => {
     formatFCFA,
   } = useStore();
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [megaMenuOpen, setMegaMenuOpen] = useState(false);
 
   const handleNav = (view: AppView) => {
     setCurrentView(view);
-    setMobileMenuOpen(false);
     setMegaMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -77,9 +75,9 @@ export const Header: React.FC = () => {
       {/* Top Announcement Bar */}
       <div className="bg-slate-950 text-slate-300 py-2 px-4 text-xs border-b border-slate-800">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2.5 font-medium tracking-wide">
+          <div className="hidden sm:flex items-center gap-2.5 font-medium tracking-wide">
             <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-            <span className="hidden sm:inline font-bold text-red-500">
+            <span className="font-bold text-red-500">
               Art Fashion :
             </span>
             <span className="text-slate-200 font-semibold">
@@ -126,16 +124,7 @@ export const Header: React.FC = () => {
       {/* Main Navigation Bar Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <div className="flex items-center lg:hidden">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="min-w-[44px] min-h-[44px] p-2.5 rounded-xl text-slate-800 hover:bg-slate-100 focus:outline-none transition-colors flex items-center justify-center cursor-pointer"
-              aria-label="Ouvrir le menu principal"
-              id="header-mobile-menu-btn"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
+
 
           {/* Brand Logo Image replacing text badge */}
           <div
@@ -350,97 +339,6 @@ export const Header: React.FC = () => {
         )}
       </div>
 
-      {mobileMenuOpen && (
-        <div className="lg:hidden bg-slate-950 text-white border-b border-slate-800 px-5 pt-4 pb-8 space-y-5 animate-fadeIn shadow-2xl">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-red-500" />
-              <span className="text-xs font-bold text-slate-300">Rue 403, Zongo Cotonou</span>
-            </div>
-            <button
-              onClick={toggleLanguage}
-              className="px-3.5 py-1.5 bg-slate-800 text-white rounded-full text-xs font-bold flex items-center gap-1.5 border border-slate-700 cursor-pointer min-h-[36px]"
-            >
-              <Globe className="w-3.5 h-3.5 text-red-500" />
-              <span>{language === 'fr' ? 'FRANÇAIS 🇫🇷' : 'ENGLISH 🇬🇧'}</span>
-            </button>
-          </div>
-
-          <div className="space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
-              {language === 'en' ? 'Quick Navigation' : 'Rayons Prêt-à-Porter'}
-            </span>
-            <div className="grid grid-cols-2 gap-2.5">
-              <button
-                onClick={() => handleCategoryClick('costumes')}
-                className="p-3.5 text-left rounded-2xl bg-slate-900 border border-slate-800 text-xs font-bold text-white hover:bg-slate-800 transition-colors flex items-center gap-2 min-h-[44px] cursor-pointer"
-              >
-                <span>👔 Costumes & Blazers</span>
-              </button>
-              <button
-                onClick={() => handleCategoryClick('chemises')}
-                className="p-3.5 text-left rounded-2xl bg-slate-900 border border-slate-800 text-xs font-bold text-white hover:bg-slate-800 transition-colors flex items-center gap-2 min-h-[44px] cursor-pointer"
-              >
-                <span>👕 Chemises de Luxe</span>
-              </button>
-              <button
-                onClick={() => handleCategoryClick('boubous')}
-                className="p-3.5 text-left rounded-2xl bg-slate-900 border border-slate-800 text-xs font-bold text-white hover:bg-slate-800 transition-colors flex items-center gap-2 min-h-[44px] cursor-pointer"
-              >
-                <span>👑 Boubous Bazin</span>
-              </button>
-              <button
-                onClick={() => handleCategoryClick('chaussures')}
-                className="p-3.5 text-left rounded-2xl bg-slate-900 border border-slate-800 text-xs font-bold text-white hover:bg-slate-800 transition-colors flex items-center gap-2 min-h-[44px] cursor-pointer"
-              >
-                <span>👞 Mocassins Cuir</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="space-y-2 pt-2 border-t border-slate-800">
-            <button
-              onClick={() => handleNav('home')}
-              className="w-full text-left py-3 px-4 rounded-xl bg-slate-900 text-xs font-bold text-white flex items-center justify-between cursor-pointer min-h-[44px]"
-            >
-              <span>{t('nav.home')}</span>
-              <ArrowRight className="w-4 h-4 text-red-500" />
-            </button>
-            <button
-              onClick={() => {
-                setFilters((prev) => ({ ...prev, category: 'all', gender: 'all' }));
-                handleNav('catalog');
-              }}
-              className="w-full text-left py-3 px-4 rounded-xl bg-slate-900 text-xs font-bold text-white flex items-center justify-between cursor-pointer min-h-[44px]"
-            >
-              <span>{t('nav.catalog')}</span>
-              <ArrowRight className="w-4 h-4 text-red-500" />
-            </button>
-            <button
-              onClick={() => handleNav('about')}
-              className="w-full text-left py-3 px-4 rounded-xl bg-slate-900 text-xs font-bold text-white flex items-center justify-between cursor-pointer min-h-[44px]"
-            >
-              <span>
-                {t('nav.about')}
-              </span>
-              <ArrowRight className="w-4 h-4 text-red-500" />
-            </button>
-
-          </div>
-
-          <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
-            <a
-              href={settings.facebook_url}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-1.5 text-blue-400 font-bold hover:underline min-h-[36px]"
-            >
-              <Facebook className="w-4 h-4 fill-current" /> Facebook Officiel
-            </a>
-            <span className="text-[11px]">Cotonou, Bénin</span>
-          </div>
-        </div>
-      )}
     </header>
   );
 };
