@@ -59,7 +59,7 @@ export function CoverflowCarousel({
   perspective = 3,
   falloff = 0.56,
   fade = 0.1,
-  cardWidth = "clamp(148px, 22vw, 260px)",
+  cardWidth = "clamp(160px, 24vw, 280px)",
   gap = 0.05,
   loop = true,
   showCaption = false,
@@ -280,7 +280,7 @@ export function CoverflowCarousel({
           <div
             className="relative select-none"
             style={{
-              height: "calc(var(--cf-card) * 1.25)",
+              height: "calc(var(--cf-card) * 1.45)",
               transformStyle: "preserve-3d",
             }}
           >
@@ -299,7 +299,7 @@ export function CoverflowCarousel({
                     "absolute left-1/2 top-0 overflow-hidden rounded-2xl bg-muted shadow-xl will-change-transform",
                     cardClassName,
                   )}
-                  style={{ width: "var(--cf-card)", height: "calc(var(--cf-card) * 1.25)" }}
+                  style={{ width: "var(--cf-card)", height: "calc(var(--cf-card) * 1.45)" }}
                 >
                   {/* Image */}
                   <img
