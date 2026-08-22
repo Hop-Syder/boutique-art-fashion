@@ -25,8 +25,8 @@ export const HeroSection: React.FC = () => {
 
   const whatsappDirectUrl = `https://wa.me/${settings.whatsapp_number.replace(/\D/g, '')}?text=${encodeURIComponent(
     language === 'en'
-      ? 'Hello ART FASHION Cotonou 👋 I would like to inquire about your men suit & shirt collection.'
-      : 'Bonjour ART FASHION Cotonou 👋 Je souhaite me renseigner sur la collection de costumes et chemises sur-mesure.'
+      ? 'Hello Maison ART FASHION 👋 I am contacting you from your official website (artfashion-cotonou.com). I would like to discover your suits, shirts and bespoke tailoring collection.'
+      : 'Bonjour Maison ART FASHION 👋 Je vous contacte depuis votre site web officiel (artfashion-cotonou.com). Je souhaite découvrir votre collection de costumes, chemises et créations sur-mesure.'
   )}`;
 
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(

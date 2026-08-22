@@ -43,7 +43,8 @@ export const generateWhatsAppMessage = (
     )
     .join('\n\n');
 
-  const rawMessage = `👑 *NOUVELLE COMMANDE ART FASHION COTONOU* 👑
+  const rawMessage = `👑 *NOUVELLE COMMANDE EN LIGNE — ART FASHION COTONOU* 👑
+🌐 *Provenance :* _Site Web Officiel (artfashion-cotonou.com)_
 -----------------------------------------
 🔖 *N° de Commande :* \`${order.order_number}\`
 📅 *Date :* ${new Date(order.created_at).toLocaleDateString('fr-FR')}

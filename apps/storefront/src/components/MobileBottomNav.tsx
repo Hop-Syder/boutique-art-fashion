@@ -110,7 +110,9 @@ export const MobileBottomNav: React.FC = () => {
   };
 
   const whatsappUrl = `https://wa.me/${settings.whatsapp_number.replace(/\D/g, '')}?text=${encodeURIComponent(
-    'Bonjour Maison Art Fashion, je souhaite être conseillé pour un article.'
+    language === 'en'
+      ? 'Bonjour Maison ART FASHION 👋 Je vous écris depuis votre site web officiel (artfashion-cotonou.com) et je souhaite avoir un conseil personnalisé sur vos collections.'
+      : 'Bonjour Maison ART FASHION 👋 Je viens de votre site web officiel (artfashion-cotonou.com) et je souhaite avoir un conseil personnalisé sur vos collections.'
   )}`;
 
   return (
