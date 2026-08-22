@@ -1,0 +1,70 @@
+version: '3.8'
+
+# =============================================================================
+# docker-compose.yml — ART FASHION VPS LWS
+# Services :
+#   nginx       → Reverse proxy + SPA statiques (port 80)
+#   upload-api  → Micro-serveur Express (upload images + persistance db.json)
+# Volumes :
+#   uploads_data → Images produits persistantes sur VPS
+#   db_data      → Fichier db.json persistant sur VPS
+# =============================================================================
+
+services:
+
+  # ── Serveur Web Nginx + Assets SPA ─────────────────────────────────────────
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: artfashion_nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      # Volume partagé : nginx sert /uploads/, upload-api y écrit
+      - uploads_data:/usr/share/nginx/html/uploads
+    depends_on:
+      upload-api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # ── Micro-serveur Upload + Persistance ─────────────────────────────────────
+  upload-api:
+    build:
+      context: ./apps/upload-server
+      dockerfile: Dockerfile
+    container_name: artfashion_upload_api
+    restart: always
+    environment:
+      - PORT=3002
+      - NODE_ENV=production
+      - UPLOADS_DIR=/app/uploads
+      - DB_PATH=/app/data/db.json
+    volumes:
+      # Images produits (partagées avec nginx)
+      - uploads_data:/app/uploads
+      # Base de données JSON (persistante même si rebuild)
+      - db_data:/app/data
+    expose:
+      - "3002"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3002/api/health"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+# ── Volumes Docker persistants ──────────────────────────────────────────────
+volumes:
+  uploads_data:
+    name: artfashion_uploads
+    driver: local
+  db_data:
+    name: artfashion_db
+    driver: local

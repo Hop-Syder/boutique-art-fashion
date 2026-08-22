@@ -1,0 +1,22 @@
+{
+  "name": "ayele-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "pnpm@10.24.0",
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:storefront": "pnpm --filter @ayele/storefront dev",
+    "dev:admin": "pnpm --filter @ayele/admin-cms dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run lint",
+    "clean": "rm -rf dist apps/*/.vite apps/*/dist"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.0",
+    "typescript": "~5.8.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["sharp"]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "name": "ART FASHION — Prêt-à-Porter de Luxe Cotonou",
+  "short_name": "ART FASHION",
+  "description": "Boutique mode homme haut de gamme à Cotonou, Bénin. Costumes, boubous Bazin, chemises lin, mocassins cuir. Livraison à domicile.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F172A",
+  "theme_color": "#0F172A",
+  "lang": "fr-BJ",
+  "dir": "ltr",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "categories": ["shopping", "fashion", "lifestyle"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "apple touch icon"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "ART FASHION — Accueil boutique"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Catalogue Mode",
+      "url": "/?view=catalog",
+      "description": "Voir tous les vêtements homme"
+    },
+    {
+      "name": "Nous contacter",
+      "url": "/?view=about",
+      "description": "Adresse et contact boutique"
+    }
+  ]
+}

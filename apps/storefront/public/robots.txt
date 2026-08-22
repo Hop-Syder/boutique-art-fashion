@@ -1,0 +1,39 @@
+# ===========================================================
+# robots.txt — ART FASHION Cotonou (artfashion-cotonou.com)
+# ===========================================================
+
+User-agent: *
+Allow: /
+
+# Autoriser tous les bots majeurs
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Mobile
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+# Exclure les ressources internes non pertinentes
+Disallow: /src/
+Disallow: /.env
+Disallow: /node_modules/
+
+# Sitemap
+Sitemap: https://artfashion-cotonou.com/sitemap.xml

@@ -1,0 +1,6 @@
+{
+  "name": "AYÉLÉ Maison de Mode - Bénin",
+  "description": "Plateforme e-commerce Afro-Chic de mode au Bénin avec catalogue produits, variantes, panier intelligent, validation WhatsApp et back-office de gestion des commandes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

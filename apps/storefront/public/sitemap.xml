@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Page Accueil -->
+  <url>
+    <loc>https://artfashion-cotonou.com/</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://artfashion-cotonou.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://artfashion-cotonou.com/?lang=en"/>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>ART FASHION Cotonou — Boutique Prêt-à-Porter Homme Luxe</image:title>
+      <image:caption>Boutique officielle ART FASHION, Rue 403 Zongo, Cotonou, Bénin</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Catalogue complet -->
+  <url>
+    <loc>https://artfashion-cotonou.com/?view=catalog</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://artfashion-cotonou.com/?view=catalog"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://artfashion-cotonou.com/?view=catalog&amp;lang=en"/>
+  </url>
+
+  <!-- Costumes & Blazers -->
+  <url>
+    <loc>https://artfashion-cotonou.com/?view=catalog&amp;category=costumes</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- Hauts & Chemises -->
+  <url>
+    <loc>https://artfashion-cotonou.com/?view=catalog&amp;category=hauts</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+
+  <!-- Boubous Bazin -->
+  <url>
+    <loc>https://artfashion-cotonou.com/?view=catalog&amp;category=boubous</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- Chaussures -->
+  <url>
+    <loc>https://artfashion-cotonou.com/?view=catalog&amp;category=chaussures</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Accessoires -->
+  <url>
+    <loc>https://artfashion-cotonou.com/?view=catalog&amp;category=accessoires</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.82</priority>
+  </url>
+
+  <!-- Bas & Pantalons -->
+  <url>
+    <loc>https://artfashion-cotonou.com/?view=catalog&amp;category=bas</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Vestes & Manteaux -->
+  <url>
+    <loc>https://artfashion-cotonou.com/?view=catalog&amp;category=vestes</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Page À Propos -->
+  <url>
+    <loc>https://artfashion-cotonou.com/?view=about</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://artfashion-cotonou.com/?view=about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://artfashion-cotonou.com/?view=about&amp;lang=en"/>
+  </url>
+
+</urlset>
