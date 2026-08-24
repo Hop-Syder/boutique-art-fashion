@@ -1,4 +1,15 @@
+/**
+ * @author @hopsyder
+ * @organization Nexus Partners
+ * @description OrderProcessSteps — Guide interactif des 6 étapes de commande WhatsApp avec support bilingue FR/EN
+ * @created 2026-08-19
+ * @updated 2026-08-23
+ * 🌐 nexus-partners.xyz
+ * 📧 daoudaabassichristian@gmail.com
+ */
+// ──────────────────────────────────
 import React, { useState } from 'react';
+import { useStore } from '../context/StoreContext';
 import {
   ShoppingBag,
   Truck,
@@ -14,55 +25,69 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 
 export interface ProcessStep {
   num: string;
-  title: string;
-  desc: string;
+  title_fr: string;
+  title_en: string;
+  desc_fr: string;
+  desc_en: string;
   icon: React.FC<{ className?: string }>;
 }
 
 export const ORDER_STEPS: ProcessStep[] = [
   {
     num: '01',
-    title: 'Composez votre panier',
-    desc: 'Choisissez vos modèles, tailles et couleurs disponibles sur la boutique.',
+    title_fr: 'Composez votre panier',
+    title_en: 'Build your cart',
+    desc_fr: 'Choisissez vos modèles, tailles et couleurs disponibles sur la boutique.',
+    desc_en: 'Select your preferred styles, sizes, and colors directly from our catalog.',
     icon: ShoppingBag,
   },
   {
     num: '02',
-    title: 'Précisez votre adresse',
-    desc: 'Indiquez votre quartier et repère (Cotonou, Calavi, Porto-Novo, etc.).',
+    title_fr: 'Précisez votre adresse',
+    title_en: 'Enter delivery location',
+    desc_fr: 'Indiquez votre quartier et repère (Cotonou, Calavi, Porto-Novo, etc.).',
+    desc_en: 'Specify your district and landmark (Cotonou, Calavi, Porto-Novo, etc.).',
     icon: Truck,
   },
   {
     num: '03',
-    title: 'Envoi sur WhatsApp',
-    desc: 'Un message récapitulatif est automatiquement généré et transmis au caissier.',
+    title_fr: 'Envoi sur WhatsApp',
+    title_en: 'Submit via WhatsApp',
+    desc_fr: 'Un message récapitulatif est automatiquement généré et transmis au conseiller.',
+    desc_en: 'A pre-formatted order summary is generated and sent to our team.',
     icon: WhatsAppIcon,
   },
   {
     num: '04',
-    title: 'Validation immédiate',
-    desc: 'Le conseiller vérifie le stock disponible et valide la préparation de commande.',
+    title_fr: 'Validation immédiate',
+    title_en: 'Instant confirmation',
+    desc_fr: 'Le conseiller vérifie le stock disponible et valide la préparation de commande.',
+    desc_en: 'Our advisor checks inventory and starts preparing your custom order.',
     icon: CheckCircle2,
   },
   {
     num: '05',
-    title: 'Livraison Express',
-    desc: 'Expédition rapide et sécurisée directement à votre domicile ou bureau.',
+    title_fr: 'Livraison Express',
+    title_en: 'Express Delivery',
+    desc_fr: 'Expédition rapide et sécurisée directement à votre domicile ou bureau.',
+    desc_en: 'Swift and secure door-to-door delivery to your home or office.',
     icon: PackageCheck,
   },
   {
     num: '06',
-    title: 'Paiement Réception',
-    desc: 'Essayez votre tenue et réglez en espèces, MTN Mobile Money ou Moov Money.',
+    title_fr: 'Paiement Réception',
+    title_en: 'Pay upon Delivery',
+    desc_fr: 'Essayez votre tenue et réglez en espèces, MTN Mobile Money ou Moov Money.',
+    desc_en: 'Try on your outfit and pay with Cash, MTN Mobile Money or Moov Money.',
     icon: ShieldCheck,
   },
 ];
 
 export const OrderProcessSteps: React.FC = () => {
-  // Mobile pagination state: page 0 (cards 1-2), page 1 (cards 3-4), page 2 (cards 5-6)
+  const { language } = useStore();
   const [mobilePage, setMobilePage] = useState<number>(0);
 
-  const totalMobilePages = 3; // 2 cards per page * 3 pages = 6 cards
+  const totalMobilePages = 3;
 
   const handleNextMobilePage = () => {
     setMobilePage((prev) => (prev + 1) % totalMobilePages);
@@ -78,10 +103,12 @@ export const OrderProcessSteps: React.FC = () => {
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-8 sm:mb-12 relative z-10">
           <h2 className="text-2xl sm:text-4xl font-serif font-medium text-white tracking-tight">
-            Comment passer votre commande ?
+            {language === 'en' ? 'How to Place Your Order?' : 'Comment passer votre commande ?'}
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-            Un parcours 100% pensé pour les habitudes béninoises, combinant la clarté du catalogue digital et la réactivité de WhatsApp.
+            {language === 'en'
+              ? 'A smooth shopping journey combining the clarity of a digital catalog with the instant responsiveness of WhatsApp.'
+              : 'Un parcours 100% pensé pour les habitudes béninoises, combinant la clarté du catalogue digital et la réactivité de WhatsApp.'}
           </p>
         </div>
 
@@ -104,10 +131,10 @@ export const OrderProcessSteps: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-sm text-white leading-snug group-hover/step:text-red-300 transition-colors">
-                    {st.title}
+                    {language === 'en' ? st.title_en : st.title_fr}
                   </h4>
                   <p className="text-[11px] text-slate-300/80 mt-1.5 leading-relaxed">
-                    {st.desc}
+                    {language === 'en' ? st.desc_en : st.desc_fr}
                   </p>
                 </div>
               </div>
@@ -117,9 +144,9 @@ export const OrderProcessSteps: React.FC = () => {
 
         {/* MOBILE VIEW: Interactive 2-card pagination carousel */}
         <div className="md:hidden space-y-5 relative z-10">
-          {/* Mobile Cards Display (2 cards according to current page) */}
+          {/* Mobile Cards Display */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {ORDER_STEPS.slice(mobilePage * 2, mobilePage * 2 + 2).map((st, idx) => {
+            {ORDER_STEPS.slice(mobilePage * 2, mobilePage * 2 + 2).map((st) => {
               const Icon = st.icon;
               return (
                 <div
@@ -127,17 +154,19 @@ export const OrderProcessSteps: React.FC = () => {
                   className="bg-gradient-to-b from-white/[0.10] to-white/[0.04] border border-white/15 p-5 rounded-2xl flex flex-col justify-between space-y-3.5 shadow-xl transition-all animate-fadeIn"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-600 to-red-800 text-white font-mono font-bold text-xs flex items-center justify-center shadow-md ring-2 ring-white/20">{st.num}</span>
+                    <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-600 to-red-800 text-white font-mono font-bold text-xs flex items-center justify-center shadow-md ring-2 ring-white/20">
+                      {st.num}
+                    </span>
                     <div className="w-9 h-9 rounded-xl bg-red-600/20 border border-red-500/30 flex items-center justify-center text-red-400">
                       <Icon className="w-4.5 h-4.5" />
                     </div>
                   </div>
                   <div>
                     <h4 className="font-bold text-base text-white leading-snug">
-                      {st.title}
+                      {language === 'en' ? st.title_en : st.title_fr}
                     </h4>
                     <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
-                      {st.desc}
+                      {language === 'en' ? st.desc_en : st.desc_fr}
                     </p>
                   </div>
                 </div>
@@ -153,11 +182,12 @@ export const OrderProcessSteps: React.FC = () => {
                 <button
                   key={pageIdx}
                   onClick={() => setMobilePage(pageIdx)}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${mobilePage === pageIdx
-                    ? 'w-8 bg-red-500 shadow-sm'
-                    : 'w-2 bg-slate-700 hover:bg-slate-600'
-                    }`}
-                  aria-label={`Aller à la page d'étapes ${pageIdx + 1}`}
+                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                    mobilePage === pageIdx
+                      ? 'w-8 bg-red-500 shadow-sm'
+                      : 'w-2 bg-slate-700 hover:bg-slate-600'
+                  }`}
+                  aria-label={`Go to step page ${pageIdx + 1}`}
                 />
               ))}
             </div>
@@ -169,15 +199,25 @@ export const OrderProcessSteps: React.FC = () => {
               id="order-steps-next-btn-mobile"
             >
               <span>
-                {mobilePage === 0 && 'Voir les étapes suivantes 3 & 4'}
-                {mobilePage === 1 && 'Voir les étapes suivantes 5 & 6'}
-                {mobilePage === 2 && 'Revenir aux étapes 1 & 2'}
+                {language === 'en'
+                  ? mobilePage === 0
+                    ? 'View next steps 3 & 4'
+                    : mobilePage === 1
+                    ? 'View next steps 5 & 6'
+                    : 'Back to steps 1 & 2'
+                  : mobilePage === 0
+                  ? 'Voir les étapes suivantes 3 & 4'
+                  : mobilePage === 1
+                  ? 'Voir les étapes suivantes 5 & 6'
+                  : 'Revenir aux étapes 1 & 2'}
               </span>
               <ChevronDown className="w-4 h-4 text-white animate-bounce" />
             </button>
 
             <span className="text-[11px] text-slate-400 font-medium">
-              Étape {mobilePage * 2 + 1} & {mobilePage * 2 + 2} sur 6
+              {language === 'en'
+                ? `Steps ${mobilePage * 2 + 1} & ${mobilePage * 2 + 2} of 6`
+                : `Étape ${mobilePage * 2 + 1} & ${mobilePage * 2 + 2} sur 6`}
             </span>
           </div>
         </div>

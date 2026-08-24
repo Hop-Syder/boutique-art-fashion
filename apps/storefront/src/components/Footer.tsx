@@ -89,7 +89,7 @@ export const Footer: React.FC = () => {
                 id="footer-facebook-btn"
               >
                 <Facebook className="w-3.5 h-3.5 fill-current" />
-                <span>Facebook Officiel</span>
+                <span>{language === 'en' ? 'Official Facebook' : 'Facebook Officiel'}</span>
               </a>
 
               <a
@@ -113,11 +113,11 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2.5 text-xs font-medium">
               {[
-                { id: 'costumes', label: 'Costumes 3 Pièces & Blazers' },
-                { id: 'chemises', label: 'Chemises de Luxe & Lin Brodé' },
-                { id: 'boubous', label: 'Grands Boubous Bazin Riches' },
-                { id: 'chaussures', label: 'Chaussures & Mocassins Cuir' },
-                { id: 'accessoires', label: 'Accessoires & Maroquinerie' },
+                { id: 'costumes', label_fr: 'Costumes 3 Pièces & Blazers', label_en: '3-Piece Suits & Blazers' },
+                { id: 'chemises', label_fr: 'Chemises de Luxe & Lin Brodé', label_en: 'Luxury Shirts & Linen' },
+                { id: 'boubous', label_fr: 'Grands Boubous Bazin Riches', label_en: 'Rich Bazin Boubous' },
+                { id: 'chaussures', label_fr: 'Chaussures & Mocassins Cuir', label_en: 'Leather Shoes & Loafers' },
+                { id: 'accessoires', label_fr: 'Accessoires & Maroquinerie', label_en: 'Accessories & Leather' },
               ].map((cat) => (
                 <li key={cat.id}>
                   <button
@@ -125,7 +125,7 @@ export const Footer: React.FC = () => {
                     className="text-slate-400 hover:text-red-400 hover:translate-x-1 transition-all duration-200 flex items-center gap-2 cursor-pointer text-left group"
                   >
                     <span className="text-[10px] text-red-500/60 group-hover:text-red-500">→</span>
-                    <span>{cat.label}</span>
+                    <span>{language === 'en' ? cat.label_en : cat.label_fr}</span>
                   </button>
                 </li>
               ))}
@@ -136,14 +136,18 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-4 space-y-4">
             <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-red-600" />
-              {language === 'en' ? 'Boutique Location' : 'Boutique Physionomique'}
+              {language === 'en' ? 'Boutique & Tailoring Workshop' : 'Boutique & Atelier'}
             </h4>
             <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3 text-xs text-slate-400 shadow-sm">
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
                 <div>
                   <strong className="text-slate-200 block font-semibold">Rue 403, Zongo / Scoa Gbéto</strong>
-                  <span className="text-[11px] text-slate-500">Près Avenue Jean-Paul II & Galerie Fayola, Cotonou</span>
+                  <span className="text-[11px] text-slate-500">
+                    {language === 'en'
+                      ? 'Near Jean-Paul II Avenue & Fayola Gallery, Cotonou'
+                      : 'Près Avenue Jean-Paul II & Galerie Fayola, Cotonou'}
+                  </span>
                 </div>
               </div>
               <div className="flex items-center gap-2.5 pt-1.5 border-t border-slate-800/80">
@@ -215,7 +219,7 @@ export const Footer: React.FC = () => {
           <div className="flex flex-col md:flex-row items-center justify-start gap-3 text-[10px] text-slate-600">
             <p>© 2026 ART FASHION Cotonou — Maison de Prêt-à-Porter Masculin.</p>
             <p className="flex items-center gap-1">
-              Développé par{' '}
+              {language === 'en' ? 'Developed by' : 'Développé par'}{' '}
               <a
                 href="https://nexus-partners.xyz/"
                 target="_blank"

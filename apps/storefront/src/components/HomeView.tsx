@@ -127,10 +127,12 @@ export const HomeView: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4">
           <div>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900">
-              Les Nouveautés de l'Atelier
+              {language === 'en' ? 'Workshop New Arrivals' : "Les Nouveautés de l'Atelier"}
             </h2>
             <p className="text-xs text-slate-500 mt-1">
-              Des pièces exclusives confectionnées en séries limitées dans notre atelier à Cotonou.
+              {language === 'en'
+                ? 'Exclusive limited-edition pieces crafted in our Cotonou workshop.'
+                : 'Des pièces exclusives confectionnées en séries limitées dans notre atelier à Cotonou.'}
             </p>
           </div>
 
@@ -138,7 +140,7 @@ export const HomeView: React.FC = () => {
             onClick={handleViewAllNew}
             className="text-xs font-bold text-red-600 hover:text-red-700 flex items-center gap-1 cursor-pointer min-h-[44px]"
           >
-            <span>Voir toutes les nouveautés</span>
+            <span>{language === 'en' ? 'View all new arrivals' : 'Voir toutes les nouveautés'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -161,10 +163,12 @@ export const HomeView: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
           <div>
             <h2 className="text-2xl sm:text-3xl font-serif font-medium text-slate-900">
-              Les Pièces Signature
+              {language === 'en' ? 'Signature Pieces' : 'Les Pièces Signature'}
             </h2>
             <p className="text-xs text-slate-500 mt-1">
-              Les modèles les plus plébiscités par nos clientes et clients à Cotonou, Calavi et Porto-Novo.
+              {language === 'en'
+                ? 'Our most celebrated creations by clients in Cotonou, Calavi and Porto-Novo.'
+                : 'Les modèles les plus plébiscités par nos clientes et clients à Cotonou, Calavi et Porto-Novo.'}
             </p>
           </div>
 
@@ -172,7 +176,7 @@ export const HomeView: React.FC = () => {
             onClick={handleViewAllFeatured}
             className="text-xs font-bold text-red-600 hover:text-red-700 flex items-center gap-1 cursor-pointer min-h-[44px]"
           >
-            <span>Explorer tout le catalogue</span>
+            <span>{language === 'en' ? 'Explore entire catalog' : 'Explorer tout le catalogue'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

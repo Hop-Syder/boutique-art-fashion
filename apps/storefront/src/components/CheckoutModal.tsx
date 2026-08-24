@@ -203,7 +203,7 @@ export const CheckoutModal: React.FC = () => {
                   <span className="text-base font-extrabold text-slate-900">{formatFCFA(cartTotal)}</span>
                 </div>
                 <span className="text-[11px] bg-red-100 text-red-800 font-bold px-2.5 py-1 rounded-full border border-red-200">
-                  {language === 'en' ? 'Delivery fee:' : 'Frais livraison :'} {selectedZone.fee === 0 ? 'GRATUIT' : formatFCFA(selectedZone.fee)}
+                  {language === 'en' ? 'Delivery fee:' : 'Frais livraison :'} {selectedZone.fee === 0 ? (language === 'en' ? 'FREE' : 'GRATUIT') : formatFCFA(selectedZone.fee)}
                 </span>
               </div>
 
@@ -223,7 +223,7 @@ export const CheckoutModal: React.FC = () => {
                       required
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
-                      placeholder="Ex: M. Serge Koudou"
+                      placeholder={language === 'en' ? 'E.g. Mr. David Mensah' : 'Ex: M. Serge Koudou'}
                       className="w-full min-h-[44px] p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all font-medium"
                       id="checkout-name-input"
                     />
@@ -289,7 +289,7 @@ export const CheckoutModal: React.FC = () => {
                     >
                       {deliveryZones.map((z) => (
                         <option key={z.id} value={z.id}>
-                          {language === 'en' && z.name_en ? z.name_en : z.name} — {z.fee === 0 ? 'GRATUIT' : formatFCFA(z.fee)}
+                          {language === 'en' && z.name_en ? z.name_en : z.name} — {z.fee === 0 ? (language === 'en' ? 'FREE' : 'GRATUIT') : formatFCFA(z.fee)}
                         </option>
                       ))}
                     </select>
@@ -305,7 +305,7 @@ export const CheckoutModal: React.FC = () => {
                     required
                     value={deliveryAddress}
                     onChange={(e) => setDeliveryAddress(e.target.value)}
-                    placeholder="Ex: Scoa Gbéto, Rue 403, près Galerie Fayola"
+                    placeholder={language === 'en' ? 'E.g. Scoa Gbeto, Rue 403, near Fayola Gallery' : 'Ex: Scoa Gbéto, Rue 403, près Galerie Fayola'}
                     className="w-full min-h-[44px] p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all font-medium"
                     id="checkout-address-input"
                   />
@@ -320,7 +320,7 @@ export const CheckoutModal: React.FC = () => {
                       type="text"
                       value={deliveryLandmark}
                       onChange={(e) => setDeliveryLandmark(e.target.value)}
-                      placeholder="Ex: Avenue Jean-Paul II"
+                      placeholder={language === 'en' ? 'E.g. Jean-Paul II Avenue' : 'Ex: Avenue Jean-Paul II'}
                       className="w-full min-h-[44px] p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all font-medium"
                       id="checkout-landmark-input"
                     />
@@ -334,7 +334,7 @@ export const CheckoutModal: React.FC = () => {
                       type="text"
                       value={deliveryNotes}
                       onChange={(e) => setDeliveryNotes(e.target.value)}
-                      placeholder="Ex: Appeler à l'arrivée Rue 403"
+                      placeholder={language === 'en' ? 'E.g. Call 15 min before arrival' : "Ex: Appeler à l'arrivée Rue 403"}
                       className="w-full min-h-[44px] p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all font-medium"
                       id="checkout-notes-input"
                     />

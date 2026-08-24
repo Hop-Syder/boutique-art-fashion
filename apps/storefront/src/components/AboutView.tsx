@@ -151,7 +151,7 @@ export const AboutView: React.FC = () => {
 
   return (
     <div className="space-y-12 sm:space-y-16 pb-12">
-      
+
       {/* ── 1. HERO : NOTRE MAISON (Harmonisé avec HeroSection) ── */}
       <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50 to-slate-100/60 py-10 sm:py-16 border-b border-slate-200/80">
         <div className="absolute top-0 right-0 w-96 h-96 bg-red-500/5 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
@@ -159,7 +159,7 @@ export const AboutView: React.FC = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            
+
             {/* Colonne Gauche : Histoire de la Maison */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-950 text-red-400 text-[11px] font-bold uppercase tracking-widest border border-red-900/60 shadow-xs">
@@ -167,29 +167,16 @@ export const AboutView: React.FC = () => {
                 <span>{fr ? 'Maison de Haute Élégance Masculine' : 'House of Men’s High Elegance'}</span>
               </div>
 
-              <h1 className="text-3xl sm:text-5xl font-serif font-normal text-slate-950 leading-[1.15] tracking-tight">
-                {fr ? 'Notre Maison' : 'Our House'}
-                <br />
-                <span className="font-cloister-black text-slate-950 font-normal tracking-normal inline-block mt-1">
-                  Art Fashion
-                </span>
-              </h1>
-
               <div className="space-y-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
                 <p>
                   <strong className="text-slate-900 font-semibold">ART FASHION</strong> {fr
-                    ? 'est bien plus qu’une boutique de mode masculine. C’est une maison d’élégance dédiée aux hommes qui cultivent le goût de l’excellence.'
-                    : 'is far more than a menswear store. It is a house of elegance dedicated to men who cultivate a taste for excellence.'}
-                </p>
-                <p className="text-sm sm:text-base text-slate-600">
-                  {fr
-                    ? 'Depuis notre adresse emblématique de la Rue 403 à Zongo, au cœur de Cotonou, nous accompagnons hommes d’affaires, dirigeants et gentlemen dans la construction d’une image raffinée et intemporelle. Notre savoir-faire repose sur une sélection rigoureuse de costumes italiens, de chemises nobles, de boubous bazin prestigieux et d’accessoires en cuir d’exception.'
-                    : 'From our flagship address on Rue 403 in Zongo, at the heart of Cotonou, we guide business executives and gentlemen in crafting a refined and timeless image. Our craft is built on rigorous curation of Italian suits, luxury shirts, prestigious bazin boubous, and exceptional leather goods.'}
+                    ? "est une maison d'élégance masculine à Cotonou. Nous proposons une sélection raffinée de costumes italiens, chemises, boubous bazin et accessoires haut de gamme, alliant le raffinement européen à l'élégance africaine."
+                    : "is a house of men's elegance in Cotonou. We offer a refined selection of Italian suits, luxury shirts, bazin boubous, and premium accessories, seamlessly blending European refinement with African elegance."}
                 </p>
                 <p className="text-sm sm:text-base text-slate-700 font-medium">
                   {fr
-                    ? 'À travers chacune de nos collections, nous fusionnons le raffinement européen et l’héritage vestimentaire africain afin de créer un style unique, distingué et résolument moderne.'
-                    : 'Through every collection, we fuse European refinement with African sartorial heritage to create a style that is unique, distinguished, and resolutely modern.'}
+                    ? "Nous accompagnons les hommes soucieux de leur image avec des pièces soigneusement sélectionnées, conçues pour affirmer leur personnalité avec distinction, confiance et modernité."
+                    : "We guide men who value their style with carefully curated pieces designed to express their personality with distinction, confidence, and modernity."}
                 </p>
               </div>
 
@@ -473,7 +460,7 @@ export const AboutView: React.FC = () => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-slate-900 text-white rounded-3xl overflow-hidden border border-slate-800 shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            
+
             {/* Infos Boutique */}
             <div className="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-between space-y-6">
               <div className="space-y-4">

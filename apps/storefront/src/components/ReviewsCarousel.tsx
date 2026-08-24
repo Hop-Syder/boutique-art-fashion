@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useStore } from '../context/StoreContext';
 import { User, Star, MapPin, ChevronLeft, ChevronRight, ExternalLink, CheckCircle2 } from 'lucide-react';
 
 export interface GoogleReview {
@@ -123,6 +124,7 @@ export const REAL_GOOGLE_REVIEWS: GoogleReview[] = [
 ];
 
 export const ReviewsCarousel: React.FC = () => {
+  const { language } = useStore();
   const row1Ref = useRef<HTMLDivElement>(null);
   const row2Ref = useRef<HTMLDivElement>(null);
 
@@ -158,11 +160,11 @@ export const ReviewsCarousel: React.FC = () => {
         <div className="space-y-3 relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold uppercase tracking-wider">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Avis Clients Certifiés Google Maps</span>
+            <span>{language === 'en' ? 'Verified Google Maps Client Reviews' : 'Avis Clients Certifiés Google Maps'}</span>
           </div>
 
           <h2 className="text-2xl sm:text-4xl font-serif font-medium text-white leading-tight">
-            La Satisfaction de Nos Clients à Cotonou
+            {language === 'en' ? 'Client Satisfaction in Cotonou' : 'La Satisfaction de Nos Clients à Cotonou'}
           </h2>
 
           <div className="flex items-center gap-3 text-xs sm:text-sm text-slate-300">
@@ -174,7 +176,9 @@ export const ReviewsCarousel: React.FC = () => {
                 ))}
               </div>
             </div>
-            <span className="text-slate-400">Basé sur les avis réels certifiés Google Maps</span>
+            <span className="text-slate-400">
+              {language === 'en' ? 'Based on verified Google Maps reviews' : 'Basé sur les avis réels certifiés Google Maps'}
+            </span>
           </div>
         </div>
 
@@ -184,7 +188,7 @@ export const ReviewsCarousel: React.FC = () => {
             <button
               onClick={handleScrollLeft}
               className="w-11 h-11 rounded-2xl bg-slate-800 hover:bg-red-600 text-white flex items-center justify-center transition-all border border-slate-700 shadow-md cursor-pointer hover:scale-105 active:scale-95"
-              aria-label="Faire défiler vers la gauche"
+              aria-label={language === 'en' ? 'Scroll left' : 'Faire défiler vers la gauche'}
               id="reviews-scroll-left-btn"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -192,7 +196,7 @@ export const ReviewsCarousel: React.FC = () => {
             <button
               onClick={handleScrollRight}
               className="w-11 h-11 rounded-2xl bg-slate-800 hover:bg-red-600 text-white flex items-center justify-center transition-all border border-slate-700 shadow-md cursor-pointer hover:scale-105 active:scale-95"
-              aria-label="Faire défiler vers la droite"
+              aria-label={language === 'en' ? 'Scroll right' : 'Faire défiler vers la droite'}
               id="reviews-scroll-right-btn"
             >
               <ChevronRight className="w-5 h-5" />
@@ -206,7 +210,7 @@ export const ReviewsCarousel: React.FC = () => {
             className="px-4 py-3 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-2xl flex items-center gap-2 transition-all shadow-lg cursor-pointer hover:scale-105 active:scale-95 shrink-0"
             id="reviews-google-maps-btn"
           >
-            <span>Voir sur Google Maps</span>
+            <span>{language === 'en' ? 'View on Google Maps' : 'Voir sur Google Maps'}</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
         </div>

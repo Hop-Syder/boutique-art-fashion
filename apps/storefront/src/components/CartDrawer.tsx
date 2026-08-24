@@ -16,6 +16,7 @@ import {
   Plus,
   Minus,
   ArrowRight,
+  ArrowLeft,
   ShieldCheck,
   MapPin,
 } from 'lucide-react';
@@ -96,9 +97,10 @@ export const CartDrawer: React.FC = () => {
                 </div>
                 <button
                   onClick={() => setIsCartOpen(false)}
-                  className="px-6 py-3 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors cursor-pointer"
+                  className="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 group active:scale-[0.99] shadow-md"
                 >
-                  {language === 'en' ? 'Explore Collection' : 'Découvrir la collection'}
+                  <span>{language === 'en' ? 'Explore Collection' : 'Découvrir la collection'}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-red-400 group-hover:translate-x-1 transition-transform duration-300" />
                 </button>
               </div>
             ) : (
@@ -148,10 +150,10 @@ export const CartDrawer: React.FC = () => {
 
                           <div className="mt-1 flex flex-wrap gap-1 text-[11px] text-slate-700 font-semibold">
                             <span className="bg-white px-2 py-0.5 rounded-md border border-slate-200">
-                              Taille: <strong>{item.variant.size}</strong>
+                              {language === 'en' ? 'Size:' : 'Taille :'} <strong>{item.variant.size}</strong>
                             </span>
                             <span className="bg-white px-2 py-0.5 rounded-md border border-slate-200">
-                              Couleur: {item.variant.color}
+                              {language === 'en' ? 'Color:' : 'Couleur :'} {language === 'en' && item.variant.color_en ? item.variant.color_en : item.variant.color}
                             </span>
                           </div>
                         </div>
@@ -201,7 +203,7 @@ export const CartDrawer: React.FC = () => {
                     {language === 'en' ? 'Delivery Zone:' : 'Zone de livraison :'}
                   </span>
                   <span className="text-red-600 font-bold">
-                    {selectedZone.fee === 0 ? 'GRATUIT' : formatFCFA(selectedZone.fee)}
+                    {selectedZone.fee === 0 ? (language === 'en' ? 'FREE' : 'GRATUIT') : formatFCFA(selectedZone.fee)}
                   </span>
                 </label>
                 <select
@@ -216,7 +218,7 @@ export const CartDrawer: React.FC = () => {
                 >
                   {deliveryZones.map((z) => (
                     <option key={z.id} value={z.id}>
-                      {language === 'en' && z.name_en ? z.name_en : z.name} — {z.fee === 0 ? 'GRATUIT' : formatFCFA(z.fee)}
+                      {language === 'en' && z.name_en ? z.name_en : z.name} — {z.fee === 0 ? (language === 'en' ? 'FREE' : 'GRATUIT') : formatFCFA(z.fee)}
                     </option>
                   ))}
                 </select>
@@ -230,7 +232,7 @@ export const CartDrawer: React.FC = () => {
                 <div className="flex justify-between text-slate-600">
                   <span>{language === 'en' ? 'Delivery fee:' : 'Frais de livraison :'}</span>
                   <span className="font-bold text-slate-900">
-                    {selectedZone.fee === 0 ? 'GRATUIT' : formatFCFA(selectedZone.fee)}
+                    {selectedZone.fee === 0 ? (language === 'en' ? 'FREE' : 'GRATUIT') : formatFCFA(selectedZone.fee)}
                   </span>
                 </div>
                 <div className="flex justify-between text-base font-bold text-slate-900 pt-2 border-t border-slate-200">
@@ -239,16 +241,27 @@ export const CartDrawer: React.FC = () => {
                 </div>
               </div>
 
-              <button
-                onClick={handleProceedToCheckout}
-                className="w-full min-h-[48px] py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer focus:ring-2 focus:ring-slate-900"
-                id="cart-drawer-checkout-btn"
-              >
-                <span>{language === 'en' ? 'Proceed to Order' : 'Valider ma commande'}</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+              <div className="space-y-2.5 pt-1">
+                <button
+                  onClick={handleProceedToCheckout}
+                  className="w-full min-h-[48px] py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2.5 shadow-lg transition-all cursor-pointer focus:ring-2 focus:ring-slate-900 group active:scale-[0.99]"
+                  id="cart-drawer-checkout-btn"
+                >
+                  <span>{language === 'en' ? 'Proceed to Order' : 'Valider ma commande'}</span>
+                  <ArrowRight className="w-4 h-4 text-red-400 group-hover:translate-x-1.5 transition-transform duration-300 ease-out" />
+                </button>
 
-              <p className="text-[11px] text-center text-slate-600 font-medium flex items-center justify-center gap-1">
+                <button
+                  onClick={() => setIsCartOpen(false)}
+                  className="w-full min-h-[44px] py-2.5 bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-950 border border-slate-200/90 hover:border-slate-300 rounded-xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer group active:scale-[0.99] shadow-2xs"
+                  id="cart-drawer-continue-shopping-btn"
+                >
+                  <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:-translate-x-1.5 transition-transform duration-300 ease-out" />
+                  <span>{language === 'en' ? 'Continue Shopping' : 'Continuer mes achats'}</span>
+                </button>
+              </div>
+
+              <p className="text-[11px] text-center text-slate-600 font-medium flex items-center justify-center gap-1 pt-1">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                 {language === 'en' ? 'Direct validation on WhatsApp' : 'Validation sans frais sur WhatsApp'}
               </p>

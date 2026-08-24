@@ -211,7 +211,7 @@ export const CatalogView: React.FC = () => {
             id="catalog-mobile-filters-btn"
           >
             <SlidersHorizontal className="w-4 h-4 text-red-600" />
-            <span>Filtres</span>
+            <span>{language === 'en' ? 'Filters' : 'Filtres'}</span>
             {activeFilterCount > 0 && (
               <span className="bg-slate-900 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">
                 {activeFilterCount}
@@ -243,7 +243,7 @@ export const CatalogView: React.FC = () => {
           {/* Category Filter */}
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
-              {language === 'en' ? 'Category' : 'Rayons & Catégories'}
+              {language === 'en' ? 'Departments & Categories' : 'Rayons & Catégories'}
             </label>
             <div className="space-y-1">
               <button
@@ -261,19 +261,21 @@ export const CatalogView: React.FC = () => {
                 const subs = getSubcategories(cat.id);
                 const isCatSelected = filters.category === cat.id;
 
-                const categoryLabels: Record<string, string> = {
-                  'hauts': '👕 Hauts (Chemises, Boubous...)',
-                  'bas': '👖 Bas (Pantalons, Jeans...)',
-                  'vestes-manteaux': '🧥 Vestes & manteaux',
-                  'costumes-habille': '🤵 Costumes & habillé',
-                  'sous-vetements': '🩲 Sous-vêtements',
-                  'chaussures': '👞 Chaussures',
-                  'accessoires': '💼 Accessoires',
-                  'vetements-de-sport': '🏋️ Vêtements de sport',
-                  'autre': '🎁 Autre',
+                const categoryLabels: Record<string, { fr: string; en: string }> = {
+                  'hauts': { fr: '👕 Hauts (Chemises, Boubous...)', en: '👕 Tops (Shirts, Boubous...)' },
+                  'bas': { fr: '👖 Bas (Pantalons, Jeans...)', en: '👖 Bottoms (Trousers, Jeans...)' },
+                  'vestes-manteaux': { fr: '🧥 Vestes & manteaux', en: '🧥 Jackets & Coats' },
+                  'costumes-habille': { fr: '🤵 Costumes & habillé', en: '🤵 Suits & Formal Wear' },
+                  'sous-vetements': { fr: '🩲 Sous-vêtements', en: '🩲 Underwear' },
+                  'chaussures': { fr: '👞 Chaussures', en: '👞 Shoes & Footwear' },
+                  'accessoires': { fr: '💼 Accessoires', en: '💼 Accessories & Leather' },
+                  'vetements-de-sport': { fr: '🏋️ Vêtements de sport', en: '🏋️ Sportswear' },
+                  'autre': { fr: '🎁 Autre', en: '🎁 Other' },
                 };
 
-                const displayName = categoryLabels[cat.id] || (language === 'en' && cat.name_en ? cat.name_en : cat.name);
+                const displayName = categoryLabels[cat.id]
+                  ? (language === 'en' ? categoryLabels[cat.id].en : categoryLabels[cat.id].fr)
+                  : (language === 'en' && cat.name_en ? cat.name_en : cat.name);
 
                 return (
                   <div key={cat.id} className="space-y-1">
@@ -302,7 +304,7 @@ export const CatalogView: React.FC = () => {
                                 : 'text-slate-600 hover:bg-slate-50'
                                 }`}
                             >
-                              <span>{sub.name}</span>
+                              <span>{language === 'en' && sub.name_en ? sub.name_en : sub.name}</span>
                               {isSubSelected && <Check className="w-3 h-3 text-red-600" />}
                             </button>
                           );
@@ -317,11 +319,15 @@ export const CatalogView: React.FC = () => {
 
           {/* DYNAMIC FILTER GROUPS */}
           {visibleFilterGroups.map((fGroup) => {
+            const groupName = language === 'en'
+              ? (fGroup.id === 'taille' ? 'Size' : fGroup.id === 'pointure' ? 'Shoe Size' : fGroup.type === 'color' ? 'Color' : fGroup.name)
+              : fGroup.name;
+
             if (fGroup.id === 'taille' || fGroup.id === 'pointure') {
               return (
                 <div key={fGroup.id} className="space-y-2 pt-3 border-t border-slate-100">
                   <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
-                    {fGroup.name}
+                    {groupName}
                   </label>
                   <div className="flex flex-wrap gap-1.5">
                     <button
@@ -331,7 +337,7 @@ export const CatalogView: React.FC = () => {
                         : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
                         }`}
                     >
-                      Toutes
+                      {language === 'en' ? 'All' : 'Toutes'}
                     </button>
                     {fGroup.options.map((opt) => (
                       <button
@@ -354,7 +360,7 @@ export const CatalogView: React.FC = () => {
               return (
                 <div key={fGroup.id} className="space-y-2 pt-3 border-t border-slate-100">
                   <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
-                    {fGroup.name}
+                    {groupName}
                   </label>
                   <div className="flex flex-wrap gap-2">
                     <button
@@ -364,7 +370,7 @@ export const CatalogView: React.FC = () => {
                         : 'bg-white border-slate-200 text-slate-700'
                         }`}
                     >
-                      Toutes
+                      {language === 'en' ? 'All' : 'Toutes'}
                     </button>
                     {fGroup.options.map((opt) => {
                       const isSel = filters.color === opt.value;
@@ -516,7 +522,7 @@ export const CatalogView: React.FC = () => {
                 {/* Catégories */}
                 <div className="space-y-2">
                   <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
-                    {language === 'en' ? 'Category' : 'Rayons & Catégories'}
+                    {language === 'en' ? 'Departments & Categories' : 'Rayons & Catégories'}
                   </label>
                   <div className="space-y-1">
                     <button
@@ -542,7 +548,7 @@ export const CatalogView: React.FC = () => {
                               isCatSelected ? 'bg-slate-900 text-white font-bold' : 'text-slate-700 bg-slate-50'
                             }`}
                           >
-                            <span>{cat.name}</span>
+                            <span>{language === 'en' && cat.name_en ? cat.name_en : cat.name}</span>
                             {isCatSelected && <Check className="w-4 h-4 text-red-500" />}
                           </button>
                           {subs.length > 0 && (
@@ -555,7 +561,7 @@ export const CatalogView: React.FC = () => {
                                     filters.category === sub.id ? 'bg-red-50 text-red-700 font-bold' : 'text-slate-600 bg-white border border-slate-100'
                                   }`}
                                 >
-                                  <span>{sub.name}</span>
+                                  <span>{language === 'en' && sub.name_en ? sub.name_en : sub.name}</span>
                                   {filters.category === sub.id && <Check className="w-3.5 h-3.5 text-red-600" />}
                                 </button>
                               ))}
@@ -573,7 +579,7 @@ export const CatalogView: React.FC = () => {
                   .map((fGroup) => (
                     <div key={fGroup.id} className="space-y-2 pt-3 border-t border-slate-100">
                       <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
-                        {fGroup.name}
+                        {language === 'en' ? (fGroup.id === 'taille' ? 'Size' : 'Shoe Size') : fGroup.name}
                       </label>
                       <div className="flex flex-wrap gap-2">
                         <button
@@ -582,7 +588,7 @@ export const CatalogView: React.FC = () => {
                             filters.size === 'all' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-200 text-slate-700'
                           }`}
                         >
-                          Toutes
+                          {language === 'en' ? 'All' : 'Toutes'}
                         </button>
                         {fGroup.options.map((opt) => (
                           <button
@@ -605,7 +611,7 @@ export const CatalogView: React.FC = () => {
                   .map((fGroup) => (
                     <div key={fGroup.id} className="space-y-2 pt-3 border-t border-slate-100">
                       <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
-                        {fGroup.name}
+                        {language === 'en' ? 'Color' : fGroup.name}
                       </label>
                       <div className="flex flex-wrap gap-2">
                         <button
@@ -614,7 +620,7 @@ export const CatalogView: React.FC = () => {
                             filters.color === 'all' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-200 text-slate-700'
                           }`}
                         >
-                          Toutes
+                          {language === 'en' ? 'All' : 'Toutes'}
                         </button>
                         {fGroup.options.map((opt) => (
                           <button
@@ -698,13 +704,15 @@ export const CatalogView: React.FC = () => {
                   className="px-4 py-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <RotateCcw className="w-4 h-4 text-slate-500" />
-                  <span>Réinitialiser</span>
+                  <span>{language === 'en' ? 'Reset' : 'Réinitialiser'}</span>
                 </button>
                 <button
                   onClick={() => setMobileFilterOpen(false)}
                   className="flex-1 py-3 px-4 bg-slate-950 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-md text-center"
                 >
-                  Voir les articles ({filteredProducts.length})
+                  {language === 'en'
+                    ? `View items (${filteredProducts.length})`
+                    : `Voir les articles (${filteredProducts.length})`}
                 </button>
               </div>
 

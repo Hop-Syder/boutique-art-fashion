@@ -3,7 +3,7 @@
  * @organization Nexus Partners
  * @description Header — Barre de navigation principale : logo, recherche, langues, panier, menu mobile Art Fashion Storefront
  * @created 2026-08-19
- * @updated 2026-08-22
+ * @updated 2026-08-24
  * 🌐 nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
@@ -80,7 +80,7 @@ export const Header: React.FC = () => {
           <div className="hidden lg:flex items-center gap-2 shrink-0 font-medium tracking-wide">
             <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
             <span className="font-bold text-red-500">Art Fashion :</span>
-            <span className="text-slate-200 font-semibold text-[11px]">
+            <span className="text-slate-200 font-semibold text-[10px]">
               {language === 'en' ? 'Luxury Ready-to-Wear • Cotonou' : 'Prêt-à-Porter de Luxe • Cotonou'}
             </span>
           </div>
@@ -197,69 +197,69 @@ export const Header: React.FC = () => {
               {megaMenuOpen && (
                 <div className="absolute top-full left-0 w-84 bg-white/98 backdrop-blur-2xl border border-slate-200 rounded-2xl shadow-2xl p-3.5 grid grid-cols-1 gap-1 animate-fadeIn z-50">
                   <div className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-3 pt-1 pb-1 border-b border-slate-100">
-                    {language === 'en' ? 'Default Universes & Categories' : 'Rayons & Catégories'}
+                    {language === 'en' ? 'Departments & Categories' : 'Rayons & Catégories'}
                   </div>
                   <button
                     onClick={() => handleCategoryClick('hauts')}
                     className="p-2.5 text-left rounded-xl hover:bg-slate-50 flex items-center justify-between text-xs font-bold text-slate-900 transition-colors cursor-pointer"
                   >
-                    <span className="flex items-center gap-2">👕 Hauts (Chemises, Boubous...)</span>
+                    <span className="flex items-center gap-2">{t('cat.hauts')}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                   </button>
                   <button
                     onClick={() => handleCategoryClick('bas')}
                     className="p-2.5 text-left rounded-xl hover:bg-slate-50 flex items-center justify-between text-xs font-bold text-slate-900 transition-colors cursor-pointer"
                   >
-                    <span className="flex items-center gap-2">👖 Bas (Pantalons, Jeans...)</span>
+                    <span className="flex items-center gap-2">{t('cat.bas')}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                   </button>
                   <button
                     onClick={() => handleCategoryClick('vestes-manteaux')}
                     className="p-2.5 text-left rounded-xl hover:bg-slate-50 flex items-center justify-between text-xs font-bold text-slate-900 transition-colors cursor-pointer"
                   >
-                    <span className="flex items-center gap-2">🧥 Vestes & manteaux</span>
+                    <span className="flex items-center gap-2">{t('cat.vestes_manteaux')}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                   </button>
                   <button
                     onClick={() => handleCategoryClick('costumes-habille')}
                     className="p-2.5 text-left rounded-xl hover:bg-slate-50 flex items-center justify-between text-xs font-bold text-slate-900 transition-colors cursor-pointer"
                   >
-                    <span className="flex items-center gap-2">🤵 Costumes & habillé</span>
+                    <span className="flex items-center gap-2">{t('cat.costumes_habille')}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                   </button>
                   <button
                     onClick={() => handleCategoryClick('sous-vetements')}
                     className="p-2.5 text-left rounded-xl hover:bg-slate-50 flex items-center justify-between text-xs font-bold text-slate-900 transition-colors cursor-pointer"
                   >
-                    <span className="flex items-center gap-2">🩲 Sous-vêtements</span>
+                    <span className="flex items-center gap-2">{t('cat.sous_vetements')}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                   </button>
                   <button
                     onClick={() => handleCategoryClick('chaussures')}
                     className="p-2.5 text-left rounded-xl hover:bg-slate-50 flex items-center justify-between text-xs font-bold text-slate-900 transition-colors cursor-pointer"
                   >
-                    <span className="flex items-center gap-2">👞 Chaussures</span>
+                    <span className="flex items-center gap-2">{t('cat.chaussures')}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                   </button>
                   <button
                     onClick={() => handleCategoryClick('accessoires')}
                     className="p-2.5 text-left rounded-xl hover:bg-slate-50 flex items-center justify-between text-xs font-bold text-slate-900 transition-colors cursor-pointer"
                   >
-                    <span className="flex items-center gap-2">💼 Accessoires</span>
+                    <span className="flex items-center gap-2">{t('cat.accessoires')}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                   </button>
                   <button
                     onClick={() => handleCategoryClick('vetements-de-sport')}
                     className="p-2.5 text-left rounded-xl hover:bg-slate-50 flex items-center justify-between text-xs font-bold text-slate-900 transition-colors cursor-pointer"
                   >
-                    <span className="flex items-center gap-2">🏋️ Vêtements de sport</span>
+                    <span className="flex items-center gap-2">{t('cat.vetements_de_sport')}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                   </button>
                   <button
                     onClick={() => handleCategoryClick('autre')}
                     className="p-2.5 text-left rounded-xl hover:bg-slate-50 flex items-center justify-between text-xs font-bold text-slate-900 transition-colors cursor-pointer"
                   >
-                    <span className="flex items-center gap-2">🎁 Autre</span>
+                    <span className="flex items-center gap-2">{t('cat.autre')}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                   </button>
                 </div>
@@ -307,7 +307,9 @@ export const Header: React.FC = () => {
                 )}
               </div>
               <div className="hidden sm:block text-left">
-                <span className="text-[10px] text-slate-400 block leading-tight">Mon Panier</span>
+                <span className="text-[10px] text-slate-400 block leading-tight">
+                  {language === 'en' ? 'My Cart' : 'Mon Panier'}
+                </span>
                 <span className="text-xs font-bold text-white block">
                   {cartItemCount > 0 ? formatFCFA(cartSubtotal) : '0 FCFA'}
                 </span>
