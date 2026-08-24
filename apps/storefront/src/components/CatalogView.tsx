@@ -153,14 +153,146 @@ export const CatalogView: React.FC = () => {
     return count;
   }, [filters]);
 
+  const activeFilterBadges = useMemo(() => {
+    const badges: { id: string; label: string; onRemove: () => void }[] = [];
+
+    if (filters.category !== 'all') {
+      const catObj = activeCategories.find((c) => c.id === filters.category);
+      const categoryLabels: Record<string, { fr: string; en: string }> = {
+        costumes: { fr: 'Costumes & Blazers', en: 'Suits & Blazers' },
+        chemises: { fr: 'Chemises de Luxe', en: 'Luxury Shirts' },
+        boubous: { fr: 'Grands Boubous Bazin', en: 'Bazin Boubous' },
+        chaussures: { fr: 'Chaussures & Mocassins', en: 'Shoes & Loafers' },
+        accessoires: { fr: 'Accessoires & Maroquinerie', en: 'Accessories' },
+        hauts: { fr: 'Hauts', en: 'Tops' },
+        bas: { fr: 'Bas', en: 'Bottoms' },
+        'vestes-manteaux': { fr: 'Vestes & Manteaux', en: 'Jackets & Coats' },
+        'costumes-habille': { fr: 'Costumes & Habillé', en: 'Suits & Formal' },
+        'sous-vetements': { fr: 'Sous-vêtements', en: 'Underwear' },
+        'vetements-de-sport': { fr: 'Vêtements de Sport', en: 'Sportswear' },
+        autre: { fr: 'Autre', en: 'Other' },
+      };
+      const label = catObj
+        ? (language === 'en' && catObj.name_en ? catObj.name_en : catObj.name)
+        : (categoryLabels[filters.category]
+            ? (language === 'en' ? categoryLabels[filters.category].en : categoryLabels[filters.category].fr)
+            : filters.category);
+
+      badges.push({
+        id: 'category',
+        label,
+        onRemove: () => setFilters((p) => ({ ...p, category: 'all' })),
+      });
+    }
+
+    if (filters.gender !== 'all') {
+      badges.push({
+        id: 'gender',
+        label: filters.gender,
+        onRemove: () => setFilters((p) => ({ ...p, gender: 'all' })),
+      });
+    }
+
+    if (filters.size !== 'all') {
+      badges.push({
+        id: 'size',
+        label: `${language === 'en' ? 'Size' : 'Taille'}: ${filters.size}`,
+        onRemove: () => setFilters((p) => ({ ...p, size: 'all' })),
+      });
+    }
+
+    if (filters.color !== 'all') {
+      badges.push({
+        id: 'color',
+        label: `${language === 'en' ? 'Color' : 'Couleur'}: ${filters.color}`,
+        onRemove: () => setFilters((p) => ({ ...p, color: 'all' })),
+      });
+    }
+
+    if (filters.onlyPromo) {
+      badges.push({
+        id: 'onlyPromo',
+        label: language === 'en' ? '🔥 Special Offer' : '🔥 Vente Privée',
+        onRemove: () => setFilters((p) => ({ ...p, onlyPromo: false })),
+      });
+    }
+
+    if (filters.onlyNew) {
+      badges.push({
+        id: 'onlyNew',
+        label: language === 'en' ? '✨ New 2026' : '✨ Collection 2026',
+        onRemove: () => setFilters((p) => ({ ...p, onlyNew: false })),
+      });
+    }
+
+    if (filters.inStockOnly) {
+      badges.push({
+        id: 'inStockOnly',
+        label: language === 'en' ? '📦 In Stock' : '📦 En Stock',
+        onRemove: () => setFilters((p) => ({ ...p, inStockOnly: false })),
+      });
+    }
+
+    if (filters.searchQuery.trim()) {
+      badges.push({
+        id: 'searchQuery',
+        label: `"${filters.searchQuery.trim()}"`,
+        onRemove: () => setFilters((p) => ({ ...p, searchQuery: '' })),
+      });
+    }
+
+    if (filters.maxPrice < 300000) {
+      badges.push({
+        id: 'maxPrice',
+        label: `≤ ${new Intl.NumberFormat('fr-FR').format(filters.maxPrice)} FCFA`,
+        onRemove: () => setFilters((p) => ({ ...p, maxPrice: 300000 })),
+      });
+    }
+
+    return badges;
+  }, [filters, activeCategories, language, setFilters]);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header & Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-serif font-normal text-slate-900">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+        <div className="flex flex-wrap items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-serif font-normal text-slate-900 shrink-0">
             {language === 'en' ? "Men's Luxury Catalog" : 'Catalogue Prêt-à-Porter'}
           </h1>
+
+          {/* Active Filter Badges (cadre rouge) */}
+          {activeFilterBadges.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 pt-1 lg:pt-0 lg:ml-2">
+              {activeFilterBadges.map((badge) => (
+                <span
+                  key={badge.id}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-900 text-white shadow-xs animate-fadeIn hover:bg-slate-800 transition-colors"
+                >
+                  <span>{badge.label}</span>
+                  <button
+                    onClick={badge.onRemove}
+                    className="hover:text-red-400 p-0.5 rounded-full hover:bg-white/20 transition-colors cursor-pointer"
+                    aria-label={`Supprimer le filtre ${badge.label}`}
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              ))}
+
+              {/* Reset All Button */}
+              {activeFilterBadges.length > 1 && (
+                <button
+                  onClick={resetFilters}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors cursor-pointer"
+                  title={language === 'en' ? 'Clear all filters' : 'Effacer tous les filtres'}
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>{language === 'en' ? 'Clear all' : 'Effacer tout'}</span>
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Search & Sort Controls */}
