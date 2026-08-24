@@ -118,49 +118,61 @@ export const ProductDetailModal: React.FC = () => {
         </button>
 
         {/* Left: Images Gallery */}
-        <div className="md:w-1/2 bg-slate-50 p-4 sm:p-6 flex flex-col justify-between overflow-y-auto border-b md:border-b-0 md:border-r border-slate-100">
-          <div className="relative aspect-[3/4] min-h-[360px] sm:min-h-[450px] md:min-h-[520px] rounded-2xl overflow-hidden bg-white shadow-inner border border-slate-200">
+        <div className="md:w-1/2 bg-slate-50/90 p-4 sm:p-6 flex flex-col gap-4 overflow-y-auto max-h-[85vh] md:max-h-[94vh] border-b md:border-b-0 md:border-r border-slate-200/80">
+          {/* Main Display Image */}
+          <div className="relative w-full aspect-[3/4] max-h-[460px] sm:max-h-[500px] rounded-2xl overflow-hidden bg-white shadow-sm border border-slate-200/90 shrink-0 group">
             <img
               src={selectedProduct.images[activeImageIndex] || selectedProduct.images[0]}
               alt={selectedProduct.name}
-              className="w-full h-full object-cover object-center"
+              className="w-full h-full object-cover object-center transition-all duration-300 group-hover:scale-105"
               loading="eager"
             />
             {selectedProduct.is_promo && selectedProduct.compare_price && (
-              <span className="absolute top-3 left-3 bg-rose-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+              <span className="absolute top-3 left-3 bg-rose-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md z-10">
                 {language === 'en' ? 'Special Offer' : 'Offre Spéciale'}
+              </span>
+            )}
+
+            {/* Photo Counter Badge */}
+            {selectedProduct.images.length > 1 && (
+              <span className="absolute bottom-3 right-3 bg-slate-950/75 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-full shadow-md z-10">
+                {activeImageIndex + 1} / {selectedProduct.images.length}
               </span>
             )}
           </div>
 
-          {/* Thumbnails */}
+          {/* Thumbnails Track */}
           {selectedProduct.images.length > 1 && (
-            <div className="flex items-center gap-2.5 mt-4 overflow-x-auto pb-1">
-              {selectedProduct.images.map((img, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setActiveImageIndex(idx)}
-                  className={`w-16 h-16 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
-                    activeImageIndex === idx
-                      ? 'border-slate-900 shadow-md scale-105'
-                      : 'border-transparent opacity-70 hover:opacity-100'
-                  }`}
-                  aria-label={`Afficher vue ${idx + 1}`}
-                >
-                  <img src={img} alt="" className="w-full h-full object-cover" />
-                </button>
-              ))}
+            <div className="shrink-0 w-full">
+              <div className="flex items-center gap-3 overflow-x-auto py-1 px-0.5 scrollbar-thin scrollbar-thumb-slate-300">
+                {selectedProduct.images.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveImageIndex(idx)}
+                    className={`relative w-16 h-16 sm:w-18 sm:h-18 rounded-xl overflow-hidden border-2 transition-all duration-200 shrink-0 cursor-pointer ${
+                      activeImageIndex === idx
+                        ? 'border-slate-900 ring-2 ring-slate-900/20 shadow-md scale-105 opacity-100'
+                        : 'border-slate-200/80 opacity-65 hover:opacity-100 hover:scale-102 hover:border-slate-400'
+                    }`}
+                    aria-label={`Afficher vue ${idx + 1}`}
+                  >
+                    <img src={img} alt="" className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 
-          {/* Quick reassurance */}
-          <div className="mt-4 p-3 rounded-xl bg-white border border-slate-200/80 flex items-center justify-around text-[11px] text-slate-700 shadow-xs font-medium">
-            <span className="flex items-center gap-1">
-              <Truck className="w-3.5 h-3.5 text-red-600" /> Cotonou Express
-            </span>
-            <span className="flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Rue 403 Zongo
-            </span>
+          {/* Quick Reassurance */}
+          <div className="mt-auto pt-2 shrink-0">
+            <div className="p-3 rounded-xl bg-white border border-slate-200/80 flex items-center justify-around text-[11px] text-slate-700 shadow-xs font-medium">
+              <span className="flex items-center gap-1.5">
+                <Truck className="w-3.5 h-3.5 text-red-600 shrink-0" /> Cotonou Express
+              </span>
+              <span className="flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Rue 403 Zongo
+              </span>
+            </div>
           </div>
         </div>
 
