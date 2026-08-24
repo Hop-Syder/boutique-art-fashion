@@ -1,3 +1,13 @@
+/**
+ * @author @hopsyder
+ * @organization Nexus Partners
+ * @description ProductDetailModal — Modale de fiche détail produit avec vue agrandie de l'image, sélecteur de variantes et commande rapide
+ * @created 2026-08-19
+ * @updated 2026-08-24
+ * 🌐 nexus-partners.xyz
+ * 📧 daoudaabassichristian@gmail.com
+ */
+// ──────────────────────────────────
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../context/StoreContext';
 import { ProductVariant } from '@ayele/shared';
@@ -96,7 +106,7 @@ export const ProductDetailModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/65 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-fadeIn">
-      <div className="bg-white rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl border border-slate-200 relative flex flex-col md:flex-row max-h-[92vh]">
+      <div className="bg-white rounded-3xl max-w-5xl w-full overflow-hidden shadow-2xl border border-slate-200 relative flex flex-col md:flex-row max-h-[94vh]">
         {/* Close button */}
         <button
           onClick={() => setSelectedProduct(null)}
@@ -109,7 +119,7 @@ export const ProductDetailModal: React.FC = () => {
 
         {/* Left: Images Gallery */}
         <div className="md:w-1/2 bg-slate-50 p-4 sm:p-6 flex flex-col justify-between overflow-y-auto border-b md:border-b-0 md:border-r border-slate-100">
-          <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-white shadow-inner border border-slate-200">
+          <div className="relative aspect-[3/4] min-h-[360px] sm:min-h-[450px] md:min-h-[520px] rounded-2xl overflow-hidden bg-white shadow-inner border border-slate-200">
             <img
               src={selectedProduct.images[activeImageIndex] || selectedProduct.images[0]}
               alt={selectedProduct.name}
