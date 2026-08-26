@@ -16,7 +16,7 @@ const STORAGE_KEYS = {
   CATEGORIES: 'art_fashion_categories_v1',
   FILTERS: 'art_fashion_filters_v1',
   SETTINGS: 'art_fashion_settings_v1',
-  ORDERS: 'art_fashion_orders_v1',
+  ORDERS: 'ayele_orders',
 };
 
 const CHANNEL_NAME = 'art_fashion_store_sync_channel';
@@ -223,7 +223,7 @@ class StorageEngine {
   // --- ORDERS ---
   public getOrders(): any[] {
     if (typeof window === 'undefined') return [];
-    const raw = localStorage.getItem('ayele_orders');
+    const raw = localStorage.getItem(STORAGE_KEYS.ORDERS);
     if (!raw) return [];
     try {
       return JSON.parse(raw);
@@ -234,7 +234,7 @@ class StorageEngine {
 
   public saveOrders(orders: any[]): void {
     if (typeof window === 'undefined') return;
-    localStorage.setItem('ayele_orders', JSON.stringify(orders));
+    localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(orders));
     this.broadcast('ORDERS_UPDATED');
   }
 
