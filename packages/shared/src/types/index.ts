@@ -176,7 +176,64 @@ export interface SectionMedia {
   badge_en?: string;
 }
 
+export interface TrustBadge {
+  id: string;
+  title: string;
+  title_en: string;
+  description: string;
+  description_en: string;
+  icon: 'map-pin' | 'clock' | 'shield-check' | 'check-circle' | 'truck' | 'star';
+}
+
+export interface CollectionHeader {
+  title: string;
+  title_en: string;
+  description: string;
+  description_en: string;
+}
+
+export interface CarouselSlide {
+  id: string;
+  image: string;
+  title: string;
+  title_en: string;
+  subtitle: string;
+  subtitle_en: string;
+  meta: Array<{ label: string; value: string; label_en?: string; value_en?: string }>;
+}
+
+export interface AboutEngagement {
+  id: string;
+  icon: string;
+  title: string;
+  title_en: string;
+  description: string;
+  description_en: string;
+}
+
+export interface AboutStat {
+  id: string;
+  value: string;
+  label: string;
+  label_en: string;
+}
+
+export interface AboutDelivery {
+  id: string;
+  image: string;
+  location: string;
+  time: string;
+  article: string;
+  client: string;
+  status: string;
+  rating: string;
+}
+
 export interface SectionsConfig {
+  topBar: {
+    messages: string[];
+    messages_en: string[];
+  };
   hero: {
     badge?: string;
     badge_en?: string;
@@ -190,7 +247,13 @@ export interface SectionsConfig {
     cta_primary_text_en: string;
     cta_secondary_text: string;
     cta_secondary_text_en: string;
+    trust_badges: TrustBadge[];
   };
+  collections: {
+    newArrivals: CollectionHeader;
+    signaturePieces: CollectionHeader;
+  };
+  carousel3D: CarouselSlide[];
   about: {
     hero_title: string;
     hero_title_en: string;
@@ -203,8 +266,10 @@ export interface SectionsConfig {
     craftsmanship_text_en: string;
     craftsmanship_image: string;
     values_banner_image: string;
+    engagements: AboutEngagement[];
+    stats: AboutStat[];
+    deliveries: AboutDelivery[];
   };
-  promos: SectionMedia[];
 }
 
 export interface TranslationDictionary {

@@ -150,16 +150,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [products, setProducts] = useState<Product[]>(() => storageService.getProducts());
   const [categories, setCategories] = useState<Category[]>(() => storageService.getCategories());
   const [filtersConfig, setFiltersConfig] = useState<FilterGroup[]>(() => storageService.getFilters());
-  const [deliveryZones] = useState<DeliveryZone[]>(() =>
-    getStorageItem('ayele_delivery_zones', INITIAL_DELIVERY_ZONES)
-  );
+  const [deliveryZones, setDeliveryZones] = useState<DeliveryZone[]>(() => storageService.getDeliveryZones());
   const [orders, setOrders] = useState<Order[]>(() =>
     getStorageItem('ayele_orders', INITIAL_ORDERS)
   );
   const [settings, setSettings] = useState<StoreSettings>(() => storageService.getSettings());
-  const [sectionsConfig] = useState<SectionsConfig>(() =>
-    getStorageItem('ayele_sections_config', INITIAL_SECTIONS_CONFIG)
-  );
+  const [sectionsConfig, setSectionsConfig] = useState<SectionsConfig>(() => storageService.getSectionsConfig());
   const [cart, setCart] = useState<CartItem[]>(() =>
     getStorageItem('ayele_cart', [])
   );
@@ -181,6 +177,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setCategories(storageService.getCategories());
       setFiltersConfig(storageService.getFilters());
       setSettings(storageService.getSettings());
+      setSectionsConfig(storageService.getSectionsConfig());
+      setDeliveryZones(storageService.getDeliveryZones());
       if (msg.type === 'ORDERS_UPDATED' || msg.type === 'FULL_RESET') {
         const freshOrders = storageService.getOrders();
         if (freshOrders && freshOrders.length > 0) {

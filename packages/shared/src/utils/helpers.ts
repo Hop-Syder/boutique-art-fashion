@@ -44,7 +44,7 @@ export const generateWhatsAppMessage = (
     .join('\n\n');
 
   const rawMessage = `═════ *NOUVELLE COMMANDE* ═════
-🌐 _Site Web Officiel (artfashion-cotonou.com)_
+🌐 _Site Web Officiel (www.artfashionhome.com)_
 -----------------------------------------
 🔖 *N° de Commande :* \`${order.order_number}\`
 📅 *Date :* ${new Date(order.created_at).toLocaleDateString('fr-FR')}

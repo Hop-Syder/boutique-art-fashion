@@ -526,6 +526,10 @@ export const INITIAL_ORDERS: Order[] = [
 ];
 
 export const INITIAL_SECTIONS_CONFIG: SectionsConfig = {
+  topBar: {
+    messages: ["LIVRAISON OFFERTE À COTONOU ET CALAVI", "LANCEMENT DE LA COLLECTION 2026"],
+    messages_en: ["FREE DELIVERY IN COTONOU AND CALAVI", "LAUNCH OF THE 2026 COLLECTION"],
+  },
   hero: {
     title: 'ART FASHION Prêt-à-Porter de Luxe',
     title_en: 'ART FASHION Luxury Ready-to-Wear',
@@ -537,7 +541,46 @@ export const INITIAL_SECTIONS_CONFIG: SectionsConfig = {
     cta_primary_text_en: "Men's Collection",
     cta_secondary_text: 'Localiser la Boutique Rue 403',
     cta_secondary_text_en: 'Locate Rue 403 Boutique',
+    trust_badges: [
+      { id: 'tb1', title: 'Boutique', title_en: 'Boutique', description: 'Cotonou, Bénin', description_en: 'Cotonou, Benin', icon: 'map-pin' },
+      { id: 'tb2', title: 'Livraison Express', title_en: 'Express Delivery', description: 'Sous 24h', description_en: 'Within 24h', icon: 'truck' },
+      { id: 'tb3', title: 'Paiement Sûr', title_en: 'Secure Payment', description: 'À la livraison', description_en: 'On delivery', icon: 'shield-check' }
+    ]
   },
+  collections: {
+    newArrivals: {
+      title: 'Nouveautés de l\'Atelier',
+      title_en: 'New Arrivals',
+      description: 'Découvrez nos dernières créations.',
+      description_en: 'Discover our latest creations.'
+    },
+    signaturePieces: {
+      title: 'Les Pièces Signature',
+      title_en: 'Signature Pieces',
+      description: 'L\'essence même de notre maison.',
+      description_en: 'The very essence of our house.'
+    }
+  },
+  carousel3D: [
+    {
+      id: 'slide1',
+      image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80',
+      title: 'Costume Zongo',
+      title_en: 'Zongo Suit',
+      subtitle: 'Prestige & Élégance',
+      subtitle_en: 'Prestige & Elegance',
+      meta: [{ label: 'Prix', value: '185000 FCFA', label_en: 'Price', value_en: '185000 FCFA' }]
+    },
+    {
+      id: 'slide2',
+      image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80',
+      title: 'Boubou Fayola',
+      title_en: 'Fayola Boubou',
+      subtitle: 'Tradition Royale',
+      subtitle_en: 'Royal Tradition',
+      meta: [{ label: 'Prix', value: '240000 FCFA', label_en: 'Price', value_en: '240000 FCFA' }]
+    }
+  ],
   about: {
     hero_title: 'Notre Maison — ART FASHION Cotonou',
     hero_title_en: 'Our House — ART FASHION Cotonou',
@@ -550,22 +593,117 @@ export const INITIAL_SECTIONS_CONFIG: SectionsConfig = {
     craftsmanship_text_en: 'Our expertise rests on the rigorous selection of Italian suits, premium dress shirts, prestigious bazin boubous and exceptional leather accessories. Through each collection, we fuse European refinement with African sartorial heritage to create a style that is unique, distinguished, and resolutely modern.',
     craftsmanship_image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=800&q=80',
     values_banner_image: 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=1200&q=80',
-  },
-  promos: [
-    {
-      id: 'promo-costumes-collection',
-      title: 'Offre Prestige Costumes 3 Pièces',
-      title_en: 'Prestige 3-Piece Suit Offer',
-      subtitle: '-15% sur la collection Zongo pour tout achat en boutique ce mois-ci',
-      subtitle_en: '-15% off Zongo suit collection for any in-store order this month',
-      image_url: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80',
-      button_text: 'Commander sur WhatsApp',
-      button_text_en: 'Order on WhatsApp',
-      button_link: 'catalog',
-      badge: 'Exclusivité Cotonou',
-      badge_en: 'Cotonou Exclusive',
-    },
-  ],
+    engagements: [
+      {
+        id: 'eng1',
+        icon: 'Award',
+        title: 'Tissus & Matières Premium',
+        title_en: 'Premium Fabrics & Materials',
+        description: 'Laines Super 140s italiennes, soies sauvages, lins égyptiens et cotons Getzner 5 étoiles.',
+        description_en: 'Italian Super 140s wools, raw silks, Egyptian linens, and 5-star Getzner cottons.',
+      },
+      {
+        id: 'eng2',
+        icon: 'Scissors',
+        title: 'Finitions & Retouches Sur-Mesure',
+        title_en: 'Custom Alterations & Tailoring',
+        description: 'Ajustement précis et retouches personnalisées par nos maîtres tailleurs à l’atelier Rue 403.',
+        description_en: 'Precise fitting and custom alterations by master tailors in our Rue 403 workshop.',
+      },
+      {
+        id: 'eng3',
+        icon: 'Crown',
+        title: 'Conseils de Style VIP',
+        title_en: 'VIP Bespoke Styling Advice',
+        description: 'Accompagnement vestimentaire dédié pour mariages, galas diplomatiques et rendez-vous d’affaires.',
+        description_en: 'Dedicated styling guidance for weddings, diplomatic galas, and executive meetings.',
+      },
+      {
+        id: 'eng4',
+        icon: 'HeartHandshake',
+        title: 'Service Client d’Excellence',
+        title_en: 'Excellence in Customer Care',
+        description: 'Conseillers disponibles 7j/7 sur WhatsApp et accueil personnalisé en salon privé à la boutique.',
+        description_en: 'Advisors available 7/7 on WhatsApp and private salon reception at our flagship store.',
+      },
+      {
+        id: 'eng5',
+        icon: 'Truck',
+        title: 'Livraison Rapide & Essayage',
+        title_en: 'Fast Delivery & Home Fitting',
+        description: 'Livraison express à Cotonou, Calavi et Porto-Novo avec essayage et paiement à réception.',
+        description_en: 'Express delivery in Cotonou, Calavi, and Porto-Novo with in-home fitting and COD.',
+      },
+    ],
+    stats: [
+      { id: 'st1', value: '500+', label: 'Gentlemen habillés', label_en: 'Gentlemen styled' },
+      { id: 'st2', value: '15+', label: 'Années d\'expertise', label_en: 'Years of expertise' },
+      { id: 'st3', value: '9', label: 'Rayons exclusifs', label_en: 'Exclusive categories' },
+      { id: 'st4', value: '100%', label: 'Satisfaction garantie', label_en: 'Guaranteed satisfaction' },
+    ],
+    deliveries: [
+      {
+        id: 'del1',
+        image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80',
+        location: 'Haie Vive, Cotonou',
+        time: '45 min',
+        article: 'Costume Croisé Zongo Prestige',
+        client: 'Directeur Général — Société Immobilière',
+        status: 'Livré & Essayé à domicile',
+        rating: '5.0',
+      },
+      {
+        id: 'del2',
+        image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=800&q=80',
+        location: 'Fidjrossè Plage, Cotonou',
+        time: '1h15',
+        article: 'Chemise Lin Égyptien Brodé',
+        client: 'Cadre Bancaire',
+        status: 'Payé par Mobile Money à réception',
+        rating: '5.0',
+      },
+      {
+        id: 'del3',
+        image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80',
+        location: 'Arconville, Abomey-Calavi',
+        time: '1h45',
+        article: 'Grand Boubou Bazin Impérial',
+        client: 'Cérémonie Diplomatique',
+        status: 'Livré en housse de protection luxe',
+        rating: '5.0',
+      },
+      {
+        id: 'del4',
+        image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=80',
+        location: 'Ganhi (Zone Commerciale), Cotonou',
+        time: '30 min',
+        article: 'Blazer Croisé & Pantalon Habillé',
+        client: 'Avocat au Barreau',
+        status: 'Livraison express bureau',
+        rating: '5.0',
+      },
+      {
+        id: 'del5',
+        image: 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=800&q=80',
+        location: 'Cadjèhoun, Cotonou',
+        time: '50 min',
+        article: 'Mocassins Cuir Italien Blake & Ceinture',
+        client: 'Consultant International',
+        status: 'Ajustement parfait sur place',
+        rating: '5.0',
+      },
+      {
+        id: 'del6',
+        image: 'https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=800&q=80',
+        location: 'Akpakpa Dodomè, Cotonou',
+        time: '1h10',
+        article: 'Ensemble Maroquinerie & Boutons d’Or',
+        client: 'Entrepreneur VIP',
+        status: 'Paiement à la livraison',
+        rating: '5.0',
+      },
+    ],
+  }
 };
 
 export const TRANSLATIONS_FR: TranslationDictionary = {

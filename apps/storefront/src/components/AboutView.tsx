@@ -36,107 +36,18 @@ const MAPS_URL =
   'https://www.google.com/maps/search/?api=1&query=' +
   encodeURIComponent('ART FASHION Rue 403 Zongo Scoa Gbeto Cotonou Benin');
 
-const ENGAGEMENTS = [
-  {
-    icon: Award,
-    title_fr: 'Tissus & Matières Premium',
-    title_en: 'Premium Fabrics & Materials',
-    desc_fr: 'Laines Super 140s italiennes, soies sauvages, lins égyptiens et cotons Getzner 5 étoiles.',
-    desc_en: 'Italian Super 140s wools, raw silks, Egyptian linens, and 5-star Getzner cottons.',
-  },
-  {
-    icon: Scissors,
-    title_fr: 'Finitions & Retouches Sur-Mesure',
-    title_en: 'Custom Alterations & Tailoring',
-    desc_fr: 'Ajustement précis et retouches personnalisées par nos maîtres tailleurs à l’atelier Rue 403.',
-    desc_en: 'Precise fitting and custom alterations by master tailors in our Rue 403 workshop.',
-  },
-  {
-    icon: Crown,
-    title_fr: 'Conseils de Style VIP',
-    title_en: 'VIP Bespoke Styling Advice',
-    desc_fr: 'Accompagnement vestimentaire dédié pour mariages, galas diplomatiques et rendez-vous d’affaires.',
-    desc_en: 'Dedicated styling guidance for weddings, diplomatic galas, and executive meetings.',
-  },
-  {
-    icon: HeartHandshake,
-    title_fr: 'Service Client d’Excellence',
-    title_en: 'Excellence in Customer Care',
-    desc_fr: 'Conseillers disponibles 7j/7 sur WhatsApp et accueil personnalisé en salon privé à la boutique.',
-    desc_en: 'Advisors available 7/7 on WhatsApp and private salon reception at our flagship store.',
-  },
-  {
-    icon: Truck,
-    title_fr: 'Livraison Rapide & Essayage',
-    title_en: 'Fast Delivery & Home Fitting',
-    desc_fr: 'Livraison express à Cotonou, Calavi et Porto-Novo avec essayage et paiement à réception.',
-    desc_en: 'Express delivery in Cotonou, Calavi, and Porto-Novo with in-home fitting and COD.',
-  },
-];
-
-const CHIFFRES = [
-  { val: '500+', fr: 'Gentlemen habillés', en: 'Gentlemen styled' },
-  { val: '15+', fr: "Années d'expertise", en: 'Years of expertise' },
-  { val: '9', fr: 'Rayons exclusifs', en: 'Exclusive categories' },
-  { val: '100%', fr: 'Satisfaction garantie', en: 'Guaranteed satisfaction' },
-];
-
-const LIVRAISONS = [
-  {
-    img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80',
-    lieu: 'Haie Vive, Cotonou',
-    delai: '45 min',
-    article: 'Costume Croisé Zongo Prestige',
-    client: 'Directeur Général — Société Immobilière',
-    status: 'Livré & Essayé à domicile',
-    note: '5.0',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=800&q=80',
-    lieu: 'Fidjrossè Plage, Cotonou',
-    delai: '1h15',
-    article: 'Chemise Lin Égyptien Brodé',
-    client: 'Cadre Bancaire',
-    status: 'Payé par Mobile Money à réception',
-    note: '5.0',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80',
-    lieu: 'Arconville, Abomey-Calavi',
-    delai: '1h45',
-    article: 'Grand Boubou Bazin Impérial',
-    client: 'Cérémonie Diplomatique',
-    status: 'Livré en housse de protection luxe',
-    note: '5.0',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=80',
-    lieu: 'Ganhi (Zone Commerciale), Cotonou',
-    delai: '30 min',
-    article: 'Blazer Croisé & Pantalon Habillé',
-    client: 'Avocat au Barreau',
-    status: 'Livraison express bureau',
-    note: '5.0',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=800&q=80',
-    lieu: 'Cadjèhoun, Cotonou',
-    delai: '50 min',
-    article: 'Mocassins Cuir Italien Blake & Ceinture',
-    client: 'Consultant International',
-    status: 'Ajustement parfait sur place',
-    note: '5.0',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=800&q=80',
-    lieu: 'Akpakpa Dodomè, Cotonou',
-    delai: '1h10',
-    article: 'Ensemble Maroquinerie & Boutons d’Or',
-    client: 'Entrepreneur VIP',
-    status: 'Paiement à la livraison',
-    note: '5.0',
-  },
-];
+const ICON_MAP: Record<string, React.FC<any>> = {
+  Award,
+  Scissors,
+  Crown,
+  HeartHandshake,
+  Truck,
+  ShieldCheck,
+  CheckCircle2,
+  PackageCheck,
+  Star,
+  Sparkles,
+};
 
 export const AboutView: React.FC = () => {
   const { settings, sectionsConfig, language, setCurrentView } = useStore();
@@ -168,15 +79,11 @@ export const AboutView: React.FC = () => {
               </div>
 
               <div className="space-y-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+                <h1 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mb-4">
+                  {fr ? about.hero_title : about.hero_title_en}
+                </h1>
                 <p>
-                  <strong className="text-slate-900 font-semibold">ART FASHION</strong> {fr
-                    ? "est une maison d'élégance masculine à Cotonou. Nous proposons une sélection raffinée de costumes italiens, chemises, boubous bazin et accessoires haut de gamme, alliant le raffinement européen à l'élégance africaine."
-                    : "is a house of men's elegance in Cotonou. We offer a refined selection of Italian suits, luxury shirts, bazin boubous, and premium accessories, seamlessly blending European refinement with African elegance."}
-                </p>
-                <p className="text-sm sm:text-base text-slate-700 font-medium">
-                  {fr
-                    ? "Nous accompagnons les hommes soucieux de leur image avec des pièces soigneusement sélectionnées, conçues pour affirmer leur personnalité avec distinction, confiance et modernité."
-                    : "We guide men who value their style with carefully curated pieces designed to express their personality with distinction, confidence, and modernity."}
+                  {fr ? about.hero_subtitle : about.hero_subtitle_en}
                 </p>
               </div>
 
@@ -300,28 +207,35 @@ export const AboutView: React.FC = () => {
         </div>
       </section>
 
-      {/* ── 3. NOS 5 ENGAGEMENTS D'EXCELLENCE ── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200/80 pb-5">
-          <div className="space-y-2">
-            <h2 className="text-2xl sm:text-4xl font-serif font-normal text-slate-950 tracking-tight leading-tight">
-              {fr ? 'Nos Engagements d’Excellence' : 'Our Commitments to Excellence'}
-            </h2>
-            <div className="flex items-center gap-3 pt-0.5">
+      {/* ── 3. SAVOIR-FAIRE & ENGAGEMENTS D'EXCELLENCE ── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="order-2 lg:order-1 relative rounded-3xl overflow-hidden shadow-2xl">
+            <img 
+              src={about.craftsmanship_image || 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=800&q=80'} 
+              alt="Savoir-Faire" 
+              className="w-full h-[400px] object-cover"
+            />
+          </div>
+          <div className="order-1 lg:order-2 space-y-6">
+            <div className="space-y-2">
+              <h2 className="text-2xl sm:text-4xl font-serif font-normal text-slate-950 tracking-tight leading-tight">
+                {fr ? about.craftsmanship_title : about.craftsmanship_title_en}
+              </h2>
               <div className="w-12 h-0.5 bg-gradient-to-r from-red-600 to-red-400 rounded-full" />
-              <p className="text-xs sm:text-sm text-slate-600 font-normal">
-                {fr ? 'Une exigence sans compromis du tissu jusqu’à la livraison' : 'Uncompromising standards from fabric to final delivery'}
-              </p>
             </div>
+            <p className="text-slate-600 leading-relaxed">
+              {fr ? about.craftsmanship_text : about.craftsmanship_text_en}
+            </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {ENGAGEMENTS.map((item, idx) => {
-            const Icon = item.icon;
+          {about.engagements.map((item, idx) => {
+            const Icon = ICON_MAP[item.icon] || Star;
             return (
               <div
-                key={idx}
+                key={item.id || idx}
                 className="bg-white rounded-2xl p-6 border border-slate-200/80 hover:border-red-300 hover:shadow-lg transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
@@ -329,10 +243,10 @@ export const AboutView: React.FC = () => {
                     <Icon className="w-6 h-6" />
                   </div>
                   <h3 className="text-base font-bold text-slate-900 mb-2">
-                    {fr ? item.title_fr : item.title_en}
+                    {fr ? item.title : item.title_en}
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-                    {fr ? item.desc_fr : item.desc_en}
+                    {fr ? item.description : item.description_en}
                   </p>
                 </div>
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-1.5 text-[11px] font-bold text-red-600">
@@ -349,10 +263,10 @@ export const AboutView: React.FC = () => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-slate-900 text-white rounded-3xl p-8 sm:p-10 border border-slate-800 shadow-xl">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center divide-x-0 sm:divide-x divide-slate-800">
-            {CHIFFRES.map(({ val, fr: lf, en: le }, idx) => (
-              <div key={idx} className="p-2">
-                <p className="text-3xl sm:text-5xl font-serif font-normal text-red-500 tracking-tight">{val}</p>
-                <p className="text-xs sm:text-sm text-slate-300 mt-2 font-medium">{fr ? lf : le}</p>
+            {about.stats.map((stat) => (
+              <div key={stat.id} className="p-2">
+                <p className="text-3xl sm:text-5xl font-serif font-normal text-red-500 tracking-tight">{stat.value}</p>
+                <p className="text-xs sm:text-sm text-slate-300 mt-2 font-medium">{fr ? stat.label : stat.label_en}</p>
               </div>
             ))}
           </div>
@@ -394,15 +308,15 @@ export const AboutView: React.FC = () => {
         {/* Carrousel Loop Marquee */}
         <div className="relative w-full overflow-hidden py-4">
           <div className="animate-marquee-left flex gap-6 px-4">
-            {[...LIVRAISONS, ...LIVRAISONS, ...LIVRAISONS].map((d, i) => (
+            {[...about.deliveries, ...about.deliveries, ...about.deliveries].map((d, i) => (
               <div
-                key={i}
+                key={`${d.id}-${i}`}
                 className="w-[300px] sm:w-[360px] shrink-0 bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 hover:border-red-500/50 hover:shadow-2xl hover:shadow-red-950/30 transition-all duration-300 group select-none"
               >
                 <div className="relative h-56 sm:h-64 overflow-hidden bg-slate-950">
                   <img
-                    src={d.img}
-                    alt={`${d.article} livré à ${d.lieu}`}
+                    src={d.image}
+                    alt={`${d.article} livré à ${d.location}`}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     loading="lazy"
                     decoding="async"
@@ -415,13 +329,13 @@ export const AboutView: React.FC = () => {
                   </span>
 
                   <span className="absolute top-3 right-3 bg-slate-950/80 backdrop-blur-md text-slate-200 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg border border-white/10">
-                    ⚡ {d.delai}
+                    ⚡ {d.time}
                   </span>
 
                   <div className="absolute bottom-3 left-3 right-3 text-white">
                     <p className="text-xs font-semibold text-red-400 flex items-center gap-1.5 mb-1">
                       <MapPin className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                      <span>{d.lieu}</span>
+                      <span>{d.location}</span>
                     </p>
                     <h3 className="text-sm sm:text-base font-serif font-bold text-white leading-tight">
                       {d.article}
@@ -434,7 +348,7 @@ export const AboutView: React.FC = () => {
                     <span className="text-slate-400 font-medium truncate max-w-[200px]">{d.client}</span>
                     <div className="flex items-center gap-1 text-amber-400 font-bold">
                       <Star className="w-3.5 h-3.5 fill-amber-400" />
-                      <span>{d.note}</span>
+                      <span>{d.rating}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 pt-1 border-t border-slate-800 text-[11px] text-emerald-400 font-medium">

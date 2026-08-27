@@ -22,7 +22,7 @@ interface ImageUploadInputProps {
 
 const MAX_SIZE_MB  = 8;
 const MAX_SIZE_B   = MAX_SIZE_MB * 1024 * 1024;
-const UPLOAD_API   = '/api/upload';
+const UPLOAD_API   = '/api/upload.php';
 
 export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
   value,

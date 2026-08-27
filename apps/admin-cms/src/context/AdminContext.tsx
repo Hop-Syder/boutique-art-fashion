@@ -90,16 +90,12 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [products, setProducts] = useState<Product[]>(() => storageService.getProducts());
   const [categories, setCategories] = useState<Category[]>(() => storageService.getCategories());
   const [filters, setFilters] = useState<FilterGroup[]>(() => storageService.getFilters());
-  const [deliveryZones, setDeliveryZones] = useState<DeliveryZone[]>(() =>
-    getStorageItem('ayele_delivery_zones', INITIAL_DELIVERY_ZONES)
-  );
+  const [deliveryZones, setDeliveryZones] = useState<DeliveryZone[]>(() => storageService.getDeliveryZones());
   const [orders, setOrders] = useState<Order[]>(() =>
     getStorageItem('ayele_orders', INITIAL_ORDERS)
   );
   const [settings, setSettings] = useState<StoreSettings>(() => storageService.getSettings());
-  const [sectionsConfig, setSectionsConfig] = useState<SectionsConfig>(() =>
-    getStorageItem('ayele_sections_config', INITIAL_SECTIONS_CONFIG)
-  );
+  const [sectionsConfig, setSectionsConfig] = useState<SectionsConfig>(() => storageService.getSectionsConfig());
 
   // Pull the VPS-persisted snapshot once at startup (survives cache clears / new browsers),
   // then reflect it into local state — this context doesn't subscribe() to sync messages.
@@ -110,6 +106,8 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setFilters(storageService.getFilters());
       setSettings(storageService.getSettings());
       setOrders(storageService.getOrders());
+      setSectionsConfig(storageService.getSectionsConfig());
+      setDeliveryZones(storageService.getDeliveryZones());
     });
   }, []);
 
@@ -135,11 +133,11 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [orders]);
 
   useEffect(() => {
-    setStorageItem('ayele_delivery_zones', deliveryZones);
+    storageService.saveDeliveryZones(deliveryZones);
   }, [deliveryZones]);
 
   useEffect(() => {
-    setStorageItem('ayele_sections_config', sectionsConfig);
+    storageService.saveSectionsConfig(sectionsConfig);
   }, [sectionsConfig]);
 
   // Product CRUD

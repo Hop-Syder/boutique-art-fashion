@@ -42,6 +42,7 @@ export const Header: React.FC = () => {
     setLanguage,
     t,
     formatFCFA,
+    sectionsConfig,
   } = useStore();
 
   const [searchOpen, setSearchOpen] = useState(false);
@@ -90,26 +91,15 @@ export const Header: React.FC = () => {
             <div className="animate-ticker flex items-center gap-8 py-0.5 whitespace-nowrap text-[10px] sm:text-xs">
               {[1, 2].map((loopIdx) => (
                 <div key={loopIdx} className="flex items-center gap-6 sm:gap-8 shrink-0">
-                  <span className="flex items-center gap-1.5 text-red-500 font-bold">
-                    <span>🔥</span>
-                    <span>{language === 'en' ? 'Special Promo: Up to -30% on Luxury Suits & Blazers' : 'Vente Privée : Jusqu’à -30% sur les Costumes & Blazers'}</span>
-                  </span>
-                  <span className="text-slate-600 font-bold">•</span>
-                  <span className="flex items-center gap-1.5 text-slate-200 font-medium">
-                    <span>🚚</span>
-                    <span>{language === 'en' ? 'Express Home Delivery in Cotonou & Calavi (2h-4h)' : 'Livraison Express à Domicile Cotonou & Calavi (2h à 4h)'}</span>
-                  </span>
-                  <span className="text-slate-600 font-bold">•</span>
-                  <span className="flex items-center gap-1.5 text-red-400 font-semibold">
-                    <span>✨</span>
-                    <span>{language === 'en' ? 'New 2026 Collection Now in Store' : 'Nouvelle Collection Cérémonie & Soirée 2026'}</span>
-                  </span>
-                  <span className="text-slate-600 font-bold">•</span>
-                  <span className="flex items-center gap-1.5 text-slate-200 font-medium">
-                    <span>👑</span>
-                    <span>{language === 'en' ? 'Boubous Bazin Riche & Custom Tailoring' : 'Boubous Bazin Riche & Retouches Sur-Mesure'}</span>
-                  </span>
-                  <span className="text-slate-600 font-bold">•</span>
+                  {((language === 'en' ? sectionsConfig.topBar?.messages_en : sectionsConfig.topBar?.messages) || []).map((msg, i) => (
+                    <React.Fragment key={i}>
+                      <span className="flex items-center gap-1.5 text-slate-200 font-medium">
+                        <Sparkles className="w-3 h-3 text-red-500" />
+                        <span>{msg}</span>
+                      </span>
+                      <span className="text-slate-600 font-bold">•</span>
+                    </React.Fragment>
+                  ))}
                 </div>
               ))}
             </div>

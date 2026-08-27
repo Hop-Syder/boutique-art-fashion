@@ -92,7 +92,7 @@ const COVERFLOW_SLIDES: CoverflowSlide[] = [
 ];
 
 export const HomeView: React.FC = () => {
-  const { products, setCurrentView, setFilters, settings, language } = useStore();
+  const { products, setCurrentView, setFilters, settings, language, sectionsConfig } = useStore();
   const [mapTab, setMapTab] = React.useState<'interactive' | 'visual'>('interactive');
 
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -127,12 +127,12 @@ export const HomeView: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4">
           <div>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900">
-              {language === 'en' ? 'Workshop New Arrivals' : "Les Nouveautés de l'Atelier"}
+              {language === 'en' ? sectionsConfig.collections?.newArrivals?.title_en : sectionsConfig.collections?.newArrivals?.title}
             </h2>
             <p className="text-xs text-slate-500 mt-1">
               {language === 'en'
-                ? 'Exclusive limited-edition pieces crafted in our Cotonou workshop.'
-                : 'Des pièces exclusives confectionnées en séries limitées dans notre atelier à Cotonou.'}
+                ? sectionsConfig.collections?.newArrivals?.description_en
+                : sectionsConfig.collections?.newArrivals?.description}
             </p>
           </div>
 
@@ -144,6 +144,27 @@ export const HomeView: React.FC = () => {
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
+
+        {/* Carousel 3D */}
+        {(sectionsConfig.carousel3D?.length ?? 0) > 0 && (
+          <div className="mb-12 mt-8">
+            <CoverflowCarousel
+              slides={sectionsConfig.carousel3D.map(slide => ({
+                src: slide.image,
+                alt: slide.title,
+                title: language === 'en' ? slide.title_en : slide.title,
+                subtitle: language === 'en' ? slide.subtitle_en : slide.subtitle,
+                meta: slide.meta?.map(m => ({
+                  label: language === 'en' && m.label_en ? m.label_en : m.label,
+                  value: language === 'en' && m.value_en ? m.value_en : m.value
+                }))
+              }))}
+              showCaption
+              showPagination
+              showNavigation
+            />
+          </div>
+        )}
 
 
 
@@ -163,12 +184,12 @@ export const HomeView: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
           <div>
             <h2 className="text-2xl sm:text-3xl font-serif font-medium text-slate-900">
-              {language === 'en' ? 'Signature Pieces' : 'Les Pièces Signature'}
+              {language === 'en' ? sectionsConfig.collections?.signaturePieces?.title_en : sectionsConfig.collections?.signaturePieces?.title}
             </h2>
             <p className="text-xs text-slate-500 mt-1">
               {language === 'en'
-                ? 'Our most celebrated creations by clients in Cotonou, Calavi and Porto-Novo.'
-                : 'Les modèles les plus plébiscités par nos clientes et clients à Cotonou, Calavi et Porto-Novo.'}
+                ? sectionsConfig.collections?.signaturePieces?.description_en
+                : sectionsConfig.collections?.signaturePieces?.description}
             </p>
           </div>
 

@@ -8,8 +8,8 @@
  * 📧 daoudaabassichristian@gmail.com
  */
 
-import { Product, Category, StoreSettings, FilterGroup } from '../types';
-import { INITIAL_PRODUCTS, INITIAL_CATEGORIES, INITIAL_STORE_SETTINGS, INITIAL_FILTERS } from '../data/initialData';
+import { Product, Category, StoreSettings, FilterGroup, SectionsConfig, DeliveryZone } from '../types';
+import { INITIAL_PRODUCTS, INITIAL_CATEGORIES, INITIAL_STORE_SETTINGS, INITIAL_FILTERS, INITIAL_SECTIONS_CONFIG, INITIAL_DELIVERY_ZONES } from '../data/initialData';
 
 const STORAGE_KEYS = {
   PRODUCTS: 'art_fashion_products_v1',
@@ -17,6 +17,8 @@ const STORAGE_KEYS = {
   FILTERS: 'art_fashion_filters_v1',
   SETTINGS: 'art_fashion_settings_v1',
   ORDERS: 'ayele_orders',
+  SECTIONS_CONFIG: 'ayele_sections_config',
+  DELIVERY_ZONES: 'ayele_delivery_zones',
 };
 
 const CHANNEL_NAME = 'art_fashion_store_sync_channel';
@@ -28,11 +30,13 @@ export interface StorageSyncMessage {
     | 'CATEGORIES_UPDATED'
     | 'FILTERS_UPDATED'
     | 'ORDERS_UPDATED'
+    | 'SECTIONS_UPDATED'
+    | 'ZONES_UPDATED'
     | 'FULL_RESET';
   timestamp: number;
 }
 
-const DATA_API_URL = '/api/data';
+const DATA_API_URL = '/api/data.php';
 const SERVER_SYNC_DEBOUNCE_MS = 800;
 
 class StorageEngine {
@@ -94,6 +98,8 @@ class StorageEngine {
         filters: this.getFilters(),
         settings: this.getSettings(),
         orders: this.getOrders(),
+        sectionsConfig: this.getSectionsConfig(),
+        deliveryZones: this.getDeliveryZones(),
       };
       fetch(DATA_API_URL, {
         method: 'POST',
@@ -108,7 +114,10 @@ class StorageEngine {
   public async hydrateFromServer(): Promise<void> {
     if (typeof window === 'undefined') return;
     try {
-      const response = await fetch(DATA_API_URL);
+      const timestamp = Date.now();
+      const response = await fetch(`${DATA_API_URL}?t=${timestamp}`, {
+        cache: 'no-store'
+      });
       if (!response.ok) return;
       const data = await response.json();
       if (!data) return;
@@ -119,6 +128,8 @@ class StorageEngine {
       if (Array.isArray(data.filters)) this.saveFilters(data.filters);
       if (data.settings && typeof data.settings === 'object') this.saveSettings(data.settings);
       if (Array.isArray(data.orders)) this.saveOrders(data.orders);
+      if (data.sectionsConfig && typeof data.sectionsConfig === 'object') this.saveSectionsConfig(data.sectionsConfig);
+      if (Array.isArray(data.deliveryZones)) this.saveDeliveryZones(data.deliveryZones);
     } catch (err) {
       console.warn('Server hydration skipped (offline?):', err);
     } finally {
@@ -136,10 +147,6 @@ class StorageEngine {
     }
     try {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.some((p: Product) => p.category_id === 'vetements' || p.category_id === 'costumes')) {
-        this.saveProducts(INITIAL_PRODUCTS);
-        return INITIAL_PRODUCTS;
-      }
       return parsed;
     } catch {
       return INITIAL_PRODUCTS;
@@ -162,10 +169,6 @@ class StorageEngine {
     }
     try {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.some((c: Category) => c.id === 'vetements')) {
-        this.saveCategories(INITIAL_CATEGORIES);
-        return INITIAL_CATEGORIES;
-      }
       return parsed;
     } catch {
       return INITIAL_CATEGORIES;
@@ -238,6 +241,61 @@ class StorageEngine {
     this.broadcast('ORDERS_UPDATED');
   }
 
+  // --- SECTIONS CONFIG ---
+  public getSectionsConfig(): SectionsConfig {
+    if (typeof window === 'undefined') return INITIAL_SECTIONS_CONFIG;
+    const raw = localStorage.getItem(STORAGE_KEYS.SECTIONS_CONFIG);
+    if (!raw) {
+      this.saveSectionsConfig(INITIAL_SECTIONS_CONFIG);
+      return INITIAL_SECTIONS_CONFIG;
+    }
+    try {
+      const parsed = JSON.parse(raw);
+      return {
+        ...INITIAL_SECTIONS_CONFIG,
+        ...parsed,
+        topBar: { ...INITIAL_SECTIONS_CONFIG.topBar, ...(parsed.topBar || {}) },
+        hero: { 
+          ...INITIAL_SECTIONS_CONFIG.hero, 
+          ...(parsed.hero || {}),
+          trust_badges: parsed.hero?.trust_badges || INITIAL_SECTIONS_CONFIG.hero.trust_badges 
+        },
+        collections: { ...INITIAL_SECTIONS_CONFIG.collections, ...(parsed.collections || {}) },
+        carousel3D: parsed.carousel3D || INITIAL_SECTIONS_CONFIG.carousel3D,
+        about: { ...INITIAL_SECTIONS_CONFIG.about, ...(parsed.about || {}) },
+      };
+    } catch {
+      return INITIAL_SECTIONS_CONFIG;
+    }
+  }
+
+  public saveSectionsConfig(config: SectionsConfig): void {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(STORAGE_KEYS.SECTIONS_CONFIG, JSON.stringify(config));
+    this.broadcast('SECTIONS_UPDATED');
+  }
+
+  // --- DELIVERY ZONES ---
+  public getDeliveryZones(): DeliveryZone[] {
+    if (typeof window === 'undefined') return INITIAL_DELIVERY_ZONES;
+    const raw = localStorage.getItem(STORAGE_KEYS.DELIVERY_ZONES);
+    if (!raw) {
+      this.saveDeliveryZones(INITIAL_DELIVERY_ZONES);
+      return INITIAL_DELIVERY_ZONES;
+    }
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return INITIAL_DELIVERY_ZONES;
+    }
+  }
+
+  public saveDeliveryZones(zones: DeliveryZone[]): void {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(STORAGE_KEYS.DELIVERY_ZONES, JSON.stringify(zones));
+    this.broadcast('ZONES_UPDATED');
+  }
+
   // --- BACKUP & RESTORE ---
   public exportDataJSON(): string {
     const data = {
@@ -247,6 +305,8 @@ class StorageEngine {
       categories: this.getCategories(),
       filters: this.getFilters(),
       settings: this.getSettings(),
+      sectionsConfig: this.getSectionsConfig(),
+      deliveryZones: this.getDeliveryZones(),
     };
     return JSON.stringify(data, null, 2);
   }
@@ -279,6 +339,8 @@ class StorageEngine {
     this.saveCategories(INITIAL_CATEGORIES);
     this.saveFilters(INITIAL_FILTERS);
     this.saveSettings(INITIAL_STORE_SETTINGS);
+    this.saveSectionsConfig(INITIAL_SECTIONS_CONFIG);
+    this.saveDeliveryZones(INITIAL_DELIVERY_ZONES);
     this.broadcast('FULL_RESET');
   }
 }

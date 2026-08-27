@@ -72,8 +72,8 @@ export const HeroSection: React.FC = () => {
             {(() => {
               const raw = language === 'en' ? hero.description_en || hero.description : hero.description;
               const lastDot = raw.lastIndexOf('.', raw.length - 2); // dernier point avant la fin
-              const body   = lastDot > 0 ? raw.slice(0, lastDot + 1) : raw;
-              const tail   = lastDot > 0 ? raw.slice(lastDot + 1).trim() : '';
+              const body = lastDot > 0 ? raw.slice(0, lastDot + 1) : raw;
+              const tail = lastDot > 0 ? raw.slice(lastDot + 1).trim() : '';
               return (
                 <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
                   {body}{tail && <> <strong className="text-slate-900 font-semibold">{tail}</strong></>}
@@ -122,36 +122,23 @@ export const HeroSection: React.FC = () => {
             </div>
 
             {/* Value Guarantees */}
-            <div className="pt-6 border-t border-slate-200 grid grid-cols-3 gap-3 text-left">
-              <div className="flex items-start gap-2.5">
-                <MapPin className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="text-xs font-bold text-slate-900">
-                    {language === 'en' ? 'Boutique' : 'Boutique'}
-                  </h4>
-                  <p className="text-[11px] text-slate-500">{language === 'en' ? 'Zongo / Cotonou' : 'Zongo / Cotonou'}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <Clock className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="text-xs font-bold text-slate-900">
-                    {language === 'en' ? 'Fast Delivery' : 'Livraison Express'}
-                  </h4>
-                  <p className="text-[11px] text-slate-500">Cotonou & Calavi</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <ShieldCheck className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="text-xs font-bold text-slate-900">
-                    {language === 'en' ? 'Safe Payment' : 'Paiement Sûr'}
-                  </h4>
-                  <p className="text-[11px] text-slate-500">
-                    {language === 'en' ? 'Cash / Mobile Money' : 'À la livraison / MoMo'}
-                  </p>
-                </div>
-              </div>
+            <div className="pt-6 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
+              {(hero.trust_badges || []).map((badge, idx) => {
+                const IconComponent = badge.icon === 'map-pin' ? MapPin : badge.icon === 'clock' ? Clock : ShieldCheck;
+                return (
+                  <div key={idx} className="flex items-start gap-2.5">
+                    <IconComponent className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-900">
+                        {language === 'en' ? badge.title_en : badge.title}
+                      </h4>
+                      <p className="text-[11px] text-slate-500">
+                        {language === 'en' ? badge.description_en : badge.description}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -198,7 +185,7 @@ export const HeroSection: React.FC = () => {
 
               {/* Floating Badge 2 */}
               <div className="hidden sm:flex absolute -top-4 -right-4 bg-slate-900 text-white p-3 rounded-xl shadow-lg border border-slate-800 items-center gap-2.5">
-                <span className="text-lg">✨</span>
+                <span className="text-lg"></span>
                 <div>
                   <p className="text-xs font-bold text-red-400">
                     {language === 'en' ? "Men's Luxury Ready-to-Wear" : 'Prêt-à-Porter Masculin'}
