@@ -159,11 +159,14 @@ const SettingsTab: React.FC = () => {
   );
 };
 
+import { Login } from './components/Login';
+import { MobileBottomNav } from './components/MobileBottomNav';
+
 const AdminContent: React.FC = () => {
   const { activeTab } = useAdmin();
 
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col">
+    <div className="min-h-screen bg-slate-100 flex flex-col pb-20 md:pb-0">
       <AdminHeader />
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'products' && <ProductManager />}
@@ -173,11 +176,18 @@ const AdminContent: React.FC = () => {
         {activeTab === 'delivery-zones' && <DeliveryZoneManager />}
         {activeTab === 'settings' && <SettingsTab />}
       </main>
+      <MobileBottomNav />
     </div>
   );
 };
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => localStorage.getItem('admin_auth') === 'true');
+
+  if (!isAuthenticated) {
+    return <Login onLogin={() => setIsAuthenticated(true)} />;
+  }
+
   return (
     <AdminProvider>
       <AdminContent />

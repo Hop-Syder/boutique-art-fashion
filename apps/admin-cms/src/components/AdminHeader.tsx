@@ -10,6 +10,7 @@ import {
   Image as ImageIcon,
   RotateCcw,
   ExternalLink,
+  LogOut,
 } from 'lucide-react';
 
 export const AdminHeader: React.FC = () => {
@@ -37,9 +38,7 @@ export const AdminHeader: React.FC = () => {
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-serif font-bold text-lg text-white">Art Fashion Back-Office</span>
-                <span className="bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
-                  Prêt-à-Porter de Luxe
-                </span>
+
               </div>
               <p className="text-xs text-slate-400">Gestion du catalogue, des commandes et du contenu</p>
             </div>
@@ -64,15 +63,14 @@ export const AdminHeader: React.FC = () => {
           </div>
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="flex items-center space-x-2 overflow-x-auto py-2.5">
+        {/* Navigation Tabs (Desktop only) */}
+        <div className="hidden md:flex items-center space-x-2 overflow-x-auto py-2.5">
           <button
             onClick={() => setActiveTab('products')}
-            className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'products'
+            className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${activeTab === 'products'
                 ? 'bg-red-700 text-white shadow-md'
                 : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-            }`}
+              }`}
           >
             <Package className="w-4 h-4" />
             <span>Produits ({products.length})</span>
@@ -80,11 +78,10 @@ export const AdminHeader: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('filters')}
-            className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'filters'
+            className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${activeTab === 'filters'
                 ? 'bg-red-700 text-white shadow-md'
                 : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-            }`}
+              }`}
           >
             <Sliders className="w-4 h-4 text-red-300" />
             <span>Filtres ({filters.filter((f) => !f.is_archived).length})</span>
@@ -92,11 +89,10 @@ export const AdminHeader: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('cms-sections')}
-            className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'cms-sections'
+            className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${activeTab === 'cms-sections'
                 ? 'bg-red-700 text-white shadow-md'
                 : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-            }`}
+              }`}
           >
             <ImageIcon className="w-4 h-4 text-red-300" />
             <span>Éditeur de Sections (CMS)</span>
@@ -104,11 +100,10 @@ export const AdminHeader: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('delivery-zones')}
-            className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'delivery-zones'
+            className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${activeTab === 'delivery-zones'
                 ? 'bg-red-700 text-white shadow-md'
                 : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-            }`}
+              }`}
           >
             <Truck className="w-4 h-4" />
             <span>Zones de Livraison</span>
@@ -116,17 +111,16 @@ export const AdminHeader: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('settings')}
-            className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'settings'
+            className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${activeTab === 'settings'
                 ? 'bg-red-700 text-white shadow-md'
                 : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-            }`}
+              }`}
           >
             <Settings className="w-4 h-4" />
             <span>Paramètres Boutique</span>
           </button>
 
-          <div className="ml-auto pl-4 border-l border-slate-800">
+          <div className="ml-auto pl-4 border-l border-slate-800 flex items-center gap-2">
             <button
               onClick={resetToDefaultData}
               className="min-w-[44px] min-h-[44px] p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-950/30 rounded-xl transition-colors cursor-pointer flex items-center justify-center"
@@ -134,6 +128,17 @@ export const AdminHeader: React.FC = () => {
               aria-label="Réinitialiser les données"
             >
               <RotateCcw className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => {
+                localStorage.removeItem('admin_auth');
+                window.location.reload();
+              }}
+              className="min-w-[44px] min-h-[44px] p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-950/30 rounded-xl transition-colors cursor-pointer flex items-center justify-center"
+              title="Se déconnecter"
+              aria-label="Se déconnecter"
+            >
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>

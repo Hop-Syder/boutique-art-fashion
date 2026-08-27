@@ -160,6 +160,30 @@ export const SectionImageManager: React.FC = () => {
     }));
   };
 
+
+  const SaveButton = () => (
+    <button
+      type="submit"
+      className={`px-4 py-2 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer ${
+        savedSuccess
+          ? 'bg-emerald-600 text-white'
+          : 'bg-slate-900 hover:bg-slate-800 text-white'
+      }`}
+    >
+      {savedSuccess ? (
+        <>
+          <Check className="w-4 h-4" />
+          <span className="hidden sm:inline">Publié</span>
+        </>
+      ) : (
+        <>
+          <Save className="w-4 h-4 text-orange-400" />
+          <span className="hidden sm:inline">Publier</span>
+        </>
+      )}
+    </button>
+  );
+
   return (
     <form onSubmit={handleSave} className="space-y-8 animate-fadeIn">
       {/* Header Banner */}
@@ -209,14 +233,17 @@ export const SectionImageManager: React.FC = () => {
               1. Barre d'Annonce (Top Bar)
             </h3>
           </div>
-          <button
-            type="button"
-            onClick={handleAddTopBarMessage}
-            className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-          >
-            <Plus className="w-4 h-4 text-orange-400" />
-            <span>Ajouter un Message</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleAddTopBarMessage}
+              className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span className="hidden sm:inline">Ajouter</span>
+            </button>
+            <SaveButton />
+          </div>
         </div>
 
         <div className="space-y-4">
@@ -252,11 +279,14 @@ export const SectionImageManager: React.FC = () => {
 
       {/* 2. SECTION HERO */}
       <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-        <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
-          <ImageIcon className="w-5 h-5 text-orange-600" />
-          <h3 className="text-lg font-serif font-bold text-slate-900">
-            2. Hero Section & Badges de Confiance
-          </h3>
+        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div className="flex items-center gap-2">
+            <ImageIcon className="w-5 h-5 text-orange-600" />
+            <h3 className="text-lg font-serif font-bold text-slate-900">
+              2. Hero Section
+            </h3>
+          </div>
+          <SaveButton />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -359,11 +389,14 @@ export const SectionImageManager: React.FC = () => {
 
       {/* 3. COLLECTIONS HEADERS */}
       <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-        <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
-          <LayoutTemplate className="w-5 h-5 text-orange-600" />
-          <h3 className="text-lg font-serif font-bold text-slate-900">
-            3. En-têtes de Collections
-          </h3>
+        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div className="flex items-center gap-2">
+            <LayoutTemplate className="w-5 h-5 text-orange-600" />
+            <h3 className="text-lg font-serif font-bold text-slate-900">
+              3. En-têtes de Collections
+            </h3>
+          </div>
+          <SaveButton />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
@@ -388,14 +421,17 @@ export const SectionImageManager: React.FC = () => {
               4. Carrousel 3D (Produits Phares)
             </h3>
           </div>
-          <button
-            type="button"
-            onClick={handleAddCarouselSlide}
-            className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-          >
-            <Plus className="w-4 h-4 text-orange-400" />
-            <span>Ajouter une Slide</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleAddCarouselSlide}
+              className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span className="hidden sm:inline">Ajouter</span>
+            </button>
+            <SaveButton />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -415,11 +451,14 @@ export const SectionImageManager: React.FC = () => {
 
       {/* 5. A PROPOS */}
       <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-        <div className="flex items-center gap-2 border-b border-slate-100 pb-4">
-          <Sparkles className="w-5 h-5 text-orange-600" />
-          <h3 className="text-lg font-serif font-bold text-slate-900">
-            5. Page À Propos
-          </h3>
+        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-orange-600" />
+            <h3 className="text-lg font-serif font-bold text-slate-900">
+              5. Page À Propos
+            </h3>
+          </div>
+          <SaveButton />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
            <div className="space-y-4">
