@@ -8,3 +8,6 @@ coverage/
 !.env.example
 .dexty/
 .turbo/
+
+.vscode/sftp.json
+apps/*/.vscode/sftp.json

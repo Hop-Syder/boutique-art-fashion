@@ -80,7 +80,7 @@ export const Header: React.FC = () => {
           <div className="hidden lg:flex items-center gap-2 shrink-0 font-medium tracking-wide">
             <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
             <span className="font-bold text-red-500">Art Fashion :</span>
-            <span className="text-slate-200 font-semibold text-[10px]">
+            <span className="text-slate-200 font-semibold text-[8px]">
               {language === 'en' ? 'Luxury Ready-to-Wear • Cotonou' : 'Prêt-à-Porter de Luxe • Cotonou'}
             </span>
           </div>
@@ -90,7 +90,7 @@ export const Header: React.FC = () => {
             <div className="animate-ticker flex items-center gap-8 py-0.5 whitespace-nowrap text-[10px] sm:text-xs">
               {[1, 2].map((loopIdx) => (
                 <div key={loopIdx} className="flex items-center gap-6 sm:gap-8 shrink-0">
-                  <span className="flex items-center gap-1.5 text-amber-300 font-bold">
+                  <span className="flex items-center gap-1.5 text-red-500 font-bold">
                     <span>🔥</span>
                     <span>{language === 'en' ? 'Special Promo: Up to -30% on Luxury Suits & Blazers' : 'Vente Privée : Jusqu’à -30% sur les Costumes & Blazers'}</span>
                   </span>

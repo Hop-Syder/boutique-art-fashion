@@ -65,7 +65,7 @@ ${itemsText}
 -----------------------------------------
 💰 *Sous-Total Articles :* ${formatFCFA(order.subtotal)}
 🚚 *Frais de Livraison :* ${formatFCFA(order.delivery_fee)}
-🔥 *TOTAL À PAYER À LA LIVRAISON :* *${formatFCFA(order.total)}*
+💵 *TOTAL À PAYER À LA LIVRAISON :* *${formatFCFA(order.total)}*
 
 Merci de me confirmer la disponibilité des articles et le créneau de livraison !`;
 
