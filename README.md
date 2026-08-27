@@ -75,3 +75,5 @@ pnpm build
 
 - **Site Vitrine Client** : [http://localhost:3000](http://localhost:3000)
 - **Back-Office Admin CMS** : [http://localhost:3001](http://localhost:3001)
+  - **Email** : `1admin@artfashion.com`
+  - **Mot de passe** : `ArtFasq12345@.com`
