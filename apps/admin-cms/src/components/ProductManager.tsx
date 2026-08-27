@@ -62,7 +62,7 @@ export const ProductManager: React.FC = () => {
     setCategory(categories[0]?.id || 'chemises');
     setGender('Homme');
     setDescription('');
-    setImageUrl('https://images.unsplash.com/photo-1590736969955-71cc94801759?auto=format&fit=crop&w=800&q=80');
+    setImageUrl('');
     setSku(`AYE-PRD-${Math.floor(100 + Math.random() * 900)}`);
     setIsNew(true);
     setIsFeatured(true);
@@ -124,7 +124,7 @@ export const ProductManager: React.FC = () => {
       category_id: category,
       gender,
       status: 'active',
-      images: [imageUrl || 'https://images.unsplash.com/photo-1590736969955-71cc94801759?auto=format&fit=crop&w=800&q=80'],
+      images: imageUrl ? [imageUrl] : [],
       tags: ['Afro-Chic', category, gender],
       attributes,
       is_new: isNew,
@@ -528,11 +528,17 @@ export const ProductManager: React.FC = () => {
                   <tr key={p.id} className="hover:bg-slate-50/80 transition-colors">
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        <img
-                          src={p.images[0]}
-                          alt={p.name}
-                          className="w-12 h-14 object-cover rounded-xl border border-slate-200"
-                        />
+                        {p.images[0] ? (
+                          <img
+                            src={p.images[0]}
+                            alt={p.name}
+                            className="w-12 h-14 object-cover rounded-xl border border-slate-200"
+                          />
+                        ) : (
+                          <div className="w-12 h-14 rounded-xl border border-dashed border-slate-200 bg-slate-50 flex items-center justify-center shrink-0">
+                            <Package className="w-4 h-4 text-slate-300" />
+                          </div>
+                        )}
                         <div>
                           <h4 className="font-bold text-slate-900 text-xs">{p.name}</h4>
                           <span className="font-mono text-[10px] text-slate-400">SKU: {p.sku}</span>

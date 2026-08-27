@@ -92,7 +92,7 @@ export const CategoryManager: React.FC = () => {
       name: '',
       name_en: '',
       slug: '',
-      image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80',
+      image: '',
       description: '',
       description_en: '',
       parent_id: parentId,
@@ -122,9 +122,7 @@ export const CategoryManager: React.FC = () => {
       name: formData.name.trim(),
       name_en: formData.name_en?.trim() || formData.name.trim(),
       slug,
-      image:
-        formData.image?.trim() ||
-        'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80',
+      image: formData.image?.trim() || '',
       description: formData.description?.trim() || '',
       description_en: formData.description_en?.trim() || '',
       parent_id: formData.parent_id || null,
@@ -200,11 +198,17 @@ export const CategoryManager: React.FC = () => {
                 {/* Main Category Row */}
                 <div className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-50/70 border-b border-slate-100">
                   <div className="flex items-center gap-4">
-                    <img
-                      src={mainCat.image}
-                      alt={mainCat.name}
-                      className="w-14 h-14 rounded-2xl object-cover border border-slate-200 shrink-0"
-                    />
+                    {mainCat.image ? (
+                      <img
+                        src={mainCat.image}
+                        alt={mainCat.name}
+                        className="w-14 h-14 rounded-2xl object-cover border border-slate-200 shrink-0"
+                      />
+                    ) : (
+                      <div className="w-14 h-14 rounded-2xl border border-dashed border-slate-200 bg-slate-50 flex items-center justify-center shrink-0">
+                        <FolderTree className="w-5 h-5 text-slate-300" />
+                      </div>
+                    )}
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="font-serif font-bold text-base text-slate-900">{mainCat.name}</span>

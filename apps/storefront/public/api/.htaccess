@@ -1,0 +1,10 @@
+# Sur hébergement mutualisé (PHP en CGI/FastCGI via suexec), Apache ne transmet
+# pas le header Authorization à PHP par défaut (sécurité) — nécessaire pour
+# l'auth Bearer token de upload.php. Les deux lignes suivantes le rétablissent.
+CGIPassAuth On
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP:Authorization} ^(.+)$
+  RewriteRule .* - [E=HTTP_AUTHORIZATION:%1]
+</IfModule>

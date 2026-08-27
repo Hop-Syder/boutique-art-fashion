@@ -13,7 +13,7 @@ import { useStore } from '../context/StoreContext';
 import { HeroSection } from './HeroSection';
 import { CategoryPills } from './CategoryPills';
 import { ProductCard } from './ProductCard';
-import { CoverflowCarousel, CoverflowSlide } from './ui/coverflow-carousel';
+import { CoverflowCarousel } from './ui/coverflow-carousel';
 import {
   Zap,
   ArrowRight,
@@ -32,64 +32,6 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 
 import { ReviewsCarousel } from './ReviewsCarousel';
 import { OrderProcessSteps } from './OrderProcessSteps';
-
-const COVERFLOW_SLIDES: CoverflowSlide[] = [
-  {
-    src: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80",
-    alt: "Costume Croisé Zongo Prestige",
-    title: "Costume Croisé \"Zongo Prestige\"",
-    subtitle: "185 000 FCFA • Série Limitée",
-    meta: [
-      { label: "Collection", value: "Haute-Couture 2026" },
-      { label: "Matière", value: "Laine Vierge & Soie" },
-      { label: "Atelier", value: "Rue 403 Cotonou" },
-    ],
-  },
-  {
-    src: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=800&q=80",
-    alt: "Chemise Lin Égyptien Scoa Gbéto",
-    title: "Chemise Lin Égyptien Brodé",
-    subtitle: "45 000 FCFA • Collection Lin",
-    meta: [
-      { label: "Collection", value: "Été 2026" },
-      { label: "Matière", value: "100% Lin Égyptien" },
-      { label: "Atelier", value: "Rue 403 Cotonou" },
-    ],
-  },
-  {
-    src: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80",
-    alt: "Grand Boubou Bazin Riche Or Imperial",
-    title: "Grand Boubou Bazin Imperial",
-    subtitle: "210 000 FCFA • Bazin Getzner",
-    meta: [
-      { label: "Collection", value: "Prestige Royal" },
-      { label: "Matière", value: "Bazin Riche 5 étoiles" },
-      { label: "Atelier", value: "Rue 403 Cotonou" },
-    ],
-  },
-  {
-    src: "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=800&q=80",
-    alt: "Mocassins Cuir Italien Zongo",
-    title: "Mocassins Cuir Italien Patiné",
-    subtitle: "65 000 FCFA • Chaussures",
-    meta: [
-      { label: "Collection", value: "Souliers Luxe" },
-      { label: "Matière", value: "Cuir Pleine Fleur" },
-      { label: "Atelier", value: "Finition Main" },
-    ],
-  },
-  {
-    src: "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?auto=format&fit=crop&w=800&q=80",
-    alt: "Blazer 3 Pièces Prince de Galles",
-    title: "Blazer Prince de Galles Noir & Doré",
-    subtitle: "135 000 FCFA • Tailleur",
-    meta: [
-      { label: "Collection", value: "Gentleman 2026" },
-      { label: "Matière", value: "Laine italienne Super 140" },
-      { label: "Atelier", value: "Rue 403 Cotonou" },
-    ],
-  },
-];
 
 export const HomeView: React.FC = () => {
   const { products, setCurrentView, setFilters, settings, language, sectionsConfig } = useStore();

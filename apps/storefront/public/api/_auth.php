@@ -21,8 +21,18 @@ function verify_token(?string $token): bool {
 }
 
 function bearer_token(): ?string {
-    $headers = function_exists('getallheaders') ? getallheaders() : [];
-    $auth = $headers['Authorization'] ?? $headers['authorization'] ?? ($_SERVER['HTTP_AUTHORIZATION'] ?? '');
+    $auth = '';
+    if (function_exists('getallheaders')) {
+        $headers = getallheaders();
+        $auth = $headers['Authorization'] ?? $headers['authorization'] ?? '';
+    }
+    if (!$auth) {
+        // Fallback hébergement mutualisé (PHP-CGI) : le header arrive via $_SERVER,
+        // parfois préfixé REDIRECT_ après une réécriture .htaccess (CGIPassAuth).
+        $auth = $_SERVER['HTTP_AUTHORIZATION']
+            ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
+            ?? '';
+    }
     if (str_starts_with($auth, 'Bearer ')) return substr($auth, 7);
     return null;
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAdmin } from '../context/AdminContext';
-import { Image as ImageIcon, Save, Check, Plus, Trash2, Sparkles, RefreshCw, Eye, MessageSquare, LayoutTemplate, ShieldCheck, Box, CheckCircle2 } from 'lucide-react';
-import { SectionsConfig, TrustBadge, CarouselSlide } from '@ayele/shared';
+import { Image as ImageIcon, Save, Check, Plus, Trash2, Sparkles, RefreshCw, Eye, MessageSquare, LayoutTemplate, ShieldCheck, Box, CheckCircle2, PackageCheck } from 'lucide-react';
+import { SectionsConfig, TrustBadge, CarouselSlide, AboutDelivery } from '@ayele/shared';
 import { ImageUploadInput } from './ImageUploadInput';
 
 export const SectionImageManager: React.FC = () => {
@@ -50,7 +50,7 @@ export const SectionImageManager: React.FC = () => {
   const handleAddCarouselSlide = () => {
     const newSlide: CarouselSlide = {
       id: `slide-${Date.now()}`,
-      image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80',
+      image: '',
       title: 'Nouveau Produit',
       title_en: 'New Product',
       subtitle: 'Description courte',
@@ -129,23 +129,21 @@ export const SectionImageManager: React.FC = () => {
   };
 
   const handleAddDelivery = () => {
+    const newDelivery: AboutDelivery = {
+      id: `del-${Date.now()}`,
+      image: '',
+      location: 'Lieu',
+      time: 'Temps',
+      article: 'Article',
+      client: 'Client',
+      status: 'Statut',
+      rating: '5.0'
+    };
     setFormData((prev) => ({
       ...prev,
       about: {
         ...prev.about,
-        deliveries: [
-          ...(prev.about.deliveries || []),
-          {
-            id: `del-${Date.now()}`,
-            image: '',
-            location: 'Lieu',
-            time: 'Temps',
-            article: 'Article',
-            client: 'Client',
-            status: 'Statut',
-            rating: '5.0'
-          }
-        ]
+        deliveries: [...(prev.about.deliveries || []), newDelivery]
       }
     }));
   };
@@ -488,6 +486,131 @@ export const SectionImageManager: React.FC = () => {
               <ImageUploadInput value={formData.about.craftsmanship_image} onChange={(url) => setFormData(prev => ({...prev, about: {...prev.about, craftsmanship_image: url}}))} label="Savoir-Faire Image" placeholder="URL..." />
            </div>
         </div>
+      </div>
+
+      {/* 6. PREUVES DE LIVRAISON */}
+      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div className="flex items-center gap-2">
+            <PackageCheck className="w-5 h-5 text-orange-600" />
+            <h3 className="text-lg font-serif font-bold text-slate-900">
+              6. Preuves de Livraison ("Preuves Réelles · 100% Livraisons Réussies")
+            </h3>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleAddDelivery}
+              className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span className="hidden sm:inline">Ajouter</span>
+            </button>
+            <SaveButton />
+          </div>
+        </div>
+        <p className="text-xs text-slate-500 -mt-2">
+          Cette section n'apparaît sur le site que si au moins une preuve est ajoutée ici.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {(formData.about.deliveries || []).map((delivery, idx) => (
+            <div key={delivery.id} className="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3 relative group">
+              <button
+                type="button"
+                onClick={() => handleRemoveDelivery(idx)}
+                className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-white transition-colors cursor-pointer"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+              <div className="text-xs font-bold text-slate-400 uppercase">Preuve n°{idx + 1}</div>
+
+              <ImageUploadInput
+                value={delivery.image}
+                onChange={(url) => setFormData(prev => {
+                  const n = [...(prev.about.deliveries || [])];
+                  n[idx] = { ...n[idx], image: url };
+                  return { ...prev, about: { ...prev.about, deliveries: n } };
+                })}
+                label="Photo"
+                placeholder="URL..."
+              />
+              <input
+                type="text"
+                value={delivery.article}
+                onChange={(e) => setFormData(prev => {
+                  const n = [...(prev.about.deliveries || [])];
+                  n[idx] = { ...n[idx], article: e.target.value };
+                  return { ...prev, about: { ...prev.about, deliveries: n } };
+                })}
+                className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs font-bold"
+                placeholder="Article livré (ex: Costume Croisé Zongo Prestige)"
+              />
+              <input
+                type="text"
+                value={delivery.location}
+                onChange={(e) => setFormData(prev => {
+                  const n = [...(prev.about.deliveries || [])];
+                  n[idx] = { ...n[idx], location: e.target.value };
+                  return { ...prev, about: { ...prev.about, deliveries: n } };
+                })}
+                className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
+                placeholder="Lieu (ex: Haie Vive, Cotonou)"
+              />
+              <div className="grid grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  value={delivery.time}
+                  onChange={(e) => setFormData(prev => {
+                    const n = [...(prev.about.deliveries || [])];
+                    n[idx] = { ...n[idx], time: e.target.value };
+                    return { ...prev, about: { ...prev.about, deliveries: n } };
+                  })}
+                  className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
+                  placeholder="Délai (ex: 45 min)"
+                />
+                <input
+                  type="text"
+                  value={delivery.rating}
+                  onChange={(e) => setFormData(prev => {
+                    const n = [...(prev.about.deliveries || [])];
+                    n[idx] = { ...n[idx], rating: e.target.value };
+                    return { ...prev, about: { ...prev.about, deliveries: n } };
+                  })}
+                  className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
+                  placeholder="Note (ex: 5.0)"
+                />
+              </div>
+              <input
+                type="text"
+                value={delivery.client}
+                onChange={(e) => setFormData(prev => {
+                  const n = [...(prev.about.deliveries || [])];
+                  n[idx] = { ...n[idx], client: e.target.value };
+                  return { ...prev, about: { ...prev.about, deliveries: n } };
+                })}
+                className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
+                placeholder="Client (ex: Directeur Général — Société Immobilière)"
+              />
+              <input
+                type="text"
+                value={delivery.status}
+                onChange={(e) => setFormData(prev => {
+                  const n = [...(prev.about.deliveries || [])];
+                  n[idx] = { ...n[idx], status: e.target.value };
+                  return { ...prev, about: { ...prev.about, deliveries: n } };
+                })}
+                className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
+                placeholder="Statut (ex: Livré & Essayé à domicile)"
+              />
+            </div>
+          ))}
+        </div>
+        {(formData.about.deliveries || []).length === 0 && (
+          <p className="text-xs text-slate-400 text-center py-4">
+            Aucune preuve pour l'instant — cliquez sur "Ajouter" pour en créer une.
+          </p>
+        )}
       </div>
 
       {/* Pro Save Notification Toast */}
