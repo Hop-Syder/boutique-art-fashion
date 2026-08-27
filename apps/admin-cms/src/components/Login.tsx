@@ -10,11 +10,28 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Identifiants par défaut
     if (email === '1admin@artfashion.com' && password === 'ArtFasq12345@.com') {
       localStorage.setItem('admin_auth', 'true');
+      // Récupère un token serveur pour autoriser les actions d'écriture protégées
+      // (ex: upload d'images). Best-effort : si le backend PHP n'est pas joignable
+      // (ex: pnpm dev en local sans serveur PHP), l'admin reste utilisable, mais
+      // les actions protégées échoueront proprement jusqu'au prochain déploiement.
+      try {
+        const res = await fetch('/api/login.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        if (res.ok) {
+          const { token } = await res.json();
+          localStorage.setItem('admin_token', token);
+        }
+      } catch {
+        // Backend indisponible — non bloquant.
+      }
       onLogin();
     } else {
       setError(true);

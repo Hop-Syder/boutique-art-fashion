@@ -95,3 +95,4 @@ apps/*/.vscode/sftp.json
 scripts/deploy.mjs
 deploy.mjs
 db.json
+apps/storefront/public/api/_config.php

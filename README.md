@@ -1,6 +1,8 @@
 # ART FASHION — Prêt-à-Porter Masculin de Luxe (Cotonou, Bénin)
 
-![ART FASHION Banner](https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=80)
+<p align="center">
+  <img src="apps/storefront/public/logo-art-fashion.png" alt="Logo ART FASHION" width="400">
+</p>
 
 > **Monorepo Officiel d'E-commerce & Back-Office CMS pour ART FASHION**  
 > 📍 **Localisation physique** : Rue 403, Quartier Zongo / Scoa Gbéto (près Avenue Jean-Paul II & Galerie Fayola), Cotonou, Bénin  

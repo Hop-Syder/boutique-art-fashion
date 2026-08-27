@@ -132,6 +132,7 @@ export const AdminHeader: React.FC = () => {
             <button
               onClick={() => {
                 localStorage.removeItem('admin_auth');
+                localStorage.removeItem('admin_token');
                 window.location.reload();
               }}
               className="min-w-[44px] min-h-[44px] p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-950/30 rounded-xl transition-colors cursor-pointer flex items-center justify-center"

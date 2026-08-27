@@ -24,6 +24,11 @@ const MAX_SIZE_MB  = 8;
 const MAX_SIZE_B   = MAX_SIZE_MB * 1024 * 1024;
 const UPLOAD_API   = '/api/upload.php';
 
+const authHeaders = (): Record<string, string> => {
+  const token = localStorage.getItem('admin_token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
   value,
   onChange,
@@ -40,7 +45,7 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
     const formData = new FormData();
     formData.append('image', file);
 
-    const res = await fetch(UPLOAD_API, { method: 'POST', body: formData });
+    const res = await fetch(UPLOAD_API, { method: 'POST', headers: authHeaders(), body: formData });
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
       throw new Error(body.error || `HTTP ${res.status}`);
@@ -100,7 +105,10 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
     // Si c'est une URL serveur, on peut notifier l'API (optionnel)
     if (value && value.startsWith('/uploads/')) {
       const filename = value.replace('/uploads/', '');
-      fetch(`/api/upload/${encodeURIComponent(filename)}`, { method: 'DELETE' }).catch(() => {});
+      fetch(`/api/upload.php?filename=${encodeURIComponent(filename)}`, {
+        method: 'DELETE',
+        headers: authHeaders(),
+      }).catch(() => {});
     }
     onChange('');
   };
