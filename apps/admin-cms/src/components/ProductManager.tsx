@@ -34,6 +34,7 @@ export const ProductManager: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Form State
   const [name, setName] = useState('');
@@ -98,7 +99,7 @@ export const ProductManager: React.FC = () => {
     setIsCreating(true);
   };
 
-  const handleSaveProduct = (e: React.FormEvent) => {
+  const handleSaveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || price <= 0) {
       alert('Veuillez entrer un nom valide et un prix supérieur à 0.');
@@ -135,14 +136,20 @@ export const ProductManager: React.FC = () => {
       created_at: editingProduct ? editingProduct.created_at : new Date().toISOString(),
     };
 
-    if (editingProduct) {
-      updateProduct(productPayload);
-    } else {
-      addProduct(productPayload);
+    setIsSaving(true);
+    try {
+      if (editingProduct) {
+        await updateProduct(productPayload);
+      } else {
+        await addProduct(productPayload);
+      }
+      setIsCreating(false);
+      resetForm();
+    } catch (error: any) {
+      alert(error.message || 'Erreur lors de la sauvegarde du produit.');
+    } finally {
+      setIsSaving(false);
     }
-
-    setIsCreating(false);
-    resetForm();
   };
 
   const handleAddVariantRow = () => {
@@ -499,9 +506,10 @@ export const ProductManager: React.FC = () => {
               </button>
               <button
                 type="submit"
-                className="px-6 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800"
+                disabled={isSaving}
+                className="px-6 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 disabled:opacity-50 flex items-center gap-2"
               >
-                Enregistrer le Produit
+                {isSaving ? 'Enregistrement...' : 'Enregistrer le Produit'}
               </button>
             </div>
           </form>
@@ -591,8 +599,14 @@ export const ProductManager: React.FC = () => {
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => {
-                            if (confirm(`Supprimer ${p.name} ?`)) deleteProduct(p.id);
+                          onClick={async () => {
+                            if (confirm(`Supprimer ${p.name} ?`)) {
+                              try {
+                                await deleteProduct(p.id);
+                              } catch (e: any) {
+                                alert(e.message || 'Erreur lors de la suppression.');
+                              }
+                            }
                           }}
                           className="p-2 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer"
                           title="Supprimer"

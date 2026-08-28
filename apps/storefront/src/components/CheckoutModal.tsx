@@ -45,7 +45,9 @@ export const CheckoutModal: React.FC = () => {
 
   if (!isCheckoutOpen) return null;
 
-  const handleSubmitOrder = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!customerName.trim() || !customerPhone.trim() || !deliveryAddress.trim()) {
@@ -59,24 +61,29 @@ export const CheckoutModal: React.FC = () => {
 
     const cleanPhone = customerPhone.replace(/\D/g, '');
 
-    const result = createOrder({
-      customer_name: customerName,
-      customer_phone: customerPhone,
-      customer_whatsapp: cleanPhone,
-      delivery_city: deliveryCity,
-      delivery_zone: selectedZone.name,
-      delivery_address: deliveryAddress,
-      delivery_landmark: deliveryLandmark,
-      delivery_notes: deliveryNotes,
-    });
+    setIsSubmitting(true);
+    try {
+      const result = await createOrder({
+        customer_name: customerName,
+        customer_phone: customerPhone,
+        customer_whatsapp: cleanPhone,
+        delivery_city: deliveryCity,
+        delivery_zone: selectedZone.name,
+        delivery_address: deliveryAddress,
+        delivery_landmark: deliveryLandmark,
+        delivery_notes: deliveryNotes,
+      });
 
-    setCreatedOrderData(result);
+      setCreatedOrderData(result);
 
-    confetti({
-      particleCount: 80,
-      spread: 70,
-      origin: { y: 0.6 },
-    });
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleOpenWhatsApp = () => {
@@ -353,11 +360,16 @@ export const CheckoutModal: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="w-full min-h-[48px] py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer focus:ring-2 focus:ring-slate-900"
+                  disabled={isSubmitting}
+                  className="w-full min-h-[48px] py-3.5 bg-slate-900 hover:bg-slate-800 disabled:opacity-60 text-white rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer focus:ring-2 focus:ring-slate-900"
                   id="checkout-submit-btn"
                 >
                   <WhatsAppIcon className="w-5 h-5 text-emerald-400" />
-                  <span>{language === 'en' ? 'Generate WhatsApp Order' : 'Générer ma Commande WhatsApp'}</span>
+                  <span>
+                    {isSubmitting
+                      ? (language === 'en' ? 'Placing order…' : 'Enregistrement…')
+                      : (language === 'en' ? 'Generate WhatsApp Order' : 'Générer ma Commande WhatsApp')}
+                  </span>
                 </button>
 
                 <p className="text-[11px] text-center text-slate-500 font-medium flex items-center justify-center gap-1">

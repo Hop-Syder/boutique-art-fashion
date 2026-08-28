@@ -122,10 +122,15 @@ export const ProductDetailModal: React.FC = () => {
           {/* Main Display Image */}
           <div className="relative w-full aspect-[3/4] max-h-[460px] sm:max-h-[500px] rounded-2xl overflow-hidden bg-white shadow-sm border border-slate-200/90 shrink-0 group">
             <img
-              src={selectedProduct.images[activeImageIndex] || selectedProduct.images[0]}
+              src={selectedProduct.images[activeImageIndex] || selectedProduct.images[0] || '/placeholder.webp'}
               alt={selectedProduct.name}
               className="w-full h-full object-cover object-center transition-all duration-300 group-hover:scale-105"
               loading="eager"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                target.src = '/placeholder.webp';
+              }}
             />
             {selectedProduct.is_promo && selectedProduct.compare_price && (
               <span className="absolute top-3 left-3 bg-rose-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md z-10">

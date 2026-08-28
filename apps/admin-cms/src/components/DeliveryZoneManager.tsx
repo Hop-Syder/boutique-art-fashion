@@ -8,6 +8,7 @@ export const DeliveryZoneManager: React.FC = () => {
 
   const [editingZone, setEditingZone] = useState<DeliveryZone | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const [name, setName] = useState('');
   const [fee, setFee] = useState(1000);
@@ -32,7 +33,7 @@ export const DeliveryZoneManager: React.FC = () => {
     setIsCreating(true);
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
 
@@ -44,13 +45,28 @@ export const DeliveryZoneManager: React.FC = () => {
       estimated_time: estimatedTime,
     };
 
-    if (editingZone) {
-      updateDeliveryZone(payload);
-    } else {
-      addDeliveryZone(payload);
+    setIsSaving(true);
+    try {
+      if (editingZone) {
+        await updateDeliveryZone(payload);
+      } else {
+        await addDeliveryZone(payload);
+      }
+      setIsCreating(false);
+    } catch (error: any) {
+      alert(error.message || 'Erreur lors de la sauvegarde de la zone de livraison.');
+    } finally {
+      setIsSaving(false);
     }
+  };
 
-    setIsCreating(false);
+  const handleDelete = async (zone: DeliveryZone) => {
+    if (!confirm(`Supprimer la zone ${zone.name} ?`)) return;
+    try {
+      await deleteDeliveryZone(zone.id);
+    } catch (error: any) {
+      alert(error.message || 'Erreur lors de la suppression de la zone.');
+    }
   };
 
   return (
@@ -140,9 +156,10 @@ export const DeliveryZoneManager: React.FC = () => {
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white"
+              disabled={isSaving}
+              className="px-5 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white disabled:opacity-60"
             >
-              Enregistrer
+              {isSaving ? 'Enregistrement...' : 'Enregistrer'}
             </button>
           </div>
         </form>
@@ -178,9 +195,7 @@ export const DeliveryZoneManager: React.FC = () => {
                   <Edit2 className="w-4 h-4" />
                 </button>
                 <button
-                  onClick={() => {
-                    if (confirm(`Supprimer la zone ${z.name} ?`)) deleteDeliveryZone(z.id);
-                  }}
+                  onClick={() => handleDelete(z)}
                   className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50"
                 >
                   <Trash2 className="w-4 h-4" />

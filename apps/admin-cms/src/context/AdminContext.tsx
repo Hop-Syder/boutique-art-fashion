@@ -43,42 +43,42 @@ interface AdminContextType {
   sectionsConfig: SectionsConfig;
 
   // Product Operations
-  addProduct: (product: Product) => void;
-  updateProduct: (product: Product) => void;
-  deleteProduct: (productId: string) => void;
-  updateVariantStock: (productId: string, variantId: string, newStock: number) => void;
+  addProduct: (product: Product) => Promise<void>;
+  updateProduct: (product: Product) => Promise<void>;
+  deleteProduct: (productId: string) => Promise<void>;
+  updateVariantStock: (productId: string, variantId: string, newStock: number) => Promise<void>;
 
   // Category Operations
-  addCategory: (category: Category) => void;
-  updateCategory: (category: Category) => void;
-  deleteCategory: (categoryId: string) => void;
-  archiveCategory: (categoryId: string) => void;
-  reorderCategories: (newOrderedCategories: Category[]) => void;
+  addCategory: (category: Category) => Promise<void>;
+  updateCategory: (category: Category) => Promise<void>;
+  deleteCategory: (categoryId: string) => Promise<void>;
+  archiveCategory: (categoryId: string) => Promise<void>;
+  reorderCategories: (newOrderedCategories: Category[]) => Promise<void>;
 
   // Filter Operations
-  addFilter: (filter: FilterGroup) => void;
-  updateFilter: (filter: FilterGroup) => void;
-  deleteFilter: (filterId: string) => void;
-  archiveFilter: (filterId: string) => void;
+  addFilter: (filter: FilterGroup) => Promise<void>;
+  updateFilter: (filter: FilterGroup) => Promise<void>;
+  deleteFilter: (filterId: string) => Promise<void>;
+  archiveFilter: (filterId: string) => Promise<void>;
 
   // CMS Section & Image Operations
-  updateSectionsConfig: (newConfig: SectionsConfig) => void;
+  updateSectionsConfig: (newConfig: SectionsConfig) => Promise<void>;
 
   // Order Operations
-  updateOrderStatus: (orderId: string, newStatus: OrderStatus, note?: string) => void;
-  addCashierNote: (orderId: string, note: string) => void;
-  deleteOrder: (orderId: string) => void;
+  updateOrderStatus: (orderId: string, newStatus: OrderStatus, note?: string) => Promise<void>;
+  addCashierNote: (orderId: string, note: string) => Promise<void>;
+  deleteOrder: (orderId: string) => Promise<void>;
 
   // Delivery Zone Operations
-  addDeliveryZone: (zone: DeliveryZone) => void;
-  updateDeliveryZone: (zone: DeliveryZone) => void;
-  deleteDeliveryZone: (zoneId: string) => void;
+  addDeliveryZone: (zone: DeliveryZone) => Promise<void>;
+  updateDeliveryZone: (zone: DeliveryZone) => Promise<void>;
+  deleteDeliveryZone: (zoneId: string) => Promise<void>;
 
   // Store Settings
-  updateSettings: (newSettings: StoreSettings) => void;
+  updateSettings: (newSettings: StoreSettings) => Promise<void>;
 
   // System
-  resetToDefaultData: () => void;
+  resetToDefaultData: () => Promise<void>;
   formatFCFA: (amount: number) => string;
 }
 
@@ -91,14 +91,12 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [categories, setCategories] = useState<Category[]>(() => storageService.getCategories());
   const [filters, setFilters] = useState<FilterGroup[]>(() => storageService.getFilters());
   const [deliveryZones, setDeliveryZones] = useState<DeliveryZone[]>(() => storageService.getDeliveryZones());
-  const [orders, setOrders] = useState<Order[]>(() =>
-    getStorageItem('ayele_orders', INITIAL_ORDERS)
-  );
+  const [orders, setOrders] = useState<Order[]>(() => getStorageItem('ayele_orders', INITIAL_ORDERS));
   const [settings, setSettings] = useState<StoreSettings>(() => storageService.getSettings());
   const [sectionsConfig, setSectionsConfig] = useState<SectionsConfig>(() => storageService.getSectionsConfig());
 
   // Pull the VPS-persisted snapshot once at startup (survives cache clears / new browsers),
-  // then reflect it into local state — this context doesn't subscribe() to sync messages.
+  // then reflect it into local state.
   useEffect(() => {
     storageService.hydrateFromServer().then(() => {
       setProducts(storageService.getProducts());
@@ -111,178 +109,174 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
   }, []);
 
-  // Sync state changes to storageService
-  useEffect(() => {
-    storageService.saveProducts(products);
-  }, [products]);
-
-  useEffect(() => {
-    storageService.saveCategories(categories);
-  }, [categories]);
-
-  useEffect(() => {
-    storageService.saveFilters(filters);
-  }, [filters]);
-
-  useEffect(() => {
-    storageService.saveSettings(settings);
-  }, [settings]);
-
-  useEffect(() => {
-    storageService.saveOrders(orders);
-  }, [orders]);
-
-  useEffect(() => {
-    storageService.saveDeliveryZones(deliveryZones);
-  }, [deliveryZones]);
-
-  useEffect(() => {
-    storageService.saveSectionsConfig(sectionsConfig);
-  }, [sectionsConfig]);
-
   // Product CRUD
-  const addProduct = (newProduct: Product) => {
-    setProducts((prev) => [newProduct, ...prev]);
+  const addProduct = async (newProduct: Product) => {
+    const newList = [newProduct, ...products];
+    await storageService.saveProducts(newList);
+    setProducts(newList);
   };
 
-  const updateProduct = (updatedProduct: Product) => {
-    setProducts((prev) =>
-      prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
-    );
+  const updateProduct = async (updatedProduct: Product) => {
+    const newList = products.map((p) => (p.id === updatedProduct.id ? updatedProduct : p));
+    await storageService.saveProducts(newList);
+    setProducts(newList);
   };
 
-  const deleteProduct = (productId: string) => {
-    setProducts((prev) => prev.filter((p) => p.id !== productId));
+  const deleteProduct = async (productId: string) => {
+    const newList = products.filter((p) => p.id !== productId);
+    await storageService.saveProducts(newList);
+    setProducts(newList);
   };
 
-  const updateVariantStock = (productId: string, variantId: string, newStock: number) => {
-    setProducts((prev) =>
-      prev.map((p) => {
-        if (p.id === productId) {
-          const updatedVariants = p.variants.map((v) =>
-            v.id === variantId ? { ...v, stock: Math.max(0, newStock) } : v
-          );
-          return { ...p, variants: updatedVariants };
-        }
-        return p;
-      })
-    );
+  const updateVariantStock = async (productId: string, variantId: string, newStock: number) => {
+    const newList = products.map((p) => {
+      if (p.id === productId) {
+        const updatedVariants = p.variants.map((v) =>
+          v.id === variantId ? { ...v, stock: Math.max(0, newStock) } : v
+        );
+        return { ...p, variants: updatedVariants };
+      }
+      return p;
+    });
+    await storageService.saveProducts(newList);
+    setProducts(newList);
   };
 
   // Category CRUD
-  const addCategory = (newCategory: Category) => {
-    setCategories((prev) => [...prev, newCategory]);
+  const addCategory = async (newCategory: Category) => {
+    const newList = [...categories, newCategory];
+    await storageService.saveCategories(newList);
+    setCategories(newList);
   };
 
-  const updateCategory = (updatedCategory: Category) => {
-    setCategories((prev) =>
-      prev.map((c) => (c.id === updatedCategory.id ? updatedCategory : c))
-    );
+  const updateCategory = async (updatedCategory: Category) => {
+    const newList = categories.map((c) => (c.id === updatedCategory.id ? updatedCategory : c));
+    await storageService.saveCategories(newList);
+    setCategories(newList);
   };
 
-  const archiveCategory = (categoryId: string) => {
-    setCategories((prev) =>
-      prev.map((c) => (c.id === categoryId ? { ...c, is_archived: true, is_active: false } : c))
-    );
+  const archiveCategory = async (categoryId: string) => {
+    const newList = categories.map((c) => (c.id === categoryId ? { ...c, is_archived: true, is_active: false } : c));
+    await storageService.saveCategories(newList);
+    setCategories(newList);
   };
 
-  const deleteCategory = (categoryId: string) => {
-    setCategories((prev) => prev.filter((c) => c.id !== categoryId));
+  const deleteCategory = async (categoryId: string) => {
+    const newList = categories.filter((c) => c.id !== categoryId);
+    await storageService.saveCategories(newList);
+    setCategories(newList);
   };
 
-  const reorderCategories = (newOrderedCategories: Category[]) => {
+  const reorderCategories = async (newOrderedCategories: Category[]) => {
+    await storageService.saveCategories(newOrderedCategories);
     setCategories(newOrderedCategories);
   };
 
   // Filter Group CRUD
-  const addFilter = (newFilter: FilterGroup) => {
-    setFilters((prev) => [...prev, newFilter]);
+  const addFilter = async (newFilter: FilterGroup) => {
+    const newList = [...filters, newFilter];
+    await storageService.saveFilters(newList);
+    setFilters(newList);
   };
 
-  const updateFilter = (updatedFilter: FilterGroup) => {
-    setFilters((prev) =>
-      prev.map((f) => (f.id === updatedFilter.id ? updatedFilter : f))
-    );
+  const updateFilter = async (updatedFilter: FilterGroup) => {
+    const newList = filters.map((f) => (f.id === updatedFilter.id ? updatedFilter : f));
+    await storageService.saveFilters(newList);
+    setFilters(newList);
   };
 
-  const archiveFilter = (filterId: string) => {
-    setFilters((prev) =>
-      prev.map((f) => (f.id === filterId ? { ...f, is_archived: true, is_active: false } : f))
-    );
+  const archiveFilter = async (filterId: string) => {
+    const newList = filters.map((f) => (f.id === filterId ? { ...f, is_archived: true, is_active: false } : f));
+    await storageService.saveFilters(newList);
+    setFilters(newList);
   };
 
-  const deleteFilter = (filterId: string) => {
-    setFilters((prev) => prev.filter((f) => f.id !== filterId));
+  const deleteFilter = async (filterId: string) => {
+    const newList = filters.filter((f) => f.id !== filterId);
+    await storageService.saveFilters(newList);
+    setFilters(newList);
   };
 
   // CMS Section & Image Updates
-  const updateSectionsConfig = (newConfig: SectionsConfig) => {
+  const updateSectionsConfig = async (newConfig: SectionsConfig) => {
+    await storageService.saveSectionsConfig(newConfig);
     setSectionsConfig(newConfig);
   };
 
   // Order Management
-  const updateOrderStatus = (orderId: string, newStatus: OrderStatus, note?: string) => {
-    setOrders((prev) =>
-      prev.map((ord) => {
-        if (ord.id === orderId) {
-          const now = new Date().toISOString();
-          const newEvent = {
-            status: newStatus,
-            timestamp: now,
-            note: note || `Statut mis à jour vers ${newStatus}`,
-          };
-
-          return {
-            ...ord,
-            status: newStatus,
-            tracking_history: [...ord.tracking_history, newEvent],
-            updated_at: now,
-          };
-        }
-        return ord;
-      })
-    );
+  const updateOrderStatus = async (orderId: string, newStatus: OrderStatus, note?: string) => {
+    const newList = orders.map((ord) => {
+      if (ord.id === orderId) {
+        const now = new Date().toISOString();
+        const newEvent = {
+          status: newStatus,
+          timestamp: now,
+          note: note || `Statut mis à jour vers ${newStatus}`,
+        };
+        return {
+          ...ord,
+          status: newStatus,
+          tracking_history: [...ord.tracking_history, newEvent],
+          updated_at: now,
+        };
+      }
+      return ord;
+    });
+    await storageService.saveOrders(newList);
+    setOrders(newList);
   };
 
-  const addCashierNote = (orderId: string, note: string) => {
-    setOrders((prev) =>
-      prev.map((ord) => (ord.id === orderId ? { ...ord, cashier_notes: note } : ord))
-    );
+  const addCashierNote = async (orderId: string, note: string) => {
+    const newList = orders.map((ord) => (ord.id === orderId ? { ...ord, cashier_notes: note } : ord));
+    await storageService.saveOrders(newList);
+    setOrders(newList);
   };
 
-  const deleteOrder = (orderId: string) => {
-    setOrders((prev) => prev.filter((o) => o.id !== orderId));
+  const deleteOrder = async (orderId: string) => {
+    const newList = orders.filter((o) => o.id !== orderId);
+    await storageService.saveOrders(newList);
+    setOrders(newList);
   };
 
   // Delivery Zone CRUD
-  const addDeliveryZone = (zone: DeliveryZone) => {
-    setDeliveryZones((prev) => [...prev, zone]);
+  const addDeliveryZone = async (zone: DeliveryZone) => {
+    const newList = [...deliveryZones, zone];
+    await storageService.saveDeliveryZones(newList);
+    setDeliveryZones(newList);
   };
 
-  const updateDeliveryZone = (updatedZone: DeliveryZone) => {
-    setDeliveryZones((prev) =>
-      prev.map((z) => (z.id === updatedZone.id ? updatedZone : z))
-    );
+  const updateDeliveryZone = async (updatedZone: DeliveryZone) => {
+    const newList = deliveryZones.map((z) => (z.id === updatedZone.id ? updatedZone : z));
+    await storageService.saveDeliveryZones(newList);
+    setDeliveryZones(newList);
   };
 
-  const deleteDeliveryZone = (zoneId: string) => {
-    setDeliveryZones((prev) => prev.filter((z) => z.id !== zoneId));
+  const deleteDeliveryZone = async (zoneId: string) => {
+    const newList = deliveryZones.filter((z) => z.id !== zoneId);
+    await storageService.saveDeliveryZones(newList);
+    setDeliveryZones(newList);
   };
 
   // Settings
-  const updateSettings = (newSettings: StoreSettings) => {
+  const updateSettings = async (newSettings: StoreSettings) => {
+    await storageService.saveSettings(newSettings);
     setSettings(newSettings);
   };
 
   // Reset System
-  const resetToDefaultData = () => {
+  const resetToDefaultData = async () => {
     if (window.confirm('Voulez-vous vraiment réinitialiser toutes les données aux valeurs par défaut ?')) {
+      // Assuming storageService has a resetToDefault method or we just save initial states
+      await storageService.saveProducts(INITIAL_PRODUCTS);
+      await storageService.saveDeliveryZones(INITIAL_DELIVERY_ZONES);
+      await storageService.saveOrders(INITIAL_ORDERS);
+      await storageService.saveSettings(INITIAL_STORE_SETTINGS);
+      await storageService.saveSectionsConfig(INITIAL_SECTIONS_CONFIG);
       setProducts(INITIAL_PRODUCTS);
       setDeliveryZones(INITIAL_DELIVERY_ZONES);
       setOrders(INITIAL_ORDERS);
       setSettings(INITIAL_STORE_SETTINGS);
       setSectionsConfig(INITIAL_SECTIONS_CONFIG);
-      localStorage.clear();
       window.location.reload();
     }
   };

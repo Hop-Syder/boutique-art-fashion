@@ -31,6 +31,7 @@ export const FilterManager: React.FC = () => {
 
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
   const [editingGroup, setEditingGroup] = useState<FilterGroup | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Group Form State
   const [groupFormData, setGroupFormData] = useState<Partial<FilterGroup>>({
@@ -100,7 +101,7 @@ export const FilterManager: React.FC = () => {
     }));
   };
 
-  const handleSaveGroup = (e: React.FormEvent) => {
+  const handleSaveGroup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!groupFormData.name?.trim()) return;
 
@@ -121,13 +122,27 @@ export const FilterManager: React.FC = () => {
       options: groupFormData.options || [],
     };
 
-    if (editingGroup) {
-      updateFilter(groupData);
-    } else {
-      addFilter(groupData);
+    setIsSaving(true);
+    try {
+      if (editingGroup) {
+        await updateFilter(groupData);
+      } else {
+        await addFilter(groupData);
+      }
+      setIsGroupModalOpen(false);
+    } catch (error: any) {
+      alert(error.message || 'Erreur lors de la sauvegarde du filtre.');
+    } finally {
+      setIsSaving(false);
     }
+  };
 
-    setIsGroupModalOpen(false);
+  const handleArchive = async (filterId: string) => {
+    try {
+      await archiveFilter(filterId);
+    } catch (error: any) {
+      alert(error.message || "Erreur lors de l'archivage du filtre.");
+    }
   };
 
   const getAssociatedCategoriesCount = (filterId: string) => {
@@ -206,7 +221,7 @@ export const FilterManager: React.FC = () => {
                         <Edit2 className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => archiveFilter(fGroup.id)}
+                        onClick={() => handleArchive(fGroup.id)}
                         className="p-2 hover:bg-red-50 text-red-600 rounded-xl transition-all cursor-pointer"
                         title="Archiver (Soft-delete)"
                       >
@@ -378,10 +393,11 @@ export const FilterManager: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl flex items-center gap-1.5 cursor-pointer"
+                    disabled={isSaving}
+                    className="px-5 py-2 bg-slate-900 hover:bg-slate-800 disabled:opacity-60 text-white font-bold rounded-xl flex items-center gap-1.5 cursor-pointer"
                   >
                     <Check className="w-4 h-4 text-emerald-400" />
-                    <span>Enregistrer</span>
+                    <span>{isSaving ? 'Enregistrement...' : 'Enregistrer'}</span>
                   </button>
                 </div>
               </div>

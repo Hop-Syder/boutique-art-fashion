@@ -46,6 +46,7 @@ export const CategoryManager: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [selectedParentId, setSelectedParentId] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState<Partial<Category>>({
@@ -109,7 +110,7 @@ export const CategoryManager: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name?.trim()) return;
 
@@ -133,13 +134,27 @@ export const CategoryManager: React.FC = () => {
       item_count: getItemCount(editingCategory?.id || ''),
     };
 
-    if (editingCategory) {
-      updateCategory(categoryData);
-    } else {
-      addCategory(categoryData);
+    setIsSaving(true);
+    try {
+      if (editingCategory) {
+        await updateCategory(categoryData);
+      } else {
+        await addCategory(categoryData);
+      }
+      setIsModalOpen(false);
+    } catch (error: any) {
+      alert(error.message || 'Erreur lors de la sauvegarde de la catégorie.');
+    } finally {
+      setIsSaving(false);
     }
+  };
 
-    setIsModalOpen(false);
+  const handleArchive = async (categoryId: string) => {
+    try {
+      await archiveCategory(categoryId);
+    } catch (error: any) {
+      alert(error.message || "Erreur lors de l'archivage de la catégorie.");
+    }
   };
 
   const toggleFilterAssociation = (filterId: string) => {
@@ -258,7 +273,7 @@ export const CategoryManager: React.FC = () => {
                     </button>
 
                     <button
-                      onClick={() => archiveCategory(mainCat.id)}
+                      onClick={() => handleArchive(mainCat.id)}
                       className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-all cursor-pointer"
                       title="Archiver (Soft-delete)"
                     >
@@ -294,7 +309,7 @@ export const CategoryManager: React.FC = () => {
                             <Edit2 className="w-3.5 h-3.5" />
                           </button>
                           <button
-                            onClick={() => archiveCategory(sub.id)}
+                            onClick={() => handleArchive(sub.id)}
                             className="p-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-bold cursor-pointer"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -437,10 +452,11 @@ export const CategoryManager: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl flex items-center gap-1.5 cursor-pointer"
+                    disabled={isSaving}
+                    className="px-5 py-2 bg-slate-900 hover:bg-slate-800 disabled:opacity-60 text-white font-bold rounded-xl flex items-center gap-1.5 cursor-pointer"
                   >
                     <Check className="w-4 h-4 text-emerald-400" />
-                    <span>Enregistrer</span>
+                    <span>{isSaving ? 'Enregistrement...' : 'Enregistrer'}</span>
                   </button>
                 </div>
               </div>

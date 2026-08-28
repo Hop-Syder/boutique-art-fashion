@@ -3,7 +3,7 @@
  * @organization Nexus Partners
  * @description Universal Persistent Local Storage Engine with Real-Time BroadcastChannel for ART FASHION Cotonou
  * @created 2026-08-19
- * @updated 2026-08-19
+ * @updated 2026-08-28
  * 🌐 ceo.nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
@@ -37,13 +37,17 @@ export interface StorageSyncMessage {
 }
 
 const DATA_API_URL = '/api/data.php';
-const SERVER_SYNC_DEBOUNCE_MS = 800;
+
+// Empêche hydrateFromServer() d'écraser une modification locale pas encore
+// confirmée par le serveur (race condition : sync en cours + reload/autre
+// appareil qui hydrate entre-temps depuis une version plus ancienne).
+const SYNC_PENDING_AT_KEY = 'art_fashion_sync_pending_at';
+const LAST_SYNCED_AT_KEY = 'art_fashion_last_synced_at';
+const SYNC_PENDING_STALE_MS = 30_000; // onglet fermé pendant la requête : on ne bloque pas indéfiniment
 
 class StorageEngine {
   private broadcastChannel: BroadcastChannel | null = null;
   private syncListeners: Array<(msg: StorageSyncMessage) => void> = [];
-  private isHydrating = false;
-  private serverSyncTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
@@ -80,60 +84,88 @@ class StorageEngine {
       }
     }
     this.notifyListeners(msg);
-    this.scheduleServerSync();
   }
 
   // --- SERVER PERSISTENCE (survives cache clears / new browsers, via VPS db.json) ---
 
-  // Debounced: avoids one request per keystroke when several save*() calls fire in a row.
-  private scheduleServerSync(): void {
-    if (typeof window === 'undefined' || this.isHydrating) return;
-    if (this.serverSyncTimer) clearTimeout(this.serverSyncTimer);
-    this.serverSyncTimer = setTimeout(() => {
-      const payload = {
-        version: '1.0.0',
-        syncedAt: new Date().toISOString(),
-        products: this.getProducts(),
-        categories: this.getCategories(),
-        filters: this.getFilters(),
-        settings: this.getSettings(),
-        orders: this.getOrders(),
-        sectionsConfig: this.getSectionsConfig(),
-        deliveryZones: this.getDeliveryZones(),
-      };
-      fetch(DATA_API_URL, {
+  // Direct sync to server, throws if error
+  private async syncToServer(): Promise<void> {
+    if (typeof window === 'undefined') return;
+
+    const syncedAt = new Date().toISOString();
+    const payload = {
+      version: '1.0.0',
+      syncedAt,
+      products: this.getProducts(),
+      categories: this.getCategories(),
+      filters: this.getFilters(),
+      settings: this.getSettings(),
+      orders: this.getOrders(),
+      sectionsConfig: this.getSectionsConfig(),
+      deliveryZones: this.getDeliveryZones(),
+    };
+
+    localStorage.setItem(SYNC_PENDING_AT_KEY, String(Date.now()));
+    try {
+      const response = await fetch(DATA_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-      }).catch((err) => console.warn('Server sync unavailable (offline?):', err));
-    }, SERVER_SYNC_DEBOUNCE_MS);
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur serveur: ${response.status} ${response.statusText}`);
+      }
+      localStorage.setItem(LAST_SYNCED_AT_KEY, syncedAt);
+    } finally {
+      localStorage.removeItem(SYNC_PENDING_AT_KEY);
+    }
   }
 
   // Pulls the VPS-persisted snapshot once at startup and applies it locally.
-  // Guarded by isHydrating so applying it doesn't immediately re-POST it back.
+  // Refuse d'écraser le local si : (1) une synchronisation vers le serveur est
+  // en cours (évite qu'un hydrate concurrent efface une modif pas encore
+  // confirmée), ou (2) le serveur n'a rien de plus récent que ce qu'on a déjà
+  // nous-même confirmé lors d'un précédent syncToServer().
   public async hydrateFromServer(): Promise<void> {
     if (typeof window === 'undefined') return;
+
+    const pendingAt = Number(localStorage.getItem(SYNC_PENDING_AT_KEY) || 0);
+    if (pendingAt && Date.now() - pendingAt < SYNC_PENDING_STALE_MS) {
+      console.warn('Hydrate ignoré : une synchronisation locale est en cours.');
+      return;
+    }
+
     try {
       const timestamp = Date.now();
       const response = await fetch(`${DATA_API_URL}?t=${timestamp}`, {
         cache: 'no-store'
       });
       if (!response.ok) return;
+
       const data = await response.json();
       if (!data) return;
 
-      this.isHydrating = true;
-      if (Array.isArray(data.products)) this.saveProducts(data.products);
-      if (Array.isArray(data.categories)) this.saveCategories(data.categories);
-      if (Array.isArray(data.filters)) this.saveFilters(data.filters);
-      if (data.settings && typeof data.settings === 'object') this.saveSettings(data.settings);
-      if (Array.isArray(data.orders)) this.saveOrders(data.orders);
-      if (data.sectionsConfig && typeof data.sectionsConfig === 'object') this.saveSectionsConfig(data.sectionsConfig);
-      if (Array.isArray(data.deliveryZones)) this.saveDeliveryZones(data.deliveryZones);
+      const localLastSynced = localStorage.getItem(LAST_SYNCED_AT_KEY);
+      if (data.syncedAt && localLastSynced && data.syncedAt <= localLastSynced) {
+        // Le serveur n'a rien de plus récent que ce qu'on a déjà confirmé — ne rien écraser.
+        return;
+      }
+
+      // Update localStorage WITHOUT triggering save methods to avoid re-POSTing
+      if (Array.isArray(data.products)) localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(data.products));
+      if (Array.isArray(data.categories)) localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(data.categories));
+      if (Array.isArray(data.filters)) localStorage.setItem(STORAGE_KEYS.FILTERS, JSON.stringify(data.filters));
+      if (data.settings && typeof data.settings === 'object') localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(data.settings));
+      if (Array.isArray(data.orders)) localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(data.orders));
+      if (data.sectionsConfig && typeof data.sectionsConfig === 'object') localStorage.setItem(STORAGE_KEYS.SECTIONS_CONFIG, JSON.stringify(data.sectionsConfig));
+      if (Array.isArray(data.deliveryZones)) localStorage.setItem(STORAGE_KEYS.DELIVERY_ZONES, JSON.stringify(data.deliveryZones));
+      if (data.syncedAt) localStorage.setItem(LAST_SYNCED_AT_KEY, data.syncedAt);
+
+      // Broadcast changes to UI
+      this.broadcast('FULL_RESET');
     } catch (err) {
       console.warn('Server hydration skipped (offline?):', err);
-    } finally {
-      this.isHydrating = false;
     }
   }
 
@@ -141,21 +173,18 @@ class StorageEngine {
   public getProducts(): Product[] {
     if (typeof window === 'undefined') return INITIAL_PRODUCTS;
     const raw = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
-    if (!raw) {
-      this.saveProducts(INITIAL_PRODUCTS);
-      return INITIAL_PRODUCTS;
-    }
+    if (!raw) return INITIAL_PRODUCTS;
     try {
-      const parsed = JSON.parse(raw);
-      return parsed;
+      return JSON.parse(raw);
     } catch {
       return INITIAL_PRODUCTS;
     }
   }
 
-  public saveProducts(products: Product[]): void {
+  public async saveProducts(products: Product[]): Promise<void> {
     if (typeof window === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(products));
+    await this.syncToServer();
     this.broadcast('PRODUCTS_UPDATED');
   }
 
@@ -163,21 +192,18 @@ class StorageEngine {
   public getCategories(): Category[] {
     if (typeof window === 'undefined') return INITIAL_CATEGORIES;
     const raw = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
-    if (!raw) {
-      this.saveCategories(INITIAL_CATEGORIES);
-      return INITIAL_CATEGORIES;
-    }
+    if (!raw) return INITIAL_CATEGORIES;
     try {
-      const parsed = JSON.parse(raw);
-      return parsed;
+      return JSON.parse(raw);
     } catch {
       return INITIAL_CATEGORIES;
     }
   }
 
-  public saveCategories(categories: Category[]): void {
+  public async saveCategories(categories: Category[]): Promise<void> {
     if (typeof window === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories));
+    await this.syncToServer();
     this.broadcast('CATEGORIES_UPDATED');
   }
 
@@ -185,10 +211,7 @@ class StorageEngine {
   public getFilters(): FilterGroup[] {
     if (typeof window === 'undefined') return INITIAL_FILTERS;
     const raw = localStorage.getItem(STORAGE_KEYS.FILTERS);
-    if (!raw) {
-      this.saveFilters(INITIAL_FILTERS);
-      return INITIAL_FILTERS;
-    }
+    if (!raw) return INITIAL_FILTERS;
     try {
       return JSON.parse(raw);
     } catch {
@@ -196,9 +219,10 @@ class StorageEngine {
     }
   }
 
-  public saveFilters(filters: FilterGroup[]): void {
+  public async saveFilters(filters: FilterGroup[]): Promise<void> {
     if (typeof window === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.FILTERS, JSON.stringify(filters));
+    await this.syncToServer();
     this.broadcast('FILTERS_UPDATED');
   }
 
@@ -206,10 +230,7 @@ class StorageEngine {
   public getSettings(): StoreSettings {
     if (typeof window === 'undefined') return INITIAL_STORE_SETTINGS;
     const raw = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-    if (!raw) {
-      this.saveSettings(INITIAL_STORE_SETTINGS);
-      return INITIAL_STORE_SETTINGS;
-    }
+    if (!raw) return INITIAL_STORE_SETTINGS;
     try {
       return JSON.parse(raw);
     } catch {
@@ -217,9 +238,10 @@ class StorageEngine {
     }
   }
 
-  public saveSettings(settings: StoreSettings): void {
+  public async saveSettings(settings: StoreSettings): Promise<void> {
     if (typeof window === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+    await this.syncToServer();
     this.broadcast('SETTINGS_UPDATED');
   }
 
@@ -235,9 +257,10 @@ class StorageEngine {
     }
   }
 
-  public saveOrders(orders: any[]): void {
+  public async saveOrders(orders: any[]): Promise<void> {
     if (typeof window === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(orders));
+    await this.syncToServer();
     this.broadcast('ORDERS_UPDATED');
   }
 
@@ -245,10 +268,7 @@ class StorageEngine {
   public getSectionsConfig(): SectionsConfig {
     if (typeof window === 'undefined') return INITIAL_SECTIONS_CONFIG;
     const raw = localStorage.getItem(STORAGE_KEYS.SECTIONS_CONFIG);
-    if (!raw) {
-      this.saveSectionsConfig(INITIAL_SECTIONS_CONFIG);
-      return INITIAL_SECTIONS_CONFIG;
-    }
+    if (!raw) return INITIAL_SECTIONS_CONFIG;
     try {
       const parsed = JSON.parse(raw);
       return {
@@ -269,9 +289,10 @@ class StorageEngine {
     }
   }
 
-  public saveSectionsConfig(config: SectionsConfig): void {
+  public async saveSectionsConfig(config: SectionsConfig): Promise<void> {
     if (typeof window === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.SECTIONS_CONFIG, JSON.stringify(config));
+    await this.syncToServer();
     this.broadcast('SECTIONS_UPDATED');
   }
 
@@ -279,10 +300,7 @@ class StorageEngine {
   public getDeliveryZones(): DeliveryZone[] {
     if (typeof window === 'undefined') return INITIAL_DELIVERY_ZONES;
     const raw = localStorage.getItem(STORAGE_KEYS.DELIVERY_ZONES);
-    if (!raw) {
-      this.saveDeliveryZones(INITIAL_DELIVERY_ZONES);
-      return INITIAL_DELIVERY_ZONES;
-    }
+    if (!raw) return INITIAL_DELIVERY_ZONES;
     try {
       return JSON.parse(raw);
     } catch {
@@ -290,9 +308,10 @@ class StorageEngine {
     }
   }
 
-  public saveDeliveryZones(zones: DeliveryZone[]): void {
+  public async saveDeliveryZones(zones: DeliveryZone[]): Promise<void> {
     if (typeof window === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.DELIVERY_ZONES, JSON.stringify(zones));
+    await this.syncToServer();
     this.broadcast('ZONES_UPDATED');
   }
 
@@ -311,21 +330,16 @@ class StorageEngine {
     return JSON.stringify(data, null, 2);
   }
 
-  public importDataJSON(jsonString: string): boolean {
+  public async importDataJSON(jsonString: string): Promise<boolean> {
     try {
       const parsed = JSON.parse(jsonString);
-      if (parsed.products && Array.isArray(parsed.products)) {
-        this.saveProducts(parsed.products);
-      }
-      if (parsed.categories && Array.isArray(parsed.categories)) {
-        this.saveCategories(parsed.categories);
-      }
-      if (parsed.filters && Array.isArray(parsed.filters)) {
-        this.saveFilters(parsed.filters);
-      }
-      if (parsed.settings && typeof parsed.settings === 'object') {
-        this.saveSettings(parsed.settings);
-      }
+      
+      if (parsed.products && Array.isArray(parsed.products)) localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(parsed.products));
+      if (parsed.categories && Array.isArray(parsed.categories)) localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(parsed.categories));
+      if (parsed.filters && Array.isArray(parsed.filters)) localStorage.setItem(STORAGE_KEYS.FILTERS, JSON.stringify(parsed.filters));
+      if (parsed.settings && typeof parsed.settings === 'object') localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(parsed.settings));
+      
+      await this.syncToServer();
       this.broadcast('FULL_RESET');
       return true;
     } catch (err) {
@@ -334,13 +348,15 @@ class StorageEngine {
     }
   }
 
-  public resetToDefault(): void {
-    this.saveProducts(INITIAL_PRODUCTS);
-    this.saveCategories(INITIAL_CATEGORIES);
-    this.saveFilters(INITIAL_FILTERS);
-    this.saveSettings(INITIAL_STORE_SETTINGS);
-    this.saveSectionsConfig(INITIAL_SECTIONS_CONFIG);
-    this.saveDeliveryZones(INITIAL_DELIVERY_ZONES);
+  public async resetToDefault(): Promise<void> {
+    localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(INITIAL_PRODUCTS));
+    localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(INITIAL_CATEGORIES));
+    localStorage.setItem(STORAGE_KEYS.FILTERS, JSON.stringify(INITIAL_FILTERS));
+    localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(INITIAL_STORE_SETTINGS));
+    localStorage.setItem(STORAGE_KEYS.SECTIONS_CONFIG, JSON.stringify(INITIAL_SECTIONS_CONFIG));
+    localStorage.setItem(STORAGE_KEYS.DELIVERY_ZONES, JSON.stringify(INITIAL_DELIVERY_ZONES));
+    
+    await this.syncToServer();
     this.broadcast('FULL_RESET');
   }
 }

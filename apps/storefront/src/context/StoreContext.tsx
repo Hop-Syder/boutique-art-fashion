@@ -99,7 +99,7 @@ interface StoreContextType {
     delivery_address: string;
     delivery_landmark?: string;
     delivery_notes?: string;
-  }) => { order: Order; whatsappUrl: string; message: string };
+  }) => Promise<{ order: Order; whatsappUrl: string; message: string }>;
   findOrder: (query: string) => Order | undefined;
 
   // Formatters
@@ -208,14 +208,16 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
   }, []);
 
-  // Sync cart & orders state to LocalStorage
+  // Sync cart state to LocalStorage (purement local, jamais envoyé au serveur)
   useEffect(() => {
     setStorageItem('ayele_cart', cart);
   }, [cart]);
 
-  useEffect(() => {
-    setStorageItem('ayele_orders', orders);
-  }, [orders]);
+  // Les commandes sont persistées explicitement dans createOrder() (localStorage
+  // + push serveur), pas ici en réaction à [orders] — un effet réactif ici
+  // re-déclencherait un syncToServer() à chaque hydrate/broadcast entrant
+  // (setOrders venant du subscribe() ci-dessus), pas seulement à la création
+  // d'une vraie nouvelle commande.
 
   // Cart operations
   const addToCart = (product: Product, variant: ProductVariant, quantity: number = 1) => {
@@ -288,7 +290,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   // Order Operations
-  const createOrder = (orderData: {
+  const createOrder = async (orderData: {
     customer_name: string;
     customer_phone: string;
     customer_whatsapp: string;
@@ -341,7 +343,18 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       updated_at: now,
     };
 
-    setOrders((prev) => [newOrder, ...prev]);
+    const newOrders = [newOrder, ...orders];
+    setOrders(newOrders);
+
+    try {
+      await storageService.saveOrders(newOrders);
+    } catch (err) {
+      // Ne bloque jamais le checkout pour un souci réseau ponctuel côté client :
+      // la commande reste visible localement (saveOrders écrit localStorage avant
+      // de lever). Le prochain hydrate réussi de cet appareil, ou un accès admin
+      // direct, permettra de la retrouver. On journalise pour diagnostic.
+      console.error('Échec de synchronisation de la commande vers le serveur:', err);
+    }
 
     const { url: whatsappUrl, message } = generateWhatsAppMessage(newOrder, settings);
 

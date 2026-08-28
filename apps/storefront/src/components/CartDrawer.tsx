@@ -125,11 +125,16 @@ export const CartDrawer: React.FC = () => {
                       className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/80 flex gap-3.5 relative group hover:border-slate-300 transition-colors"
                     >
                       <img
-                        src={item.product.images[0]}
+                        src={item.product.images[0] || '/placeholder.webp'}
                         alt={item.product.name}
                         className="w-20 h-24 object-cover object-center rounded-xl bg-white border border-slate-200 shrink-0"
                         loading="lazy"
                         decoding="async"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.onerror = null;
+                          target.src = '/placeholder.webp';
+                        }}
                       />
 
                       <div className="flex-1 flex flex-col justify-between">

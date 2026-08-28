@@ -65,11 +65,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       {/* Product Image Container */}
       <div className="relative aspect-[3/4] overflow-hidden bg-slate-100">
         <img
-          src={product.images[0]}
+          src={product.images[0] || '/placeholder.webp'}
           alt={product.name}
           className="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-700 ease-out"
           loading="lazy"
           decoding="async"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.onerror = null;
+            target.src = '/placeholder.webp';
+          }}
         />
 
         {/* Ambient Gradient overlay */}

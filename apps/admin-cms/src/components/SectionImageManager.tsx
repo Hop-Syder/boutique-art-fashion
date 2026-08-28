@@ -8,12 +8,20 @@ export const SectionImageManager: React.FC = () => {
   const { sectionsConfig, updateSectionsConfig } = useAdmin();
   const [formData, setFormData] = useState<SectionsConfig>(sectionsConfig);
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateSectionsConfig(formData);
-    setSavedSuccess(true);
-    setTimeout(() => setSavedSuccess(false), 2500);
+    setIsSaving(true);
+    try {
+      await updateSectionsConfig(formData);
+      setSavedSuccess(true);
+      setTimeout(() => setSavedSuccess(false), 2500);
+    } catch (error: any) {
+      alert(error.message || 'Erreur lors de la publication des sections.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleAddTopBarMessage = () => {
@@ -162,13 +170,16 @@ export const SectionImageManager: React.FC = () => {
   const SaveButton = () => (
     <button
       type="submit"
-      className={`px-4 py-2 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer ${
+      disabled={isSaving}
+      className={`px-4 py-2 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer disabled:opacity-60 ${
         savedSuccess
           ? 'bg-emerald-600 text-white'
           : 'bg-slate-900 hover:bg-slate-800 text-white'
       }`}
     >
-      {savedSuccess ? (
+      {isSaving ? (
+        <span className="hidden sm:inline">Publication...</span>
+      ) : savedSuccess ? (
         <>
           <Check className="w-4 h-4" />
           <span className="hidden sm:inline">Publié</span>
@@ -201,14 +212,17 @@ export const SectionImageManager: React.FC = () => {
 
         <button
           type="submit"
-          className={`px-6 py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer ${
+          disabled={isSaving}
+          className={`px-6 py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer disabled:opacity-60 ${
             savedSuccess
               ? 'bg-emerald-600 text-white'
               : 'bg-slate-900 hover:bg-slate-800 text-white'
           }`}
           id="cms-save-sections-btn"
         >
-          {savedSuccess ? (
+          {isSaving ? (
+            <span>Publication en cours...</span>
+          ) : savedSuccess ? (
             <>
               <Check className="w-4 h-4" />
               <span>Sections enregistrées !</span>
