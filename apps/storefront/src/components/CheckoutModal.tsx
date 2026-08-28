@@ -43,9 +43,11 @@ export const CheckoutModal: React.FC = () => {
     message: string;
   } | null>(null);
 
-  if (!isCheckoutOpen) return null;
-
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // ⚠️ Tous les hooks doivent être appelés avant tout return conditionnel
+  // (Rules of Hooks) — sinon l'ouverture de la modale crashe l'app (page blanche).
+  if (!isCheckoutOpen) return null;
 
   const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
