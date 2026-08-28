@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { useStore } from '../context/StoreContext';
 import { User, Star, MapPin, ChevronLeft, ChevronRight, ExternalLink, CheckCircle2 } from 'lucide-react';
 
-export interface GoogleReview {
+interface GoogleReview {
   id: string;
   name: string;
   location: string;
@@ -12,7 +12,7 @@ export interface GoogleReview {
   model: string;
 }
 
-export const REAL_GOOGLE_REVIEWS: GoogleReview[] = [
+const REAL_GOOGLE_REVIEWS: GoogleReview[] = [
   {
     id: 'rev-1',
     name: 'Melvina Chabi',

@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
-export interface ProcessStep {
+interface ProcessStep {
   num: string;
   title_fr: string;
   title_en: string;
@@ -32,7 +32,7 @@ export interface ProcessStep {
   icon: React.FC<{ className?: string }>;
 }
 
-export const ORDER_STEPS: ProcessStep[] = [
+const ORDER_STEPS: ProcessStep[] = [
   {
     num: '01',
     title_fr: 'Composez votre panier',

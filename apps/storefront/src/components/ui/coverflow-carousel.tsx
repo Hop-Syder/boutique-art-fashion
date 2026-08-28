@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 const useIsoLayoutEffect =
   typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
 
-export interface CoverflowSlide {
+interface CoverflowSlide {
   src: string;
   alt: string;
   title?: string;

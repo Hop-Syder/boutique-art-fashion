@@ -22,7 +22,7 @@ import {
   storageService,
 } from '@ayele/shared';
 
-export type AdminTab =
+type AdminTab =
   | 'products'
   | 'filters'
   | 'cms-sections'

@@ -11,13 +11,10 @@
   },
   "dependencies": {
     "@ayele/shared": "workspace:*",
-    "@google/genai": "^2.4.0",
     "@tailwindcss/vite": "^4.1.14",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
-    "dotenv": "^17.2.3",
     "lucide-react": "^0.546.0",
-    "motion": "^12.23.24",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
     "tailwind-merge": "^3.6.0",
