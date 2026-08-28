@@ -1,5 +1,5 @@
 # ===========================================================
-# robots.txt — ART FASHION Cotonou (artfashion-cotonou.com)
+# robots.txt — ART FASHION Cotonou (artfashionhome.com)
 # ===========================================================
 
 User-agent: *
@@ -36,4 +36,4 @@ Disallow: /.env
 Disallow: /node_modules/
 
 # Sitemap
-Sitemap: https://artfashion-cotonou.com/sitemap.xml
+Sitemap: https://artfashionhome.com/sitemap.xml

@@ -5,12 +5,12 @@
 
   <!-- Page Accueil -->
   <url>
-    <loc>https://artfashion-cotonou.com/</loc>
+    <loc>https://artfashionhome.com/</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://artfashion-cotonou.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://artfashion-cotonou.com/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://artfashionhome.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://artfashionhome.com/?lang=en"/>
     <image:image>
       <image:loc>https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
       <image:title>ART FASHION Cotonou — Boutique Prêt-à-Porter Homme Luxe</image:title>
@@ -20,17 +20,17 @@
 
   <!-- Catalogue complet -->
   <url>
-    <loc>https://artfashion-cotonou.com/?view=catalog</loc>
+    <loc>https://artfashionhome.com/?view=catalog</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://artfashion-cotonou.com/?view=catalog"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://artfashion-cotonou.com/?view=catalog&amp;lang=en"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://artfashionhome.com/?view=catalog"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://artfashionhome.com/?view=catalog&amp;lang=en"/>
   </url>
 
   <!-- Costumes & Blazers -->
   <url>
-    <loc>https://artfashion-cotonou.com/?view=catalog&amp;category=costumes</loc>
+    <loc>https://artfashionhome.com/?view=catalog&amp;category=costumes</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
@@ -38,7 +38,7 @@
 
   <!-- Hauts & Chemises -->
   <url>
-    <loc>https://artfashion-cotonou.com/?view=catalog&amp;category=hauts</loc>
+    <loc>https://artfashionhome.com/?view=catalog&amp;category=hauts</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
@@ -46,7 +46,7 @@
 
   <!-- Boubous Bazin -->
   <url>
-    <loc>https://artfashion-cotonou.com/?view=catalog&amp;category=boubous</loc>
+    <loc>https://artfashionhome.com/?view=catalog&amp;category=boubous</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
@@ -54,7 +54,7 @@
 
   <!-- Chaussures -->
   <url>
-    <loc>https://artfashion-cotonou.com/?view=catalog&amp;category=chaussures</loc>
+    <loc>https://artfashionhome.com/?view=catalog&amp;category=chaussures</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -62,7 +62,7 @@
 
   <!-- Accessoires -->
   <url>
-    <loc>https://artfashion-cotonou.com/?view=catalog&amp;category=accessoires</loc>
+    <loc>https://artfashionhome.com/?view=catalog&amp;category=accessoires</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.82</priority>
@@ -70,7 +70,7 @@
 
   <!-- Bas & Pantalons -->
   <url>
-    <loc>https://artfashion-cotonou.com/?view=catalog&amp;category=bas</loc>
+    <loc>https://artfashionhome.com/?view=catalog&amp;category=bas</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
@@ -78,7 +78,7 @@
 
   <!-- Vestes & Manteaux -->
   <url>
-    <loc>https://artfashion-cotonou.com/?view=catalog&amp;category=vestes</loc>
+    <loc>https://artfashionhome.com/?view=catalog&amp;category=vestes</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
@@ -86,12 +86,12 @@
 
   <!-- Page À Propos -->
   <url>
-    <loc>https://artfashion-cotonou.com/?view=about</loc>
+    <loc>https://artfashionhome.com/?view=about</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://artfashion-cotonou.com/?view=about"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://artfashion-cotonou.com/?view=about&amp;lang=en"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://artfashionhome.com/?view=about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://artfashionhome.com/?view=about&amp;lang=en"/>
   </url>
 
 </urlset>

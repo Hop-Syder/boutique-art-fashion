@@ -42,8 +42,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const cleanNum = settings.whatsapp_number.replace(/\D/g, '');
     const msg =
       language === 'en'
-        ? `Hello Maison ART FASHION 👋\nI am contacting you from your official website (artfashion-cotonou.com) regarding the item:\n• *${product.name}* (${formatFCFA(product.price)})\n• Size: ${selectedVariant.size} (${selectedVariant.color})\n\nIs this piece available for delivery in Cotonou?`
-        : `Bonjour Maison ART FASHION 👋\nJe vous contacte depuis votre site web officiel (artfashion-cotonou.com) pour commander cet article :\n• *${product.name}* (${formatFCFA(product.price)})\n• Taille : ${selectedVariant.size} (${selectedVariant.color})\n\nEst-il disponible pour une livraison à Cotonou ?`;
+        ? `Hello Maison ART FASHION 👋\nI am contacting you from your official website (artfashionhome.com) regarding the item:\n• *${product.name}* (${formatFCFA(product.price)})\n• Size: ${selectedVariant.size} (${selectedVariant.color})\n\nIs this piece available for delivery in Cotonou?`
+        : `Bonjour Maison ART FASHION 👋\nJe vous contacte depuis votre site web officiel (artfashionhome.com) pour commander cet article :\n• *${product.name}* (${formatFCFA(product.price)})\n• Taille : ${selectedVariant.size} (${selectedVariant.color})\n\nEst-il disponible pour une livraison à Cotonou ?`;
 
     window.open(`https://wa.me/${cleanNum}?text=${encodeURIComponent(msg)}`, '_blank');
   };

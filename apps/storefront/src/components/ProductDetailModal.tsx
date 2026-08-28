@@ -82,8 +82,8 @@ export const ProductDetailModal: React.FC = () => {
 
     const msg =
       language === 'en'
-        ? `Hello Maison *${settings.store_name}* 👋\n\nI am ordering directly from your official website (artfashion-cotonou.com):\n\n• Article : *${selectedProduct.name}*\n• Taille : *${currentVariant.size}*\n• Couleur : *${currentVariant.color}*\n• Quantité : *${quantity}*\n• Total : *${priceText}*\n\nPour une livraison à Cotonou / Calavi.\nMerci de me confirmer la disponibilité et le délai de livraison !`
-        : `Bonjour Maison *${settings.store_name}* 👋\n\nJe passe commande depuis votre site web officiel (artfashion-cotonou.com) :\n\n• Article : *${selectedProduct.name}*\n• Taille : *${currentVariant.size}*\n• Couleur : *${currentVariant.color}*\n• Quantité : *${quantity}*\n• Montant : *${priceText}*\n\nPour une livraison à Cotonou / Calavi.\nMerci de me confirmer la disponibilité et le créneau de livraison !`;
+        ? `Hello Maison *${settings.store_name}* 👋\n\nI am ordering directly from your official website (artfashionhome.com):\n\n• Article : *${selectedProduct.name}*\n• Taille : *${currentVariant.size}*\n• Couleur : *${currentVariant.color}*\n• Quantité : *${quantity}*\n• Total : *${priceText}*\n\nPour une livraison à Cotonou / Calavi.\nMerci de me confirmer la disponibilité et le délai de livraison !`
+        : `Bonjour Maison *${settings.store_name}* 👋\n\nJe passe commande depuis votre site web officiel (artfashionhome.com) :\n\n• Article : *${selectedProduct.name}*\n• Taille : *${currentVariant.size}*\n• Couleur : *${currentVariant.color}*\n• Quantité : *${quantity}*\n• Montant : *${priceText}*\n\nPour une livraison à Cotonou / Calavi.\nMerci de me confirmer la disponibilité et le créneau de livraison !`;
 
     window.open(`https://wa.me/${cleanNum}?text=${encodeURIComponent(msg)}`, '_blank');
   };

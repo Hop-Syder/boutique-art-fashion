@@ -30,7 +30,7 @@ const AppContent: React.FC = () => {
       seo = {
         title: `${selectedProduct.name} — ${BRAND} | Boutique Mode Homme`,
         description: `${selectedProduct.name} chez ART FASHION Cotonou. ${descClean}. Achat en ligne avec livraison rapide au Bénin. Paiement à la livraison.`,
-        canonical: `https://artfashion-cotonou.com/?view=catalog`,
+        canonical: `https://artfashionhome.com/?view=catalog`,
       };
     } else if (currentView === 'catalog') {
       if (filters.category && filters.category !== 'all') {
@@ -68,30 +68,30 @@ const AppContent: React.FC = () => {
         };
         const catData = catSeo[filters.category];
         seo = catData
-          ? { title: catData.title, description: catData.desc, canonical: `https://artfashion-cotonou.com/?view=catalog&category=${filters.category}` }
+          ? { title: catData.title, description: catData.desc, canonical: `https://artfashionhome.com/?view=catalog&category=${filters.category}` }
           : {
               title: `${catName} — Collection Mode Homme | ${BRAND}`,
               description: `Collection ${catName} pour homme chez ART FASHION, boutique de référence à Cotonou, Bénin. ${SUFFIX_FR}.`,
-              canonical: `https://artfashion-cotonou.com/?view=catalog`,
+              canonical: `https://artfashionhome.com/?view=catalog`,
             };
       } else {
         seo = {
           title: `Catalogue Vêtements Homme Luxe — Costumes, Boubous, Chaussures | ${BRAND}`,
           description: `Parcourez tout le catalogue ART FASHION Cotonou : costumes croisés, grands boubous Bazin Getzner, chemises lin, mocassins cuir. Livraison rapide au Bénin.`,
-          canonical: `https://artfashion-cotonou.com/?view=catalog`,
+          canonical: `https://artfashionhome.com/?view=catalog`,
         };
       }
     } else if (currentView === 'about') {
       seo = {
         title: `À Propos & Contact — Boutique ART FASHION Rue 403 Zongo, Cotonou | Bénin`,
         description: `Découvrez ART FASHION, votre boutique mode homme de référence à Cotonou (Rue 403 Zongo / Scoa Gbéto). Histoire, valeurs, horaires et itinéraire. Tél : +229 01 90 37 36 37.`,
-        canonical: `https://artfashion-cotonou.com/?view=about`,
+        canonical: `https://artfashionhome.com/?view=about`,
       };
     } else {
       seo = {
         title: `ART FASHION Cotonou — Boutique Prêt-à-Porter Homme Luxe | Bénin & Afrique de l'Ouest`,
         description: `ART FASHION, boutique mode homme haut de gamme à Cotonou (Rue 403 Zongo). Costumes, boubous Bazin Getzner, chemises lin, mocassins cuir. Livraison à domicile Cotonou, Calavi, Porto-Novo. Paiement à la livraison.`,
-        canonical: `https://artfashion-cotonou.com/`,
+        canonical: `https://artfashionhome.com/`,
       };
     }
 
