@@ -491,12 +491,7 @@ export const SectionImageManager: React.FC = () => {
               <input type="text" value={formData.about.craftsmanship_title} onChange={(e) => setFormData(prev => ({...prev, about: {...prev.about, craftsmanship_title: e.target.value}}))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
               <label className="text-xs font-semibold text-slate-800 block mb-1">Savoir-Faire Titre (EN)</label>
               <input type="text" value={formData.about.craftsmanship_title_en} onChange={(e) => setFormData(prev => ({...prev, about: {...prev.about, craftsmanship_title_en: e.target.value}}))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
-              
-              <label className="text-xs font-semibold text-slate-800 block mb-1">Savoir-Faire Description (FR)</label>
-              <textarea rows={4} value={formData.about.craftsmanship_text} onChange={(e) => setFormData(prev => ({...prev, about: {...prev.about, craftsmanship_text: e.target.value}}))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
-              <label className="text-xs font-semibold text-slate-800 block mb-1">Savoir-Faire Description (EN)</label>
-              <textarea rows={4} value={formData.about.craftsmanship_text_en} onChange={(e) => setFormData(prev => ({...prev, about: {...prev.about, craftsmanship_text_en: e.target.value}}))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
-              
+
               <ImageUploadInput value={formData.about.craftsmanship_image} onChange={(url) => setFormData(prev => ({...prev, about: {...prev.about, craftsmanship_image: url}}))} label="Savoir-Faire Image" placeholder="URL..." />
            </div>
         </div>
