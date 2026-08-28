@@ -14,15 +14,13 @@ import { ArrowRight, ShieldCheck, Clock, MapPin } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
 export const HeroSection: React.FC = () => {
-  const { setCurrentView, setFilters, settings, sectionsConfig, language, products, formatFCFA } = useStore();
+  const { setCurrentView, setFilters, settings, sectionsConfig, language } = useStore();
   const hero = sectionsConfig.hero;
 
-  // Priorise un vrai produit (photo uploadée) au lieu d'un visuel figé : d'abord
-  // un produit mis en avant, sinon le premier produit actif avec une image.
-  const showcaseProduct =
-    products.find((p) => p.is_featured && p.status === 'active' && p.images[0]) ||
-    products.find((p) => p.status === 'active' && p.images[0]);
-  const showcaseImage = showcaseProduct?.images[0] || hero.primary_image;
+  // Image du Hero pilotée à 100 % depuis l'admin (Paramètres du site / Bannière
+  // d'accueil), strictement indépendante du catalogue produits — plus aucune
+  // récupération dynamique d'image produit, pour éviter tout conflit visuel.
+  const showcaseImage = hero.primary_image;
 
   const handleExplore = () => {
     setFilters((prev) => ({ ...prev, category: 'all', gender: 'all' }));
@@ -156,29 +154,11 @@ export const HeroSection: React.FC = () => {
               <div className="relative rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-slate-900 group">
                 <img
                   src={showcaseImage}
-                  alt={showcaseProduct ? (language === 'en' ? showcaseProduct.name_en : showcaseProduct.name) : 'ART FASHION'}
+                  alt="ART FASHION"
                   className="w-full h-[400px] sm:h-[460px] object-cover object-center group-hover:scale-105 transition-transform duration-700"
                   loading="lazy"
                   decoding="async"
                 />
-                {showcaseProduct && (
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 text-white">
-                  <span className="text-xs font-bold uppercase tracking-widest text-red-400">
-                    {language === 'en' ? 'Signature Piece' : 'Pièce Signature'}
-                  </span>
-                  <h3 className="text-xl font-serif font-semibold mt-1">
-                    {language === 'en' ? showcaseProduct.name_en : showcaseProduct.name}
-                  </h3>
-                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/20">
-                    <span className="text-lg font-bold text-red-300">{formatFCFA(showcaseProduct.price)}</span>
-                    {showcaseProduct.variants.length > 0 && (
-                      <span className="text-xs bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-white font-medium">
-                        {showcaseProduct.variants.map((v) => v.size).join(' • ')}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                )}
               </div>
 
               {/* Floating Badge 1 */}

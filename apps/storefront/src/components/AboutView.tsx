@@ -228,9 +228,6 @@ export const AboutView: React.FC = () => {
               </h2>
               <div className="w-12 h-0.5 bg-gradient-to-r from-red-600 to-red-400 rounded-full" />
             </div>
-            <p className="text-slate-600 leading-relaxed">
-              {fr ? about.craftsmanship_text : about.craftsmanship_text_en}
-            </p>
           </div>
         </div>
 
