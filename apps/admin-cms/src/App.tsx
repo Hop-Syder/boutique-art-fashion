@@ -10,7 +10,7 @@ import { Settings, Save, Check, Download, Upload, RefreshCw } from 'lucide-react
 import { StoreSettings, storageService } from '@ayele/shared';
 
 const SettingsTab: React.FC = () => {
-  const { settings, updateSettings, resetToDefaultData } = useAdmin();
+  const { settings, updateSettings } = useAdmin();
   const [formData, setFormData] = useState<StoreSettings>(settings);
   const [saved, setSaved] = useState(false);
 
@@ -145,14 +145,6 @@ const SettingsTab: React.FC = () => {
             <span>Restaurer un fichier JSON</span>
             <input type="file" accept=".json" onChange={handleImportBackup} className="hidden" />
           </label>
-
-          <button
-            onClick={resetToDefaultData}
-            className="px-4 py-2.5 bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-700 rounded-xl text-xs font-bold flex items-center gap-2 transition-all border border-slate-200 hover:border-red-200 cursor-pointer ml-auto"
-          >
-            <RefreshCw className="w-4 h-4" />
-            <span>Réinitialiser Données</span>
-          </button>
         </div>
       </div>
     </div>

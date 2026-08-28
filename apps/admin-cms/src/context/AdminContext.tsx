@@ -78,7 +78,6 @@ interface AdminContextType {
   updateSettings: (newSettings: StoreSettings) => Promise<void>;
 
   // System
-  resetToDefaultData: () => Promise<void>;
   formatFCFA: (amount: number) => string;
 }
 
@@ -263,24 +262,6 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setSettings(newSettings);
   };
 
-  // Reset System
-  const resetToDefaultData = async () => {
-    if (window.confirm('Voulez-vous vraiment réinitialiser toutes les données aux valeurs par défaut ?')) {
-      // Assuming storageService has a resetToDefault method or we just save initial states
-      await storageService.saveProducts(INITIAL_PRODUCTS);
-      await storageService.saveDeliveryZones(INITIAL_DELIVERY_ZONES);
-      await storageService.saveOrders(INITIAL_ORDERS);
-      await storageService.saveSettings(INITIAL_STORE_SETTINGS);
-      await storageService.saveSectionsConfig(INITIAL_SECTIONS_CONFIG);
-      setProducts(INITIAL_PRODUCTS);
-      setDeliveryZones(INITIAL_DELIVERY_ZONES);
-      setOrders(INITIAL_ORDERS);
-      setSettings(INITIAL_STORE_SETTINGS);
-      setSectionsConfig(INITIAL_SECTIONS_CONFIG);
-      window.location.reload();
-    }
-  };
-
   return (
     <AdminContext.Provider
       value={{
@@ -314,7 +295,6 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         updateDeliveryZone,
         deleteDeliveryZone,
         updateSettings,
-        resetToDefaultData,
         formatFCFA,
       }}
     >

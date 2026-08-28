@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export const AdminHeader: React.FC = () => {
-  const { activeTab, setActiveTab, products, categories, filters, orders, resetToDefaultData } = useAdmin();
+  const { activeTab, setActiveTab, products, categories, filters, orders } = useAdmin();
 
   const pendingOrdersCount = orders.filter(
     (o) => o.status === 'NOUVELLE' || o.status === 'CONTACTÉE' || o.status === 'CONFIRMÉE'
@@ -121,14 +121,6 @@ export const AdminHeader: React.FC = () => {
           </button>
 
           <div className="ml-auto pl-4 border-l border-slate-800 flex items-center gap-2">
-            <button
-              onClick={resetToDefaultData}
-              className="min-w-[44px] min-h-[44px] p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-950/30 rounded-xl transition-colors cursor-pointer flex items-center justify-center"
-              title="Réinitialiser les données aux valeurs par défaut"
-              aria-label="Réinitialiser les données"
-            >
-              <RotateCcw className="w-4 h-4" />
-            </button>
             <button
               onClick={() => {
                 localStorage.removeItem('admin_auth');
