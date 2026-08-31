@@ -24,7 +24,7 @@ export const INITIAL_STORE_SETTINGS: StoreSettings = {
   city: 'Cotonou',
   country: 'Bénin',
   currency: 'FCFA',
-  opening_hours: 'Lundi - Samedi : 09h00 - 20h00',
+  opening_hours: 'Lundi - Samedi : 09h00 - 22h00',
   opening_hours_en: 'Monday - Saturday: 09:00 AM - 08:00 PM',
   facebook_url: 'https://www.facebook.com/artfashionbenin/',
   instagram_handle: '@artfashion_cotonou',

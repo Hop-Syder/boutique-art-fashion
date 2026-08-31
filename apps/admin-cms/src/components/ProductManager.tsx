@@ -52,8 +52,8 @@ export const ProductManager: React.FC = () => {
 
   // Form State
   const [name, setName] = useState('');
-  const [price, setPrice] = useState<number>(25000);
-  const [comparePrice, setComparePrice] = useState<number>(30000);
+  const [price, setPrice] = useState<number | ''>('');
+  const [comparePrice, setComparePrice] = useState<number | ''>('');
   const [category, setCategory] = useState(CATEGORY_OPTIONS[0].id);
   const [gender, setGender] = useState<'Femme' | 'Homme' | 'Enfant' | 'Unisexe'>('Homme');
   const [description, setDescription] = useState('');
@@ -65,15 +65,15 @@ export const ProductManager: React.FC = () => {
   const [attributes, setAttributes] = useState<Record<string, string | string[]>>({});
 
   // Variants state
-  const [variants, setVariants] = useState<ProductVariant[]>([
-    { id: 'v1', product_id: '', size: 'M', color: 'Bleu Indigo', color_hex: '#1E3A8A', stock: 5, sku: 'VAR-1' },
-    { id: 'v2', product_id: '', size: 'L', color: 'Bleu Indigo', color_hex: '#1E3A8A', stock: 3, sku: 'VAR-2' },
+  const [variants, setVariants] = useState<(Omit<ProductVariant, 'stock'> & { stock: number | '' })[]>([
+    { id: 'v1', product_id: '', size: 'M', color: 'Bleu Indigo', color_hex: '#1E3A8A', stock: '', sku: 'VAR-1' },
+    { id: 'v2', product_id: '', size: 'L', color: 'Bleu Indigo', color_hex: '#1E3A8A', stock: '', sku: 'VAR-2' },
   ]);
 
   const resetForm = () => {
     setName('');
-    setPrice(25000);
-    setComparePrice(30000);
+    setPrice('');
+    setComparePrice('');
     setCategory(CATEGORY_OPTIONS[0].id);
     setGender('Homme');
     setDescription('');
@@ -84,8 +84,8 @@ export const ProductManager: React.FC = () => {
     setIsPromo(false);
     setAttributes({});
     setVariants([
-      { id: 'v1', product_id: '', size: 'M', color: 'Bleu Indigo', color_hex: '#1E3A8A', stock: 5, sku: 'VAR-1' },
-      { id: 'v2', product_id: '', size: 'L', color: 'Bleu Indigo', color_hex: '#1E3A8A', stock: 3, sku: 'VAR-2' },
+      { id: 'v1', product_id: '', size: 'M', color: 'Bleu Indigo', color_hex: '#1E3A8A', stock: '', sku: 'VAR-1' },
+      { id: 'v2', product_id: '', size: 'L', color: 'Bleu Indigo', color_hex: '#1E3A8A', stock: '', sku: 'VAR-2' },
     ]);
   };
 
@@ -98,8 +98,8 @@ export const ProductManager: React.FC = () => {
   const handleEdit = (prod: Product) => {
     setEditingProduct(prod);
     setName(prod.name);
-    setPrice(prod.price);
-    setComparePrice(prod.compare_price || 0);
+    setPrice(prod.price !== undefined && prod.price !== null ? prod.price : '');
+    setComparePrice(prod.compare_price || '');
     setCategory(prod.category_id);
     setGender(prod.gender);
     setDescription(prod.description);
@@ -109,13 +109,21 @@ export const ProductManager: React.FC = () => {
     setIsFeatured(Boolean(prod.is_featured));
     setIsPromo(Boolean(prod.is_promo));
     setAttributes(prod.attributes || {});
-    setVariants(prod.variants);
+    setVariants(
+      (prod.variants || []).map((v) => ({
+        ...v,
+        stock: v.stock === 0 || v.stock === undefined || v.stock === null ? '' : v.stock,
+      }))
+    );
     setIsCreating(true);
   };
 
   const handleSaveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || price <= 0) {
+    const numericPrice = typeof price === 'number' ? price : (price !== '' ? Number(price) : 0);
+    const numericComparePrice = typeof comparePrice === 'number' ? comparePrice : (comparePrice !== '' ? Number(comparePrice) : 0);
+
+    if (!name.trim() || numericPrice <= 0) {
       alert('Veuillez entrer un nom valide et un prix supérieur à 0.');
       return;
     }
@@ -126,6 +134,7 @@ export const ProductManager: React.FC = () => {
       ...v,
       id: v.id || `var-${productId}-${idx}`,
       product_id: productId,
+      stock: typeof v.stock === 'number' ? v.stock : (v.stock !== '' ? Number(v.stock) : 0),
     }));
 
     const productPayload: Product = {
@@ -134,8 +143,8 @@ export const ProductManager: React.FC = () => {
       slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       description,
       long_description: description,
-      price,
-      compare_price: comparePrice > price ? comparePrice : undefined,
+      price: numericPrice,
+      compare_price: numericComparePrice > numericPrice ? numericComparePrice : undefined,
       category_id: category,
       gender,
       status: 'active',
@@ -172,10 +181,10 @@ export const ProductManager: React.FC = () => {
       {
         id: `v-${Date.now()}`,
         product_id: '',
-        size: 'M',
-        color: 'Nouveau Coloris',
+        size: '',
+        color: '',
         color_hex: '#000000',
-        stock: 5,
+        stock: '',
         sku: `SKU-${Date.now()}`,
       },
     ]);
@@ -291,7 +300,8 @@ export const ProductManager: React.FC = () => {
                   type="number"
                   required
                   value={price}
-                  onChange={(e) => setPrice(Number(e.target.value))}
+                  onChange={(e) => setPrice(e.target.value === '' ? '' : Number(e.target.value))}
+                  placeholder="Ex: 25000"
                   className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold"
                 />
               </div>
@@ -301,7 +311,8 @@ export const ProductManager: React.FC = () => {
                 <input
                   type="number"
                   value={comparePrice}
-                  onChange={(e) => setComparePrice(Number(e.target.value))}
+                  onChange={(e) => setComparePrice(e.target.value === '' ? '' : Number(e.target.value))}
+                  placeholder="Ex: 30000"
                   className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs"
                 />
               </div>
@@ -459,14 +470,14 @@ export const ProductManager: React.FC = () => {
                     />
                     <input
                       type="number"
-                      placeholder="Stock"
+                      placeholder="Quantité / Stock"
                       value={v.stock}
                       onChange={(e) => {
                         const updated = [...variants];
-                        updated[idx].stock = Number(e.target.value);
+                        updated[idx].stock = e.target.value === '' ? '' : Number(e.target.value);
                         setVariants(updated);
                       }}
-                      className="w-20 p-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold"
+                      className="w-28 p-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold"
                     />
                     <button
                       type="button"
