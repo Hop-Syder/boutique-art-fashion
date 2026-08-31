@@ -10,7 +10,7 @@
 
 import React, { useState } from 'react';
 import { useAdmin } from '../context/AdminContext';
-import { Product, ProductVariant, Category } from '@ayele/shared';
+import { Product, ProductVariant } from '@ayele/shared';
 import { ImageUploadInput } from './ImageUploadInput';
 import {
   Plus,
@@ -27,6 +27,20 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 
+// Liste fixe des rayons / catégories sélectionnables pour un produit.
+// Les identifiants correspondent aux catégories principales du storefront.
+const CATEGORY_OPTIONS: { id: string; label: string }[] = [
+  { id: 'hauts', label: '👕 Hauts (Chemises, Boubous...)' },
+  { id: 'bas', label: '👖 Bas (Pantalons, Jeans...)' },
+  { id: 'vestes-manteaux', label: '🧥 Vestes & manteaux' },
+  { id: 'costumes-habille', label: '🤵 Costumes & habillé' },
+  { id: 'sous-vetements', label: '🩲 Sous-vêtements' },
+  { id: 'chaussures', label: '👞 Chaussures' },
+  { id: 'accessoires', label: '💼 Accessoires' },
+  { id: 'vetements-de-sport', label: '🏋️ Vêtements de sport' },
+  { id: 'autre', label: '🎁 Autre' },
+];
+
 export const ProductManager: React.FC = () => {
   const { products, categories, filters, addProduct, updateProduct, deleteProduct, updateVariantStock, formatFCFA } = useAdmin();
 
@@ -40,7 +54,7 @@ export const ProductManager: React.FC = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState<number>(25000);
   const [comparePrice, setComparePrice] = useState<number>(30000);
-  const [category, setCategory] = useState(categories[0]?.id || 'chemises');
+  const [category, setCategory] = useState(CATEGORY_OPTIONS[0].id);
   const [gender, setGender] = useState<'Femme' | 'Homme' | 'Enfant' | 'Unisexe'>('Homme');
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -60,7 +74,7 @@ export const ProductManager: React.FC = () => {
     setName('');
     setPrice(25000);
     setComparePrice(30000);
-    setCategory(categories[0]?.id || 'chemises');
+    setCategory(CATEGORY_OPTIONS[0].id);
     setGender('Homme');
     setDescription('');
     setImageUrl('');
@@ -299,37 +313,11 @@ export const ProductManager: React.FC = () => {
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"
                 >
-                  {(() => {
-                    // Rendu à partir des VRAIS noms de catégories (plus de table
-                    // d'étiquettes codée en dur qui écrasait/dupliquait les libellés).
-                    // Les catégories parentes sont listées avec leurs sous-catégories
-                    // indentées ; les catégories archivées sont masquées.
-                    const visible = categories.filter((c) => !c.is_archived);
-                    const byOrder = (a: Category, b: Category) =>
-                      (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name);
-                    const roots = visible.filter((c) => !c.parent_id).sort(byOrder);
-                    const rows: { cat: Category; depth: number }[] = [];
-                    roots.forEach((root) => {
-                      rows.push({ cat: root, depth: 0 });
-                      visible
-                        .filter((c) => c.parent_id === root.id)
-                        .sort(byOrder)
-                        .forEach((child) => rows.push({ cat: child, depth: 1 }));
-                    });
-                    // Catégories orphelines (parent introuvable) : ajoutées à plat.
-                    visible
-                      .filter((c) => c.parent_id && !roots.some((r) => r.id === c.parent_id))
-                      .filter((c) => !rows.some((r) => r.cat.id === c.id))
-                      .sort(byOrder)
-                      .forEach((c) => rows.push({ cat: c, depth: 0 }));
-
-                    return rows.map(({ cat, depth }) => (
-                      <option key={cat.id} value={cat.id}>
-                        {depth > 0 ? '  — ' : ''}
-                        {cat.name}
-                      </option>
-                    ));
-                  })()}
+                  {CATEGORY_OPTIONS.map((opt) => (
+                    <option key={opt.id} value={opt.id}>
+                      {opt.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 
