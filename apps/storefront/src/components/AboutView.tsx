@@ -394,11 +394,11 @@ export const AboutView: React.FC = () => {
                 <div className="space-y-3 pt-2 text-sm text-slate-300">
                   <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10">
                     <Clock className="w-4 h-4 text-red-400 shrink-0" />
-                    <span>{fr ? 'Du Lundi au Samedi : 8h30 – 19h30' : 'Monday to Saturday: 8:30 AM – 7:30 PM'}</span>
+                    <span>{fr ? (settings.opening_hours || 'Lundi - Samedi : 09h00 – 22h00') : (settings.opening_hours_en || 'Monday to Saturday: 09:00 AM – 10:00 PM')}</span>
                   </div>
                   <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10">
                     <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>{settings.phone} / {settings.whatsapp_number}</span>
+                    <span>{settings.phone_number || settings.whatsapp_number}</span>
                   </div>
                 </div>
               </div>

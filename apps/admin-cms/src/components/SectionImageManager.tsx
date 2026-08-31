@@ -301,49 +301,107 @@ export const SectionImageManager: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <div>
-              <label className="text-xs font-semibold text-slate-800 block mb-1">Titre Principal</label>
-              <textarea
-                rows={2}
-                value={formData.hero.title}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, hero: { ...prev.hero, title: e.target.value } }))
-                }
-                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-slate-900/10"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-slate-800 block mb-1">Titre Principal (FR)</label>
+                <textarea
+                  rows={2}
+                  value={formData.hero.title}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, hero: { ...prev.hero, title: e.target.value } }))
+                  }
+                  placeholder="Ex: ART FASHION Prêt-à-Porter de Luxe"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-slate-900/10 font-medium"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-slate-800 block mb-1">Titre Principal (EN)</label>
+                <textarea
+                  rows={2}
+                  value={formData.hero.title_en || ''}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, hero: { ...prev.hero, title_en: e.target.value } }))
+                  }
+                  placeholder="Ex: ART FASHION Luxury Ready-to-Wear"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-slate-900/10 font-medium"
+                />
+              </div>
             </div>
+
             <div>
-              <label className="text-xs font-semibold text-slate-800 block mb-1">Description</label>
+              <label className="text-xs font-semibold text-slate-800 block mb-1">Description (FR)</label>
               <textarea
                 rows={3}
                 value={formData.hero.description}
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, hero: { ...prev.hero, description: e.target.value } }))
                 }
-                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-slate-900/10"
+                placeholder="Description du Hero en français..."
+                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-slate-900/10 leading-relaxed"
               />
             </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-800 block mb-1">Description (EN) — English</label>
+              <textarea
+                rows={3}
+                value={formData.hero.description_en || ''}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, hero: { ...prev.hero, description_en: e.target.value } }))
+                }
+                placeholder="Hero description in English..."
+                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-slate-900/10 leading-relaxed"
+              />
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-semibold text-slate-800 block mb-1">Texte Bouton Explorer (FR)</label>
+                <label className="text-xs font-semibold text-slate-800 block mb-1">Bouton Explorer (FR)</label>
                 <input
                   type="text"
                   value={formData.hero.cta_primary_text}
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, hero: { ...prev.hero, cta_primary_text: e.target.value } }))
                   }
-                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-slate-900/10"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-slate-900/10 font-medium"
                 />
               </div>
               <div>
-                <label className="text-xs font-semibold text-slate-800 block mb-1">Texte Bouton Explorer (EN)</label>
+                <label className="text-xs font-semibold text-slate-800 block mb-1">Bouton Explorer (EN)</label>
                 <input
                   type="text"
                   value={formData.hero.cta_primary_text_en}
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, hero: { ...prev.hero, cta_primary_text_en: e.target.value } }))
                   }
-                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-slate-900/10"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-slate-900/10 font-medium"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-slate-800 block mb-1">Bouton GPS (FR)</label>
+                <input
+                  type="text"
+                  value={formData.hero.cta_secondary_text || ''}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, hero: { ...prev.hero, cta_secondary_text: e.target.value } }))
+                  }
+                  placeholder="Localiser la Boutique Rue 403"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-slate-900/10 font-medium"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-slate-800 block mb-1">Bouton GPS (EN)</label>
+                <input
+                  type="text"
+                  value={formData.hero.cta_secondary_text_en || ''}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, hero: { ...prev.hero, cta_secondary_text_en: e.target.value } }))
+                  }
+                  placeholder="Locate Rue 403 Boutique"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-slate-900/10 font-medium"
                 />
               </div>
             </div>
@@ -363,34 +421,66 @@ export const SectionImageManager: React.FC = () => {
         {/* Badges */}
         <div className="pt-4 border-t border-slate-100">
           <h4 className="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-orange-500" /> Badges de Confiance
+            <ShieldCheck className="w-4 h-4 text-orange-500" /> Badges de Confiance (FR & EN)
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {formData.hero.trust_badges?.map((badge, idx) => (
-              <div key={idx} className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
-                <div className="text-xs font-bold text-slate-400 uppercase">Badge {idx + 1}</div>
-                <input
-                  type="text"
-                  value={badge.title}
-                  onChange={(e) => setFormData(prev => {
-                    const newBadges = [...(prev.hero.trust_badges || [])];
-                    newBadges[idx] = { ...newBadges[idx], title: e.target.value };
-                    return { ...prev, hero: { ...prev.hero, trust_badges: newBadges } };
-                  })}
-                  placeholder="Titre"
-                  className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
-                />
-                <input
-                  type="text"
-                  value={badge.description}
-                  onChange={(e) => setFormData(prev => {
-                    const newBadges = [...(prev.hero.trust_badges || [])];
-                    newBadges[idx] = { ...newBadges[idx], description: e.target.value };
-                    return { ...prev, hero: { ...prev.hero, trust_badges: newBadges } };
-                  })}
-                  placeholder="Description"
-                  className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
-                />
+              <div key={idx} className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+                <div className="text-xs font-bold text-slate-500 uppercase">Badge {idx + 1}</div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-semibold text-slate-600">Titre (FR / EN)</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      value={badge.title}
+                      onChange={(e) => setFormData(prev => {
+                        const newBadges = [...(prev.hero.trust_badges || [])];
+                        newBadges[idx] = { ...newBadges[idx], title: e.target.value };
+                        return { ...prev, hero: { ...prev.hero, trust_badges: newBadges } };
+                      })}
+                      placeholder="Titre FR"
+                      className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
+                    />
+                    <input
+                      type="text"
+                      value={badge.title_en || ''}
+                      onChange={(e) => setFormData(prev => {
+                        const newBadges = [...(prev.hero.trust_badges || [])];
+                        newBadges[idx] = { ...newBadges[idx], title_en: e.target.value };
+                        return { ...prev, hero: { ...prev.hero, trust_badges: newBadges } };
+                      })}
+                      placeholder="Titre EN"
+                      className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-semibold text-slate-600">Description (FR / EN)</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      value={badge.description}
+                      onChange={(e) => setFormData(prev => {
+                        const newBadges = [...(prev.hero.trust_badges || [])];
+                        newBadges[idx] = { ...newBadges[idx], description: e.target.value };
+                        return { ...prev, hero: { ...prev.hero, trust_badges: newBadges } };
+                      })}
+                      placeholder="Desc FR"
+                      className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
+                    />
+                    <input
+                      type="text"
+                      value={badge.description_en || ''}
+                      onChange={(e) => setFormData(prev => {
+                        const newBadges = [...(prev.hero.trust_badges || [])];
+                        newBadges[idx] = { ...newBadges[idx], description_en: e.target.value };
+                        return { ...prev, hero: { ...prev.hero, trust_badges: newBadges } };
+                      })}
+                      placeholder="Desc EN"
+                      className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
+                    />
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -403,7 +493,7 @@ export const SectionImageManager: React.FC = () => {
           <div className="flex items-center gap-2">
             <LayoutTemplate className="w-5 h-5 text-orange-600" />
             <h3 className="text-lg font-serif font-bold text-slate-900">
-              3. En-têtes de Collections
+              3. En-têtes de Collections (FR & EN)
             </h3>
           </div>
           <SaveButton />
@@ -411,13 +501,25 @@ export const SectionImageManager: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
             <h4 className="text-sm font-semibold text-slate-800">Nouveautés</h4>
-            <input type="text" value={formData.collections.newArrivals.title} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, newArrivals: { ...prev.collections.newArrivals, title: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Titre" />
-            <textarea rows={2} value={formData.collections.newArrivals.description} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, newArrivals: { ...prev.collections.newArrivals, description: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Description" />
+            <div className="grid grid-cols-2 gap-2">
+              <input type="text" value={formData.collections.newArrivals.title} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, newArrivals: { ...prev.collections.newArrivals, title: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Titre FR" />
+              <input type="text" value={formData.collections.newArrivals.title_en || ''} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, newArrivals: { ...prev.collections.newArrivals, title_en: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Titre EN" />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <textarea rows={2} value={formData.collections.newArrivals.description} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, newArrivals: { ...prev.collections.newArrivals, description: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Description FR" />
+              <textarea rows={2} value={formData.collections.newArrivals.description_en || ''} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, newArrivals: { ...prev.collections.newArrivals, description_en: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Description EN" />
+            </div>
           </div>
           <div className="space-y-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
             <h4 className="text-sm font-semibold text-slate-800">Les Pièces Signature</h4>
-            <input type="text" value={formData.collections.signaturePieces.title} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, signaturePieces: { ...prev.collections.signaturePieces, title: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Titre" />
-            <textarea rows={2} value={formData.collections.signaturePieces.description} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, signaturePieces: { ...prev.collections.signaturePieces, description: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Description" />
+            <div className="grid grid-cols-2 gap-2">
+              <input type="text" value={formData.collections.signaturePieces.title} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, signaturePieces: { ...prev.collections.signaturePieces, title: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Titre FR" />
+              <input type="text" value={formData.collections.signaturePieces.title_en || ''} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, signaturePieces: { ...prev.collections.signaturePieces, title_en: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Titre EN" />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <textarea rows={2} value={formData.collections.signaturePieces.description} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, signaturePieces: { ...prev.collections.signaturePieces, description: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Description FR" />
+              <textarea rows={2} value={formData.collections.signaturePieces.description_en || ''} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, signaturePieces: { ...prev.collections.signaturePieces, description_en: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Description EN" />
+            </div>
           </div>
         </div>
       </div>

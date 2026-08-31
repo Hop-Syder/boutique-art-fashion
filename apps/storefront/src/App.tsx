@@ -42,7 +42,7 @@ const AppContent: React.FC = () => {
             desc: `Découvrez notre collection de costumes 3 pièces croisés italiens, blazers et costumes de cérémonie pour homme à Cotonou. ${SUFFIX_FR}.`,
           },
           hauts: {
-            title: `Chemises & Hauts Homme Bénin — Lin Brodé & Coton | ${BRAND}`,
+            title: `Chemises & Hauts Homme Bénin — Lin & Coton | ${BRAND}`,
             desc: `Chemises de luxe en lin égyptien, coton brodé et bazin pour homme. Boutique ART FASHION Rue 403 Zongo, Cotonou. ${SUFFIX_FR}.`,
           },
           boubous: {
@@ -70,10 +70,10 @@ const AppContent: React.FC = () => {
         seo = catData
           ? { title: catData.title, description: catData.desc, canonical: `https://artfashionhome.com/?view=catalog&category=${filters.category}` }
           : {
-              title: `${catName} — Collection Mode Homme | ${BRAND}`,
-              description: `Collection ${catName} pour homme chez ART FASHION, boutique de référence à Cotonou, Bénin. ${SUFFIX_FR}.`,
-              canonical: `https://artfashionhome.com/?view=catalog`,
-            };
+            title: `${catName} — Collection Mode Homme | ${BRAND}`,
+            description: `Collection ${catName} pour homme chez ART FASHION, boutique de référence à Cotonou, Bénin. ${SUFFIX_FR}.`,
+            canonical: `https://artfashionhome.com/?view=catalog`,
+          };
       } else {
         seo = {
           title: `Catalogue Vêtements Homme Luxe — Costumes, Boubous, Chaussures | ${BRAND}`,

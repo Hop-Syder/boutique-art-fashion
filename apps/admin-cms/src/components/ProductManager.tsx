@@ -27,10 +27,31 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 
-// Emoji décoratif optionnel pour les grandes catégories connues.
+// Emoji décoratif optionnel pour les grandes catégories et sous-rayons.
 // Le VRAI nom de la catégorie (issu de vos données) est toujours utilisé —
 // cette table ne fait qu'ajouter un emoji devant quand l'identifiant est connu.
 const CATEGORY_EMOJI: Record<string, string> = {
+  // ── 1. Univers : Prêt-à-porter Masculin ──
+  'pret-a-porter-masculin': '👔',
+  'elegance-ceremonie': '🤵',
+  'casual-quotidien': '👕',
+  'saisonnier-exterieur': '🧥',
+  'confort-detente': '🏋️',
+
+  // ── 2. Univers : Chaussures & Souliers Homme ──
+  'chaussures-souliers': '👞',
+  'ville-habille': '👞',
+  'casual-tendance': '👟',
+  'legerete': '🩴',
+  'prestige-exotique': '🐊',
+
+  // ── 3. Univers : Accessoires & Maroquinerie ──
+  'accessoires-maroquinerie': '💼',
+  'montres': '⌚',
+  'ceintures-cuir': '👖',
+  'petite-maroquinerie-divers': '👛',
+
+  // ── Rétrocompatibilité ──
   hauts: '👕',
   bas: '👖',
   'vestes-manteaux': '🧥',
@@ -222,7 +243,13 @@ export const ProductManager: React.FC = () => {
 
   // Filtered products
   const filteredProducts = products.filter((p) => {
-    if (selectedCategory !== 'all' && p.category_id !== selectedCategory) return false;
+    if (selectedCategory !== 'all') {
+      const isDirect = p.category_id === selectedCategory;
+      const isSub = categories
+        .filter((c) => c.parent_id === selectedCategory)
+        .some((sub) => sub.id === p.category_id);
+      if (!isDirect && !isSub) return false;
+    }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
       return (
@@ -352,7 +379,7 @@ export const ProductManager: React.FC = () => {
                 >
                   {categoryTree.length === 0 && <option value="">Aucune catégorie disponible</option>}
                   {categoryTree.map((c) => {
-                    const emoji = c.depth === 0 && CATEGORY_EMOJI[c.id] ? `${CATEGORY_EMOJI[c.id]} ` : '';
+                    const emoji = CATEGORY_EMOJI[c.id] ? `${CATEGORY_EMOJI[c.id]} ` : '';
                     return (
                       <option key={c.id} value={c.id}>
                         {c.depth > 0 ? '  — ' : ''}

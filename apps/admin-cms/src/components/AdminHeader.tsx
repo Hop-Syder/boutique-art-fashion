@@ -64,7 +64,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onOpenHelp }) => {
               <span>Aide</span>
             </button>
             <a
-              href="http://localhost:3000"
+              href="https://www.artfashionhome.com/"
               target="_blank"
               rel="noreferrer"
               className="min-h-[44px] px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold flex items-center gap-1.5 transition-colors cursor-pointer border border-white/15"

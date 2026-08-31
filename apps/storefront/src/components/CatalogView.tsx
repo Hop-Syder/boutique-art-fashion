@@ -14,6 +14,43 @@ import {
   PackageCheck,
 } from 'lucide-react';
 
+const CATEGORY_ICONS: Record<string, string> = {
+  'pret-a-porter-masculin': '👔',
+  'elegance-ceremonie': '🤵',
+  'casual-quotidien': '👕',
+  'saisonnier-exterieur': '🧥',
+  'confort-detente': '🏋️',
+  'chaussures-souliers': '👞',
+  'ville-habille': '👞',
+  'casual-tendance': '👟',
+  'legerete': '🩴',
+  'prestige-exotique': '🐊',
+  'accessoires-maroquinerie': '💼',
+  'montres': '⌚',
+  'ceintures-cuir': '👖',
+  'petite-maroquinerie-divers': '👛',
+  'autre': '🎁',
+  'hauts': '👕',
+  'bas': '👖',
+  'vestes-manteaux': '🧥',
+  'costumes-habille': '🤵',
+  'sous-vetements': '🩲',
+  'chaussures': '👞',
+  'accessoires': '💼',
+  'vetements-de-sport': '🏋️',
+};
+
+const LEGACY_CATEGORY_MAP: Record<string, string[]> = {
+  'pret-a-porter-masculin': ['hauts', 'bas', 'costumes-habille', 'vestes-manteaux', 'sous-vetements', 'vetements-de-sport', 'chemises', 'boubous'],
+  'elegance-ceremonie': ['costumes-habille', 'chemises', 'boubous', 'hauts'],
+  'casual-quotidien': ['hauts', 'bas'],
+  'saisonnier-exterieur': ['vestes-manteaux'],
+  'confort-detente': ['sous-vetements', 'vetements-de-sport'],
+  'chaussures-souliers': ['chaussures'],
+  'ville-habille': ['chaussures'],
+  'accessoires-maroquinerie': ['accessoires'],
+};
+
 export const CatalogView: React.FC = () => {
   const { products, categories, filtersConfig, filters, setFilters, resetFilters, language, t } = useStore();
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
@@ -68,7 +105,8 @@ export const CatalogView: React.FC = () => {
           const isSubcategoryMatch = activeCategories
             .filter((c) => c.parent_id === filters.category)
             .some((sub) => sub.id === p.category_id || sub.id === p.subcategory);
-          if (!isDirectMatch && !isSubcategoryMatch) return false;
+          const isLegacyMatch = LEGACY_CATEGORY_MAP[filters.category]?.includes(p.category_id) || false;
+          if (!isDirectMatch && !isSubcategoryMatch && !isLegacyMatch) return false;
         }
 
         if (filters.gender !== 'all' && p.gender !== filters.gender) return false;
@@ -392,22 +430,8 @@ export const CatalogView: React.FC = () => {
               {mainCategories.map((cat) => {
                 const subs = getSubcategories(cat.id);
                 const isCatSelected = filters.category === cat.id;
-
-                const categoryLabels: Record<string, { fr: string; en: string }> = {
-                  'hauts': { fr: '👕 Hauts (Chemises, Boubous...)', en: '👕 Tops (Shirts, Boubous...)' },
-                  'bas': { fr: '👖 Bas (Pantalons, Jeans...)', en: '👖 Bottoms (Trousers, Jeans...)' },
-                  'vestes-manteaux': { fr: '🧥 Vestes & manteaux', en: '🧥 Jackets & Coats' },
-                  'costumes-habille': { fr: '🤵 Costumes & habillé', en: '🤵 Suits & Formal Wear' },
-                  'sous-vetements': { fr: '🩲 Sous-vêtements', en: '🩲 Underwear' },
-                  'chaussures': { fr: '👞 Chaussures', en: '👞 Shoes & Footwear' },
-                  'accessoires': { fr: '💼 Accessoires', en: '💼 Accessories & Leather' },
-                  'vetements-de-sport': { fr: '🏋️ Vêtements de sport', en: '🏋️ Sportswear' },
-                  'autre': { fr: '🎁 Autre', en: '🎁 Other' },
-                };
-
-                const displayName = categoryLabels[cat.id]
-                  ? (language === 'en' ? categoryLabels[cat.id].en : categoryLabels[cat.id].fr)
-                  : (language === 'en' && cat.name_en ? cat.name_en : cat.name);
+                const icon = CATEGORY_ICONS[cat.id] || '✨';
+                const catName = language === 'en' && cat.name_en ? cat.name_en : cat.name;
 
                 return (
                   <div key={cat.id} className="space-y-1">
@@ -418,7 +442,10 @@ export const CatalogView: React.FC = () => {
                         : 'text-slate-700 hover:bg-slate-50'
                         }`}
                     >
-                      <span>{displayName}</span>
+                      <span className="flex items-center gap-1.5">
+                        <span>{icon}</span>
+                        <span>{catName}</span>
+                      </span>
                       {isCatSelected && <Check className="w-3.5 h-3.5 text-red-500" />}
                     </button>
 
@@ -427,6 +454,8 @@ export const CatalogView: React.FC = () => {
                       <div className="ml-3 pl-2 border-l-2 border-slate-100 space-y-1">
                         {subs.map((sub) => {
                           const isSubSelected = filters.category === sub.id;
+                          const subIcon = CATEGORY_ICONS[sub.id] || '•';
+                          const subName = language === 'en' && sub.name_en ? sub.name_en : sub.name;
                           return (
                             <button
                               key={sub.id}
@@ -436,7 +465,10 @@ export const CatalogView: React.FC = () => {
                                 : 'text-slate-600 hover:bg-slate-50'
                                 }`}
                             >
-                              <span>{language === 'en' && sub.name_en ? sub.name_en : sub.name}</span>
+                              <span className="flex items-center gap-1.5">
+                                <span>{subIcon}</span>
+                                <span>{subName}</span>
+                              </span>
                               {isSubSelected && <Check className="w-3 h-3 text-red-600" />}
                             </button>
                           );
@@ -672,6 +704,9 @@ export const CatalogView: React.FC = () => {
                     {mainCategories.map((cat) => {
                       const isCatSelected = filters.category === cat.id;
                       const subs = getSubcategories(cat.id);
+                      const icon = CATEGORY_ICONS[cat.id] || '✨';
+                      const catName = language === 'en' && cat.name_en ? cat.name_en : cat.name;
+
                       return (
                         <div key={cat.id} className="space-y-1">
                           <button
@@ -680,23 +715,33 @@ export const CatalogView: React.FC = () => {
                               isCatSelected ? 'bg-slate-900 text-white font-bold' : 'text-slate-700 bg-slate-50'
                             }`}
                           >
-                            <span>{language === 'en' && cat.name_en ? cat.name_en : cat.name}</span>
+                            <span className="flex items-center gap-1.5">
+                              <span>{icon}</span>
+                              <span>{catName}</span>
+                            </span>
                             {isCatSelected && <Check className="w-4 h-4 text-red-500" />}
                           </button>
                           {subs.length > 0 && (
                             <div className="ml-3 pl-2 border-l-2 border-slate-200 space-y-1">
-                              {subs.map((sub) => (
-                                <button
-                                  key={sub.id}
-                                  onClick={() => setFilters((p) => ({ ...p, category: sub.id }))}
-                                  className={`w-full text-left px-2.5 py-2 rounded-lg text-xs font-medium flex items-center justify-between cursor-pointer ${
-                                    filters.category === sub.id ? 'bg-red-50 text-red-700 font-bold' : 'text-slate-600 bg-white border border-slate-100'
-                                  }`}
-                                >
-                                  <span>{language === 'en' && sub.name_en ? sub.name_en : sub.name}</span>
-                                  {filters.category === sub.id && <Check className="w-3.5 h-3.5 text-red-600" />}
-                                </button>
-                              ))}
+                              {subs.map((sub) => {
+                                const subIcon = CATEGORY_ICONS[sub.id] || '•';
+                                const subName = language === 'en' && sub.name_en ? sub.name_en : sub.name;
+                                return (
+                                  <button
+                                    key={sub.id}
+                                    onClick={() => setFilters((p) => ({ ...p, category: sub.id }))}
+                                    className={`w-full text-left px-2.5 py-2 rounded-lg text-xs font-medium flex items-center justify-between cursor-pointer ${
+                                      filters.category === sub.id ? 'bg-red-50 text-red-700 font-bold' : 'text-slate-600 bg-white border border-slate-100'
+                                    }`}
+                                  >
+                                    <span className="flex items-center gap-1.5">
+                                      <span>{subIcon}</span>
+                                      <span>{subName}</span>
+                                    </span>
+                                    {filters.category === sub.id && <Check className="w-3.5 h-3.5 text-red-600" />}
+                                  </button>
+                                );
+                              })}
                             </div>
                           )}
                         </div>
