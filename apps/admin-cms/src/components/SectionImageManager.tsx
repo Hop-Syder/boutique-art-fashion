@@ -171,11 +171,10 @@ export const SectionImageManager: React.FC = () => {
     <button
       type="submit"
       disabled={isSaving}
-      className={`px-4 py-2 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer disabled:opacity-60 ${
-        savedSuccess
+      className={`px-4 py-2 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer disabled:opacity-60 ${savedSuccess
           ? 'bg-emerald-600 text-white'
           : 'bg-slate-900 hover:bg-slate-800 text-white'
-      }`}
+        }`}
     >
       {isSaving ? (
         <span className="hidden sm:inline">Publication...</span>
@@ -213,11 +212,10 @@ export const SectionImageManager: React.FC = () => {
         <button
           type="submit"
           disabled={isSaving}
-          className={`px-6 py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer disabled:opacity-60 ${
-            savedSuccess
+          className={`px-6 py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer disabled:opacity-60 ${savedSuccess
               ? 'bg-emerald-600 text-white'
               : 'bg-slate-900 hover:bg-slate-800 text-white'
-          }`}
+            }`}
           id="cms-save-sections-btn"
         >
           {isSaving ? (
@@ -351,51 +349,51 @@ export const SectionImageManager: React.FC = () => {
             </div>
           </div>
           <div className="space-y-4">
-             <ImageUploadInput
-                value={formData.hero.primary_image}
-                onChange={(url) =>
-                  setFormData((prev) => ({ ...prev, hero: { ...prev.hero, primary_image: url } }))
-                }
-                label="Image Hero Principale"
-                placeholder="URL ou uploader..."
-              />
+            <ImageUploadInput
+              value={formData.hero.primary_image}
+              onChange={(url) =>
+                setFormData((prev) => ({ ...prev, hero: { ...prev.hero, primary_image: url } }))
+              }
+              label="Image Hero Principale"
+              placeholder="URL ou uploader..."
+            />
           </div>
         </div>
-        
+
         {/* Badges */}
         <div className="pt-4 border-t border-slate-100">
-           <h4 className="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
-             <ShieldCheck className="w-4 h-4 text-orange-500" /> Badges de Confiance
-           </h4>
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-             {formData.hero.trust_badges?.map((badge, idx) => (
-                <div key={idx} className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
-                  <div className="text-xs font-bold text-slate-400 uppercase">Badge {idx + 1}</div>
-                  <input
-                    type="text"
-                    value={badge.title}
-                    onChange={(e) => setFormData(prev => {
-                      const newBadges = [...(prev.hero.trust_badges || [])];
-                      newBadges[idx] = { ...newBadges[idx], title: e.target.value };
-                      return { ...prev, hero: { ...prev.hero, trust_badges: newBadges } };
-                    })}
-                    placeholder="Titre"
-                    className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
-                  />
-                  <input
-                    type="text"
-                    value={badge.description}
-                    onChange={(e) => setFormData(prev => {
-                      const newBadges = [...(prev.hero.trust_badges || [])];
-                      newBadges[idx] = { ...newBadges[idx], description: e.target.value };
-                      return { ...prev, hero: { ...prev.hero, trust_badges: newBadges } };
-                    })}
-                    placeholder="Description"
-                    className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
-                  />
-                </div>
-             ))}
-           </div>
+          <h4 className="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-orange-500" /> Badges de Confiance
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {formData.hero.trust_badges?.map((badge, idx) => (
+              <div key={idx} className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                <div className="text-xs font-bold text-slate-400 uppercase">Badge {idx + 1}</div>
+                <input
+                  type="text"
+                  value={badge.title}
+                  onChange={(e) => setFormData(prev => {
+                    const newBadges = [...(prev.hero.trust_badges || [])];
+                    newBadges[idx] = { ...newBadges[idx], title: e.target.value };
+                    return { ...prev, hero: { ...prev.hero, trust_badges: newBadges } };
+                  })}
+                  placeholder="Titre"
+                  className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
+                />
+                <input
+                  type="text"
+                  value={badge.description}
+                  onChange={(e) => setFormData(prev => {
+                    const newBadges = [...(prev.hero.trust_badges || [])];
+                    newBadges[idx] = { ...newBadges[idx], description: e.target.value };
+                    return { ...prev, hero: { ...prev.hero, trust_badges: newBadges } };
+                  })}
+                  placeholder="Description"
+                  className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs"
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -412,14 +410,14 @@ export const SectionImageManager: React.FC = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
-             <h4 className="text-sm font-semibold text-slate-800">Nouveautés de l'Atelier</h4>
-             <input type="text" value={formData.collections.newArrivals.title} onChange={(e) => setFormData(prev => ({...prev, collections: {...prev.collections, newArrivals: {...prev.collections.newArrivals, title: e.target.value}}}))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Titre" />
-             <textarea rows={2} value={formData.collections.newArrivals.description} onChange={(e) => setFormData(prev => ({...prev, collections: {...prev.collections, newArrivals: {...prev.collections.newArrivals, description: e.target.value}}}))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Description" />
+            <h4 className="text-sm font-semibold text-slate-800">Nouveautés</h4>
+            <input type="text" value={formData.collections.newArrivals.title} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, newArrivals: { ...prev.collections.newArrivals, title: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Titre" />
+            <textarea rows={2} value={formData.collections.newArrivals.description} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, newArrivals: { ...prev.collections.newArrivals, description: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Description" />
           </div>
           <div className="space-y-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
-             <h4 className="text-sm font-semibold text-slate-800">Les Pièces Signature</h4>
-             <input type="text" value={formData.collections.signaturePieces.title} onChange={(e) => setFormData(prev => ({...prev, collections: {...prev.collections, signaturePieces: {...prev.collections.signaturePieces, title: e.target.value}}}))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Titre" />
-             <textarea rows={2} value={formData.collections.signaturePieces.description} onChange={(e) => setFormData(prev => ({...prev, collections: {...prev.collections, signaturePieces: {...prev.collections.signaturePieces, description: e.target.value}}}))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Description" />
+            <h4 className="text-sm font-semibold text-slate-800">Les Pièces Signature</h4>
+            <input type="text" value={formData.collections.signaturePieces.title} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, signaturePieces: { ...prev.collections.signaturePieces, title: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Titre" />
+            <textarea rows={2} value={formData.collections.signaturePieces.description} onChange={(e) => setFormData(prev => ({ ...prev, collections: { ...prev.collections, signaturePieces: { ...prev.collections.signaturePieces, description: e.target.value } } }))} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Description" />
           </div>
         </div>
       </div>
@@ -453,9 +451,9 @@ export const SectionImageManager: React.FC = () => {
                 <Trash2 className="w-4 h-4" />
               </button>
               <div className="text-xs font-bold text-slate-400 uppercase">Slide n°{idx + 1}</div>
-              <input type="text" value={slide.title} onChange={(e) => setFormData(prev => { const n = [...prev.carousel3D]; n[idx] = {...n[idx], title: e.target.value}; return {...prev, carousel3D: n} })} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs font-bold" placeholder="Titre" />
-              <input type="text" value={slide.subtitle} onChange={(e) => setFormData(prev => { const n = [...prev.carousel3D]; n[idx] = {...n[idx], subtitle: e.target.value}; return {...prev, carousel3D: n} })} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Sous-titre" />
-              <ImageUploadInput value={slide.image} onChange={(url) => setFormData(prev => { const n = [...prev.carousel3D]; n[idx] = {...n[idx], image: url}; return {...prev, carousel3D: n} })} label="Image (PNG / JPG)" placeholder="URL..." />
+              <input type="text" value={slide.title} onChange={(e) => setFormData(prev => { const n = [...prev.carousel3D]; n[idx] = { ...n[idx], title: e.target.value }; return { ...prev, carousel3D: n } })} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs font-bold" placeholder="Titre" />
+              <input type="text" value={slide.subtitle} onChange={(e) => setFormData(prev => { const n = [...prev.carousel3D]; n[idx] = { ...n[idx], subtitle: e.target.value }; return { ...prev, carousel3D: n } })} className="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs" placeholder="Sous-titre" />
+              <ImageUploadInput value={slide.image} onChange={(url) => setFormData(prev => { const n = [...prev.carousel3D]; n[idx] = { ...n[idx], image: url }; return { ...prev, carousel3D: n } })} label="Image (PNG / JPG)" placeholder="URL..." />
             </div>
           ))}
         </div>
@@ -473,27 +471,27 @@ export const SectionImageManager: React.FC = () => {
           <SaveButton />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-           <div className="space-y-4">
-              <label className="text-xs font-semibold text-slate-800 block mb-1">Titre Hero About (FR)</label>
-              <input type="text" value={formData.about.hero_title} onChange={(e) => setFormData(prev => ({...prev, about: {...prev.about, hero_title: e.target.value}}))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
-              <label className="text-xs font-semibold text-slate-800 block mb-1">Titre Hero About (EN)</label>
-              <input type="text" value={formData.about.hero_title_en} onChange={(e) => setFormData(prev => ({...prev, about: {...prev.about, hero_title_en: e.target.value}}))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
-              
-              <label className="text-xs font-semibold text-slate-800 block mb-1">Sous-titre Hero About (FR)</label>
-              <textarea rows={3} value={formData.about.hero_subtitle} onChange={(e) => setFormData(prev => ({...prev, about: {...prev.about, hero_subtitle: e.target.value}}))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
-              <label className="text-xs font-semibold text-slate-800 block mb-1">Sous-titre Hero About (EN)</label>
-              <textarea rows={3} value={formData.about.hero_subtitle_en} onChange={(e) => setFormData(prev => ({...prev, about: {...prev.about, hero_subtitle_en: e.target.value}}))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
-              
-              <ImageUploadInput value={formData.about.hero_image} onChange={(url) => setFormData(prev => ({...prev, about: {...prev.about, hero_image: url}}))} label="Image Hero About" placeholder="URL..." />
-           </div>
-           <div className="space-y-4">
-              <label className="text-xs font-semibold text-slate-800 block mb-1">Savoir-Faire Titre (FR)</label>
-              <input type="text" value={formData.about.craftsmanship_title} onChange={(e) => setFormData(prev => ({...prev, about: {...prev.about, craftsmanship_title: e.target.value}}))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
-              <label className="text-xs font-semibold text-slate-800 block mb-1">Savoir-Faire Titre (EN)</label>
-              <input type="text" value={formData.about.craftsmanship_title_en} onChange={(e) => setFormData(prev => ({...prev, about: {...prev.about, craftsmanship_title_en: e.target.value}}))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
+          <div className="space-y-4">
+            <label className="text-xs font-semibold text-slate-800 block mb-1">Titre Hero About (FR)</label>
+            <input type="text" value={formData.about.hero_title} onChange={(e) => setFormData(prev => ({ ...prev, about: { ...prev.about, hero_title: e.target.value } }))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
+            <label className="text-xs font-semibold text-slate-800 block mb-1">Titre Hero About (EN)</label>
+            <input type="text" value={formData.about.hero_title_en} onChange={(e) => setFormData(prev => ({ ...prev, about: { ...prev.about, hero_title_en: e.target.value } }))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
 
-              <ImageUploadInput value={formData.about.craftsmanship_image} onChange={(url) => setFormData(prev => ({...prev, about: {...prev.about, craftsmanship_image: url}}))} label="Savoir-Faire Image" placeholder="URL..." />
-           </div>
+            <label className="text-xs font-semibold text-slate-800 block mb-1">Sous-titre Hero About (FR)</label>
+            <textarea rows={3} value={formData.about.hero_subtitle} onChange={(e) => setFormData(prev => ({ ...prev, about: { ...prev.about, hero_subtitle: e.target.value } }))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
+            <label className="text-xs font-semibold text-slate-800 block mb-1">Sous-titre Hero About (EN)</label>
+            <textarea rows={3} value={formData.about.hero_subtitle_en} onChange={(e) => setFormData(prev => ({ ...prev, about: { ...prev.about, hero_subtitle_en: e.target.value } }))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
+
+            <ImageUploadInput value={formData.about.hero_image} onChange={(url) => setFormData(prev => ({ ...prev, about: { ...prev.about, hero_image: url } }))} label="Image Hero About" placeholder="URL..." />
+          </div>
+          <div className="space-y-4">
+            <label className="text-xs font-semibold text-slate-800 block mb-1">Savoir-Faire Titre (FR)</label>
+            <input type="text" value={formData.about.craftsmanship_title} onChange={(e) => setFormData(prev => ({ ...prev, about: { ...prev.about, craftsmanship_title: e.target.value } }))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
+            <label className="text-xs font-semibold text-slate-800 block mb-1">Savoir-Faire Titre (EN)</label>
+            <input type="text" value={formData.about.craftsmanship_title_en} onChange={(e) => setFormData(prev => ({ ...prev, about: { ...prev.about, craftsmanship_title_en: e.target.value } }))} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs" />
+
+            <ImageUploadInput value={formData.about.craftsmanship_image} onChange={(url) => setFormData(prev => ({ ...prev, about: { ...prev.about, craftsmanship_image: url } }))} label="Savoir-Faire Image" placeholder="URL..." />
+          </div>
         </div>
       </div>
 

@@ -45,7 +45,7 @@ export const HeroSection: React.FC = () => {
       return (
         <>
           {parts[0]}
-          <span className="inline-block mt-1 sm:mt-2">
+          <span className="inline-block text-lg sm:text-2xl lg:text-3xl font-serif text-slate-700 mt-1 sm:mt-2">
             {cleanSubTitle}
           </span>
         </>
