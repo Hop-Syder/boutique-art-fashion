@@ -8,7 +8,7 @@
  * 📧 daoudaabassichristian@gmail.com
  */
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useAdmin } from '../context/AdminContext';
 import { Product, ProductVariant } from '@ayele/shared';
 import { ImageUploadInput } from './ImageUploadInput';
@@ -27,22 +27,48 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 
-// Liste fixe des rayons / catégories sélectionnables pour un produit.
-// Les identifiants correspondent aux catégories principales du storefront.
-const CATEGORY_OPTIONS: { id: string; label: string }[] = [
-  { id: 'hauts', label: '👕 Hauts (Chemises, Boubous...)' },
-  { id: 'bas', label: '👖 Bas (Pantalons, Jeans...)' },
-  { id: 'vestes-manteaux', label: '🧥 Vestes & manteaux' },
-  { id: 'costumes-habille', label: '🤵 Costumes & habillé' },
-  { id: 'sous-vetements', label: '🩲 Sous-vêtements' },
-  { id: 'chaussures', label: '👞 Chaussures' },
-  { id: 'accessoires', label: '💼 Accessoires' },
-  { id: 'vetements-de-sport', label: '🏋️ Vêtements de sport' },
-  { id: 'autre', label: '🎁 Autre' },
-];
+// Emoji décoratif optionnel pour les grandes catégories connues.
+// Le VRAI nom de la catégorie (issu de vos données) est toujours utilisé —
+// cette table ne fait qu'ajouter un emoji devant quand l'identifiant est connu.
+const CATEGORY_EMOJI: Record<string, string> = {
+  hauts: '👕',
+  bas: '👖',
+  'vestes-manteaux': '🧥',
+  'costumes-habille': '🤵',
+  'sous-vetements': '🩲',
+  chaussures: '👞',
+  accessoires: '💼',
+  'vetements-de-sport': '🏋️',
+  autre: '🎁',
+};
 
 export const ProductManager: React.FC = () => {
   const { products, categories, filters, addProduct, updateProduct, deleteProduct, updateVariantStock, formatFCFA } = useAdmin();
+
+  // Arbre des catégories réelles : grandes catégories (parents) suivies de leurs
+  // sous-catégories indentées. Les identifiants (id) sont ceux du storefront, ce
+  // qui garantit que le produit s'affiche bien dans le catalogue et ses filtres.
+  const categoryTree = useMemo(() => {
+    const visible = categories.filter((c) => !c.is_archived);
+    const byOrder = (a: typeof visible[number], b: typeof visible[number]) =>
+      (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name);
+    const roots = visible.filter((c) => !c.parent_id).sort(byOrder);
+    const rows: { id: string; name: string; depth: number }[] = [];
+    roots.forEach((root) => {
+      rows.push({ id: root.id, name: root.name, depth: 0 });
+      visible
+        .filter((c) => c.parent_id === root.id)
+        .sort(byOrder)
+        .forEach((child) => rows.push({ id: child.id, name: child.name, depth: 1 }));
+    });
+    // Catégories orphelines (parent introuvable) : ajoutées à plat.
+    visible
+      .filter((c) => c.parent_id && !roots.some((r) => r.id === c.parent_id))
+      .filter((c) => !rows.some((r) => r.id === c.id))
+      .sort(byOrder)
+      .forEach((c) => rows.push({ id: c.id, name: c.name, depth: 0 }));
+    return rows;
+  }, [categories]);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -54,7 +80,7 @@ export const ProductManager: React.FC = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState<number | ''>('');
   const [comparePrice, setComparePrice] = useState<number | ''>('');
-  const [category, setCategory] = useState(CATEGORY_OPTIONS[0].id);
+  const [category, setCategory] = useState('');
   const [gender, setGender] = useState<'Femme' | 'Homme' | 'Enfant' | 'Unisexe'>('Homme');
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -74,7 +100,7 @@ export const ProductManager: React.FC = () => {
     setName('');
     setPrice('');
     setComparePrice('');
-    setCategory(CATEGORY_OPTIONS[0].id);
+    setCategory(categoryTree[0]?.id || '');
     setGender('Homme');
     setDescription('');
     setImageUrl('');
@@ -324,11 +350,17 @@ export const ProductManager: React.FC = () => {
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"
                 >
-                  {CATEGORY_OPTIONS.map((opt) => (
-                    <option key={opt.id} value={opt.id}>
-                      {opt.label}
-                    </option>
-                  ))}
+                  {categoryTree.length === 0 && <option value="">Aucune catégorie disponible</option>}
+                  {categoryTree.map((c) => {
+                    const emoji = c.depth === 0 && CATEGORY_EMOJI[c.id] ? `${CATEGORY_EMOJI[c.id]} ` : '';
+                    return (
+                      <option key={c.id} value={c.id}>
+                        {c.depth > 0 ? '  — ' : ''}
+                        {emoji}
+                        {c.name}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 
