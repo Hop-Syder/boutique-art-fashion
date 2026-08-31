@@ -1,14 +1,14 @@
 /**
  * @author @hopsyder
  * @organization Nexus Partners
- * @description OrderProcessSteps — Guide interactif des 6 étapes de commande WhatsApp avec support bilingue FR/EN
+ * @description OrderProcessSteps — Guide des 6 étapes de commande WhatsApp en liste verticale numérotée (Étape 1, 2, …), bilingue FR/EN
  * @created 2026-08-19
- * @updated 2026-08-23
+ * @updated 2026-08-31
  * 🌐 nexus-partners.xyz
  * 📧 daoudaabassichristian@gmail.com
  */
 // ──────────────────────────────────
-import React, { useState } from 'react';
+import React from 'react';
 import { useStore } from '../context/StoreContext';
 import {
   ShoppingBag,
@@ -16,10 +16,6 @@ import {
   CheckCircle2,
   PackageCheck,
   ShieldCheck,
-  ChevronDown,
-  ChevronUp,
-  ArrowRight,
-  Sparkles,
 } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
@@ -85,13 +81,7 @@ const ORDER_STEPS: ProcessStep[] = [
 
 export const OrderProcessSteps: React.FC = () => {
   const { language } = useStore();
-  const [mobilePage, setMobilePage] = useState<number>(0);
-
-  const totalMobilePages = 3;
-
-  const handleNextMobilePage = () => {
-    setMobilePage((prev) => (prev + 1) % totalMobilePages);
-  };
+  const fr = language !== 'en';
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -103,124 +93,53 @@ export const OrderProcessSteps: React.FC = () => {
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-8 sm:mb-12 relative z-10">
           <h2 className="text-2xl sm:text-4xl font-serif font-medium text-white tracking-tight">
-            {language === 'en' ? 'How to Place Your Order?' : 'Comment passer votre commande ?'}
+            {fr ? 'Comment passer votre commande ?' : 'How to Place Your Order?'}
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-            {language === 'en'
-              ? 'A smooth shopping journey combining the clarity of a digital catalog with the instant responsiveness of WhatsApp.'
-              : 'Un parcours 100% pensé pour les habitudes béninoises, combinant la clarté du catalogue digital et la réactivité de WhatsApp.'}
+            {fr
+              ? 'Un parcours 100% pensé pour les habitudes béninoises, combinant la clarté du catalogue digital et la réactivité de WhatsApp.'
+              : 'A smooth shopping journey combining the clarity of a digital catalog with the instant responsiveness of WhatsApp.'}
           </p>
         </div>
 
-        {/* DESKTOP VIEW: Grid with all 6 cards visible at once */}
-        <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5 relative z-10">
+        {/* Liste verticale numérotée (Étape 1, 2, …) — style timeline */}
+        <ol className="relative max-w-3xl mx-auto space-y-4 sm:space-y-5 z-10">
           {ORDER_STEPS.map((st, idx) => {
             const Icon = st.icon;
+            const isLast = idx === ORDER_STEPS.length - 1;
             return (
-              <div
-                key={idx}
-                className="group/step relative bg-gradient-to-b from-white/[0.08] to-white/[0.03] border border-white/10 hover:border-red-500/50 p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:bg-white/[0.12] hover:-translate-y-1 transition-all duration-300 backdrop-blur-xs shadow-lg"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="w-8 h-8 rounded-xl bg-gradient-to-br from-red-500 to-red-700 text-white font-mono font-bold text-xs flex items-center justify-center shadow-md ring-2 ring-white/15">
+              <li key={st.num} className="relative flex gap-4 sm:gap-5">
+                {/* Colonne numéro + trait de liaison */}
+                <div className="flex flex-col items-center shrink-0">
+                  <span className="w-11 h-11 rounded-2xl bg-gradient-to-br from-red-500 to-red-700 text-white font-mono font-bold text-sm flex items-center justify-center shadow-md ring-2 ring-white/15 z-10">
                     {st.num}
                   </span>
-                  <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-red-400 group-hover/step:bg-red-600/20 group-hover/step:text-red-300 transition-colors">
-                    <Icon className="w-4 h-4" />
-                  </div>
+                  {!isLast && (
+                    <span className="w-px flex-1 min-h-6 bg-gradient-to-b from-red-500/40 to-white/5 my-1" />
+                  )}
                 </div>
-                <div>
-                  <h4 className="font-bold text-sm text-white leading-snug group-hover/step:text-red-300 transition-colors">
-                    {language === 'en' ? st.title_en : st.title_fr}
-                  </h4>
-                  <p className="text-[11px] text-slate-300/80 mt-1.5 leading-relaxed">
-                    {language === 'en' ? st.desc_en : st.desc_fr}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
 
-        {/* MOBILE VIEW: Interactive 2-card pagination carousel */}
-        <div className="md:hidden space-y-5 relative z-10">
-          {/* Mobile Cards Display */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {ORDER_STEPS.slice(mobilePage * 2, mobilePage * 2 + 2).map((st) => {
-              const Icon = st.icon;
-              return (
-                <div
-                  key={`mob-${st.num}`}
-                  className="bg-gradient-to-b from-white/[0.10] to-white/[0.04] border border-white/15 p-5 rounded-2xl flex flex-col justify-between space-y-3.5 shadow-xl transition-all animate-fadeIn"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-600 to-red-800 text-white font-mono font-bold text-xs flex items-center justify-center shadow-md ring-2 ring-white/20">
-                      {st.num}
+                {/* Carte de l'étape */}
+                <div className="flex-1 mb-1 bg-gradient-to-b from-white/[0.08] to-white/[0.03] border border-white/10 hover:border-red-500/50 rounded-2xl p-4 sm:p-5 flex items-start gap-4 hover:bg-white/[0.12] transition-all duration-300 backdrop-blur-xs shadow-lg">
+                  <div className="flex-1">
+                    <span className="text-[11px] font-bold uppercase tracking-widest text-red-400">
+                      {fr ? `Étape ${idx + 1}` : `Step ${idx + 1}`}
                     </span>
-                    <div className="w-9 h-9 rounded-xl bg-red-600/20 border border-red-500/30 flex items-center justify-center text-red-400">
-                      <Icon className="w-4.5 h-4.5" />
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-base text-white leading-snug">
-                      {language === 'en' ? st.title_en : st.title_fr}
+                    <h4 className="font-bold text-sm sm:text-base text-white leading-snug mt-0.5">
+                      {fr ? st.title_fr : st.title_en}
                     </h4>
-                    <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
-                      {language === 'en' ? st.desc_en : st.desc_fr}
+                    <p className="text-xs sm:text-sm text-slate-300/80 mt-1.5 leading-relaxed">
+                      {fr ? st.desc_fr : st.desc_en}
                     </p>
                   </div>
+                  <div className="w-10 h-10 shrink-0 rounded-xl bg-white/10 flex items-center justify-center text-red-400">
+                    <Icon className="w-5 h-5" />
+                  </div>
                 </div>
-              );
-            })}
-          </div>
-
-          {/* Mobile Bottom Navigation Controls */}
-          <div className="flex flex-col items-center gap-3 pt-2">
-            {/* Pagination Dots */}
-            <div className="flex items-center justify-center gap-2">
-              {[0, 1, 2].map((pageIdx) => (
-                <button
-                  key={pageIdx}
-                  onClick={() => setMobilePage(pageIdx)}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                    mobilePage === pageIdx
-                      ? 'w-8 bg-red-500 shadow-sm'
-                      : 'w-2 bg-slate-700 hover:bg-slate-600'
-                  }`}
-                  aria-label={`Go to step page ${pageIdx + 1}`}
-                />
-              ))}
-            </div>
-
-            {/* Interactive Bottom Action Button */}
-            <button
-              onClick={handleNextMobilePage}
-              className="w-full py-3.5 px-5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white rounded-2xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition-all active:scale-98 cursor-pointer border border-red-500/40"
-              id="order-steps-next-btn-mobile"
-            >
-              <span>
-                {language === 'en'
-                  ? mobilePage === 0
-                    ? 'View next steps 3 & 4'
-                    : mobilePage === 1
-                    ? 'View next steps 5 & 6'
-                    : 'Back to steps 1 & 2'
-                  : mobilePage === 0
-                  ? 'Voir les étapes suivantes 3 & 4'
-                  : mobilePage === 1
-                  ? 'Voir les étapes suivantes 5 & 6'
-                  : 'Revenir aux étapes 1 & 2'}
-              </span>
-              <ChevronDown className="w-4 h-4 text-white animate-bounce" />
-            </button>
-
-            <span className="text-[11px] text-slate-400 font-medium">
-              {language === 'en'
-                ? `Steps ${mobilePage * 2 + 1} & ${mobilePage * 2 + 2} of 6`
-                : `Étape ${mobilePage * 2 + 1} & ${mobilePage * 2 + 2} sur 6`}
-            </span>
-          </div>
-        </div>
+              </li>
+            );
+          })}
+        </ol>
 
       </div>
     </section>
