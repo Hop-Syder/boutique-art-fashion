@@ -11,9 +11,14 @@ import {
   RotateCcw,
   ExternalLink,
   LogOut,
+  HelpCircle,
 } from 'lucide-react';
 
-export const AdminHeader: React.FC = () => {
+interface AdminHeaderProps {
+  onOpenHelp?: () => void;
+}
+
+export const AdminHeader: React.FC<AdminHeaderProps> = ({ onOpenHelp }) => {
   const { activeTab, setActiveTab, products, categories, filters, orders } = useAdmin();
 
   const pendingOrdersCount = orders.filter(
@@ -50,6 +55,14 @@ export const AdminHeader: React.FC = () => {
               <span className="text-slate-400 block text-[10px]">Alertes Stock</span>
               <span className="font-bold text-rose-400">{lowStockCount} produits bas</span>
             </div>
+            <button
+              onClick={onOpenHelp}
+              className="min-h-[44px] px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold flex items-center gap-1.5 transition-colors cursor-pointer border border-white/15"
+              title="Ouvrir le guide de démarrage"
+            >
+              <HelpCircle className="w-4 h-4 text-orange-300" />
+              <span>Aide</span>
+            </button>
             <a
               href="http://localhost:3000"
               target="_blank"
