@@ -8,6 +8,7 @@
     "dev:storefront": "pnpm --filter @ayele/storefront dev",
     "dev:admin": "pnpm --filter @ayele/admin-cms dev",
     "build": "turbo run build",
+    "deploy:ovh": "turbo run build && python3 scripts/deploy-ovh-ftp.py",
     "lint": "turbo run lint",
     "test": "turbo run lint",
     "clean": "rm -rf dist apps/*/.vite apps/*/dist"

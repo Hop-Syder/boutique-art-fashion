@@ -45,10 +45,6 @@ export const HeroSection: React.FC = () => {
       return (
         <>
           {parts[0]}
-          <span className="font-cloister-black text-slate-950 font-normal tracking-normal inline-block text-[2.6rem] sm:text-6xl lg:text-7xl my-0.5">
-            Art Fashion
-          </span>
-          <br />
           <span className="inline-block mt-1 sm:mt-2">
             {cleanSubTitle}
           </span>
@@ -149,44 +145,44 @@ export const HeroSection: React.FC = () => {
 
           {/* Right Column: Visual Showcase */}
           {showcaseImage && (
-          <div className="lg:col-span-5 relative">
-            <div className="relative mx-auto max-w-md lg:max-w-none">
-              <div className="relative rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-slate-900 group">
-                <img
-                  src={showcaseImage}
-                  alt="ART FASHION"
-                  className="w-full h-[400px] sm:h-[460px] object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-
-              {/* Floating Badge 1 */}
-              <div className="absolute -bottom-4 -left-4 sm:-left-6 bg-white p-3 sm:p-4 rounded-xl shadow-lg border border-slate-200 flex items-center gap-3 animate-bounce-subtle">
-                <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 border border-emerald-100">
-                  <WhatsAppIcon className="w-5 h-5 text-emerald-600" />
+            <div className="lg:col-span-5 relative">
+              <div className="relative mx-auto max-w-md lg:max-w-none">
+                <div className="relative rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-slate-900 group">
+                  <img
+                    src={showcaseImage}
+                    alt="ART FASHION"
+                    className="w-full h-[400px] sm:h-[460px] object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
-                <div>
-                  <p className="text-xs font-bold text-slate-800">
-                    {language === 'en' ? 'WhatsApp Direct Order' : 'Réserver sur WhatsApp'}
-                  </p>
-                </div>
-              </div>
 
-              {/* Floating Badge 2 */}
-              <div className="hidden sm:flex absolute -top-4 -right-4 bg-slate-900 text-white p-3 rounded-xl shadow-lg border border-slate-800 items-center gap-2.5">
-                <span className="text-lg"></span>
-                <div>
-                  <p className="text-xs font-bold text-red-400">
-                    {language === 'en' ? "Men's Luxury Ready-to-Wear" : 'Prêt-à-Porter Masculin'}
-                  </p>
-                  <p className="text-[10px] text-slate-300">
-                    {language === 'en' ? '3-Piece Suit' : 'Costume 3 Pièces'}
-                  </p>
+                {/* Floating Badge 1 */}
+                <div className="absolute -bottom-4 -left-4 sm:-left-6 bg-white p-3 sm:p-4 rounded-xl shadow-lg border border-slate-200 flex items-center gap-3 animate-bounce-subtle">
+                  <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 border border-emerald-100">
+                    <WhatsAppIcon className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-slate-800">
+                      {language === 'en' ? 'WhatsApp Direct Order' : 'Réserver sur WhatsApp'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Floating Badge 2 */}
+                <div className="hidden sm:flex absolute -top-4 -right-4 bg-slate-900 text-white p-3 rounded-xl shadow-lg border border-slate-800 items-center gap-2.5">
+                  <span className="text-lg"></span>
+                  <div>
+                    <p className="text-xs font-bold text-red-400">
+                      {language === 'en' ? "Men's Luxury Ready-to-Wear" : 'Prêt-à-Porter Masculin'}
+                    </p>
+                    <p className="text-[10px] text-slate-300">
+                      {language === 'en' ? '3-Piece Suit' : 'Costume 3 Pièces'}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
           )}
         </div>
       </div>
