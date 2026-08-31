@@ -194,7 +194,12 @@ class StorageEngine {
     const raw = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
     if (!raw) return INITIAL_CATEGORIES;
     try {
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      // Un instantané vide ou corrompu (ex: [] après une synchro/purge) ne doit
+      // jamais laisser l'admin sans catégories : on restaure le jeu par défaut
+      // pour que le menu déroulant "Catégorie" du formulaire produit reste utilisable.
+      if (!Array.isArray(parsed) || parsed.length === 0) return INITIAL_CATEGORIES;
+      return parsed;
     } catch {
       return INITIAL_CATEGORIES;
     }
