@@ -8,6 +8,7 @@ import { OrderManager } from './components/OrderManager';
 import { DeliveryZoneManager } from './components/DeliveryZoneManager';
 import { Settings, Save, Check, Download, Upload, RefreshCw } from 'lucide-react';
 import { StoreSettings, storageService } from '@ayele/shared';
+import { Tutorial, TUTORIAL_SEEN_KEY } from './components/Tutorial';
 
 const SettingsTab: React.FC = () => {
   const { settings, updateSettings } = useAdmin();
@@ -156,10 +157,18 @@ import { MobileBottomNav } from './components/MobileBottomNav';
 
 const AdminContent: React.FC = () => {
   const { activeTab } = useAdmin();
+  const [showTutorial, setShowTutorial] = useState(() => {
+    // Ouverture automatique uniquement à la première visite.
+    try {
+      return localStorage.getItem(TUTORIAL_SEEN_KEY) !== 'true';
+    } catch {
+      return false;
+    }
+  });
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col pb-20 md:pb-0">
-      <AdminHeader />
+      <AdminHeader onOpenHelp={() => setShowTutorial(true)} />
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'products' && <ProductManager />}
         {activeTab === 'filters' && <FilterManager />}
@@ -169,6 +178,7 @@ const AdminContent: React.FC = () => {
         {activeTab === 'settings' && <SettingsTab />}
       </main>
       <MobileBottomNav />
+      <Tutorial open={showTutorial} onClose={() => setShowTutorial(false)} />
     </div>
   );
 };
