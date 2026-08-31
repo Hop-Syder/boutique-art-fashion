@@ -10,7 +10,7 @@
 
 import React, { useState } from 'react';
 import { useAdmin } from '../context/AdminContext';
-import { Product, ProductVariant } from '@ayele/shared';
+import { Product, ProductVariant, Category } from '@ayele/shared';
 import { ImageUploadInput } from './ImageUploadInput';
 import {
   Plus,
@@ -299,40 +299,37 @@ export const ProductManager: React.FC = () => {
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"
                 >
-                  {categories.map((c) => {
-                    const categoryLabels: Record<string, string> = {
-                      'hauts': '👕 Hauts (Chemises, Boubous...)',
-                      'cat.hauts': '👕 Hauts (Chemises, Boubous...)',
-                      'bas': '👖 Bas (Pantalons, Jeans...)',
-                      'cat.bas': '👖 Bas (Pantalons, Jeans...)',
-                      'vestes-manteaux': '🧥 Vestes & manteaux',
-                      'vestes_manteaux': '🧥 Vestes & manteaux',
-                      'cat.vestes_manteaux': '🧥 Vestes & manteaux',
-                      'costumes-habille': '🤵 Costumes & habillé',
-                      'costumes_habille': '🤵 Costumes & habillé',
-                      'cat.costumes_habille': '🤵 Costumes & habillé',
-                      'sous-vetements': '🩲 Sous-vêtements',
-                      'sous_vetements': '🩲 Sous-vêtements',
-                      'cat.sous_vetements': '🩲 Sous-vêtements',
-                      'chaussures': '👞 Chaussures',
-                      'cat.chaussures': '👞 Chaussures',
-                      'accessoires': '💼 Accessoires',
-                      'cat.accessoires': '💼 Accessoires',
-                      'vetements-de-sport': '🏋️ Vêtements de sport',
-                      'vetements_de_sport': '🏋️ Vêtements de sport',
-                      'cat.vetements_de_sport': '🏋️ Vêtements de sport',
-                      'autre': '🎁 Autre',
-                      'cat.autre': '🎁 Autre',
-                    };
+                  {(() => {
+                    // Rendu à partir des VRAIS noms de catégories (plus de table
+                    // d'étiquettes codée en dur qui écrasait/dupliquait les libellés).
+                    // Les catégories parentes sont listées avec leurs sous-catégories
+                    // indentées ; les catégories archivées sont masquées.
+                    const visible = categories.filter((c) => !c.is_archived);
+                    const byOrder = (a: Category, b: Category) =>
+                      (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name);
+                    const roots = visible.filter((c) => !c.parent_id).sort(byOrder);
+                    const rows: { cat: Category; depth: number }[] = [];
+                    roots.forEach((root) => {
+                      rows.push({ cat: root, depth: 0 });
+                      visible
+                        .filter((c) => c.parent_id === root.id)
+                        .sort(byOrder)
+                        .forEach((child) => rows.push({ cat: child, depth: 1 }));
+                    });
+                    // Catégories orphelines (parent introuvable) : ajoutées à plat.
+                    visible
+                      .filter((c) => c.parent_id && !roots.some((r) => r.id === c.parent_id))
+                      .filter((c) => !rows.some((r) => r.cat.id === c.id))
+                      .sort(byOrder)
+                      .forEach((c) => rows.push({ cat: c, depth: 0 }));
 
-                    const displayName = categoryLabels[c.id] || c.name;
-
-                    return (
-                      <option key={c.id} value={c.id}>
-                        {displayName}
+                    return rows.map(({ cat, depth }) => (
+                      <option key={cat.id} value={cat.id}>
+                        {depth > 0 ? '  — ' : ''}
+                        {cat.name}
                       </option>
-                    );
-                  })}
+                    ));
+                  })()}
                 </select>
               </div>
 
