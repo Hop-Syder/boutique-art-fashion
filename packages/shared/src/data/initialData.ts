@@ -14,7 +14,7 @@ export const INITIAL_STORE_SETTINGS: StoreSettings = {
   tagline: 'Prêt-à-Porter de Luxe',
   tagline_en: 'Luxury Ready-to-Wear',
   whatsapp_number: '+229 01 97 23 44 66',
-  phone_number: '+229 01 90 37 36 37',
+  phone_number: '+229 01 97 23 44 66',
   email: 'contact@artfashionbenin.com',
   address: 'Rue 403, Quartier Zongo / Scoa Gbéto',
   address_en: 'Rue 403, Zongo / Scoa Gbeto District',

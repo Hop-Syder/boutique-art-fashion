@@ -84,7 +84,7 @@ const AppContent: React.FC = () => {
     } else if (currentView === 'about') {
       seo = {
         title: `À Propos & Contact — Boutique ART FASHION Rue 403 Zongo, Cotonou | Bénin`,
-        description: `Découvrez ART FASHION, votre boutique mode homme de référence à Cotonou (Rue 403 Zongo / Scoa Gbéto). Histoire, valeurs, horaires et itinéraire. Tél : +229 01 90 37 36 37.`,
+        description: `Découvrez ART FASHION, votre boutique mode homme de référence à Cotonou (Rue 403 Zongo / Scoa Gbéto). Histoire, valeurs, horaires et itinéraire. Tél : +229 01 97 23 44 66.`,
         canonical: `https://artfashionhome.com/?view=about`,
       };
     } else {
