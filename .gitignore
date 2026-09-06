@@ -1,5 +1,29 @@
-# Logs
-logs
+# ══════════════════════════════════════════════════════════════════════════════
+# .gitignore — ART FASHION Monorepo (pnpm + Turborepo + Vite)
+# @author @hopsyder | Nexus Partners
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ─── Dépendances ──────────────────────────────────────────────────────────────
+node_modules/
+jspm_packages/
+.pnpm-store/
+
+# ─── Build / Dist ─────────────────────────────────────────────────────────────
+dist/
+dist-ssr/
+build/
+out/
+.next/
+.nuxt/
+*.local
+
+# ─── Cache Turborepo / Vite / TypeScript ─────────────────────────────────────
+.turbo/
+.vite/
+*.tsbuildinfo
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -7,92 +31,82 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Diagnostic reports (https://nodejs.org/api/report.html)
-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
-
-# Runtime data
-pids
+# ─── Runtime / Processus ──────────────────────────────────────────────────────
+pids/
 *.pid
 *.seed
 *.pid.lock
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
-# Dependency directories
-node_modules/
-jspm_packages/
+# ─── Tests / Couverture ───────────────────────────────────────────────────────
+coverage/
+.nyc_output/
 
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# dotenv environment variables file
+# ─── Variables d'environnement (SECRETS) ─────────────────────────────────────
 .env
-.env.test
-.env.production
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
 !.env.example
 
-# Next.js build output
-.next
-out
+# ─── Fichiers de configuration sensibles / Déploiement ───────────────────────
+scripts/deploy.mjs
+scripts/deploy-ovh-ftp.py
+apps/storefront/public/api/_config.php
+apps/upload-server/.env
 
-# Nuxt.js build / generate output
-.nuxt
-dist
+# ─── Base de données locale ───────────────────────────────────────────────────
+db.json
 
-# Vite / Snowpack / Rollup
-build/
-dist/
-dist-ssr/
-*.local
+# ─── Archives / Backups auto ──────────────────────────────────────────────────
+*.bak
+*.backup
+.dexty/backups/
+*.sql.gz
 
-# Monorepo / Turborepo
-.turbo/
+# ─── Paquets npm ─────────────────────────────────────────────────────────────
+*.tgz
+.yarn-integrity
+.npm/
+.eslintcache
+.node_repl_history
 
-# OS metadata
+# ─── OS ───────────────────────────────────────────────────────────────────────
 .DS_Store
+.DS_Store?
+._*
 Thumbs.db
-*.swp
+ehthumbs.db
+desktop.ini
 
-# Testing
-coverage/
-.nyc_output
-
-# Editor directories and files
-.idea
+# ─── Éditeurs ─────────────────────────────────────────────────────────────────
+.idea/
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+!.vscode/launch.json
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*.swp
+*.swx
 
-# SFTP configs
+# ─── SFTP / Déploiement VS Code ───────────────────────────────────────────────
 .vscode/sftp.json
 apps/*/.vscode/sftp.json
 
-# Agents / AI
+# ─── Agents IA / Assistants ───────────────────────────────────────────────────
 .dexty/
 .gemini/
 .claude/
+.cursor/
 
-# Sensitive / Passwords
-scripts/deploy.mjs
-deploy.mjs
-db.json
-apps/storefront/public/api/_config.php
+# ─── Docker (fichiers locaux) ─────────────────────────────────────────────────
+docker-compose.override.yml
+.docker/
+
+# ─── Divers ───────────────────────────────────────────────────────────────────
+*.zip
+*.tar.gz
+.storybook/
+storybook-static/
