@@ -46,6 +46,6 @@ Alignement strict des 9 rayons de prêt-à-porter avec emojis explicites sur le 
 ---
 
 ### 🚀 Performance, SEO & Infrastructure
-- **Architecture Monorepo Clean (pnpm + Turbo)** : Packages `@ayele/shared`, `@ayele/storefront`, `@ayele/admin-cms`.
+- **Architecture Monorepo Clean (pnpm + Turbo)** : Packages `@artfashion/shared`, `@artfashion/storefront`, `@artfashion/admin-cms`.
 - **Validation Strictes** : `pnpm test` (0 erreur TypeScript / Linter), `pnpm build` (Compilations Vite de production en 5s).
 - **Standards DEXTY & Author Header** : Présence des blocs d'en-tête Nexus Partners sur tous les composants majeurs.

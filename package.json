@@ -1,12 +1,12 @@
 {
-  "name": "ayele-monorepo",
+  "name": "artfashion-monorepo",
   "private": true,
   "version": "1.0.0",
   "packageManager": "pnpm@10.24.0",
   "scripts": {
     "dev": "turbo run dev",
-    "dev:storefront": "pnpm --filter @ayele/storefront dev",
-    "dev:admin": "pnpm --filter @ayele/admin-cms dev",
+    "dev:storefront": "pnpm --filter @artfashion/storefront dev",
+    "dev:admin": "pnpm --filter @artfashion/admin-cms dev",
     "build": "turbo run build",
     "deploy:ovh": "turbo run build && python3 scripts/deploy-ovh-ftp.py",
     "lint": "turbo run lint",

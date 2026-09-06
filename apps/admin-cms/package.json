@@ -1,5 +1,5 @@
 {
-  "name": "@ayele/admin-cms",
+  "name": "@artfashion/admin-cms",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -10,7 +10,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@ayele/shared": "workspace:*",
+    "@artfashion/shared": "workspace:*",
     "@tailwindcss/vite": "^4.1.14",
     "lucide-react": "^0.546.0",
     "react": "^19.0.1",

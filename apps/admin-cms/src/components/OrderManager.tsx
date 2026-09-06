@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAdmin } from '../context/AdminContext';
-import { Order, OrderStatus } from '@ayele/shared';
+import { Order, OrderStatus } from '@artfashion/shared';
 import {
   ShoppingBag,
   Search,

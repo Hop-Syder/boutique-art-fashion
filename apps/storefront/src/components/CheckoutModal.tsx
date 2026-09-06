@@ -11,7 +11,7 @@ import {
   Eye,
 } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
-import { Order } from '@ayele/shared';
+import { Order } from '@artfashion/shared';
 
 export const CheckoutModal: React.FC = () => {
   const {

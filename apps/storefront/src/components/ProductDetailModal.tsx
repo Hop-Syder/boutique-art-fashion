@@ -10,7 +10,7 @@
 // ──────────────────────────────────
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../context/StoreContext';
-import { ProductVariant } from '@ayele/shared';
+import { ProductVariant } from '@artfashion/shared';
 import {
   X,
   ShoppingBag,

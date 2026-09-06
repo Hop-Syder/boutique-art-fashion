@@ -12,7 +12,7 @@ import {
   ShoppingBag,
 } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
-import { OrderStatus } from '@ayele/shared';
+import { OrderStatus } from '@artfashion/shared';
 
 interface OrderTrackingModalProps {
   isOpen: boolean;

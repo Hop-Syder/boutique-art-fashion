@@ -20,7 +20,7 @@ import {
   getStorageItem,
   setStorageItem,
   storageService,
-} from '@ayele/shared';
+} from '@artfashion/shared';
 
 type AdminTab =
   | 'products'
@@ -90,7 +90,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [categories, setCategories] = useState<Category[]>(() => storageService.getCategories());
   const [filters, setFilters] = useState<FilterGroup[]>(() => storageService.getFilters());
   const [deliveryZones, setDeliveryZones] = useState<DeliveryZone[]>(() => storageService.getDeliveryZones());
-  const [orders, setOrders] = useState<Order[]>(() => getStorageItem('ayele_orders', INITIAL_ORDERS));
+  const [orders, setOrders] = useState<Order[]>(() => getStorageItem('artfashion_orders', getStorageItem('ayele_orders', INITIAL_ORDERS)));
   const [settings, setSettings] = useState<StoreSettings>(() => storageService.getSettings());
   const [sectionsConfig, setSectionsConfig] = useState<SectionsConfig>(() => storageService.getSectionsConfig());
 

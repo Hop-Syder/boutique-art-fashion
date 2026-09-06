@@ -25,7 +25,7 @@ import {
   getStorageItem,
   setStorageItem,
   storageService,
-} from '@ayele/shared';
+} from '@artfashion/shared';
 
 export type AppView = 'home' | 'catalog' | 'tracking' | 'about';
 
@@ -152,12 +152,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [filtersConfig, setFiltersConfig] = useState<FilterGroup[]>(() => storageService.getFilters());
   const [deliveryZones, setDeliveryZones] = useState<DeliveryZone[]>(() => storageService.getDeliveryZones());
   const [orders, setOrders] = useState<Order[]>(() =>
-    getStorageItem('ayele_orders', INITIAL_ORDERS)
+    getStorageItem('artfashion_orders', getStorageItem('ayele_orders', INITIAL_ORDERS))
   );
   const [settings, setSettings] = useState<StoreSettings>(() => storageService.getSettings());
   const [sectionsConfig, setSectionsConfig] = useState<SectionsConfig>(() => storageService.getSectionsConfig());
   const [cart, setCart] = useState<CartItem[]>(() =>
-    getStorageItem('ayele_cart', [])
+    getStorageItem('artfashion_cart', getStorageItem('ayele_cart', []))
   );
   const [selectedZone, setSelectedZone] = useState<DeliveryZone>(
     () => deliveryZones[0] || INITIAL_DELIVERY_ZONES[0]
@@ -189,7 +189,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     // Écoute les changements de localStorage depuis d'autres onglets (même origine)
     const handleStorageEvent = (e: StorageEvent) => {
-      if (e.key === 'ayele_orders' && e.newValue) {
+      if ((e.key === 'artfashion_orders' || e.key === 'ayele_orders') && e.newValue) {
         try {
           const freshOrders = JSON.parse(e.newValue);
           if (Array.isArray(freshOrders) && freshOrders.length > 0) {
@@ -210,7 +210,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Sync cart state to LocalStorage (purement local, jamais envoyé au serveur)
   useEffect(() => {
-    setStorageItem('ayele_cart', cart);
+    setStorageItem('artfashion_cart', cart);
   }, [cart]);
 
   // Les commandes sont persistées explicitement dans createOrder() (localStorage

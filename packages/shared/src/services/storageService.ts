@@ -16,9 +16,9 @@ const STORAGE_KEYS = {
   CATEGORIES: 'art_fashion_categories_v1',
   FILTERS: 'art_fashion_filters_v1',
   SETTINGS: 'art_fashion_settings_v1',
-  ORDERS: 'ayele_orders',
-  SECTIONS_CONFIG: 'ayele_sections_config',
-  DELIVERY_ZONES: 'ayele_delivery_zones',
+  ORDERS: 'art_fashion_orders_v1',
+  SECTIONS_CONFIG: 'art_fashion_sections_config_v1',
+  DELIVERY_ZONES: 'art_fashion_delivery_zones_v1',
 };
 
 const CHANNEL_NAME = 'art_fashion_store_sync_channel';
@@ -253,7 +253,7 @@ class StorageEngine {
   // --- ORDERS ---
   public getOrders(): any[] {
     if (typeof window === 'undefined') return [];
-    const raw = localStorage.getItem(STORAGE_KEYS.ORDERS);
+    const raw = localStorage.getItem(STORAGE_KEYS.ORDERS) || localStorage.getItem('ayele_orders');
     if (!raw) return [];
     try {
       return JSON.parse(raw);
@@ -272,7 +272,7 @@ class StorageEngine {
   // --- SECTIONS CONFIG ---
   public getSectionsConfig(): SectionsConfig {
     if (typeof window === 'undefined') return INITIAL_SECTIONS_CONFIG;
-    const raw = localStorage.getItem(STORAGE_KEYS.SECTIONS_CONFIG);
+    const raw = localStorage.getItem(STORAGE_KEYS.SECTIONS_CONFIG) || localStorage.getItem('ayele_sections_config');
     if (!raw) return INITIAL_SECTIONS_CONFIG;
     try {
       const parsed = JSON.parse(raw);
@@ -304,7 +304,7 @@ class StorageEngine {
   // --- DELIVERY ZONES ---
   public getDeliveryZones(): DeliveryZone[] {
     if (typeof window === 'undefined') return INITIAL_DELIVERY_ZONES;
-    const raw = localStorage.getItem(STORAGE_KEYS.DELIVERY_ZONES);
+    const raw = localStorage.getItem(STORAGE_KEYS.DELIVERY_ZONES) || localStorage.getItem('ayele_delivery_zones');
     if (!raw) return INITIAL_DELIVERY_ZONES;
     try {
       return JSON.parse(raw);

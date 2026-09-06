@@ -17,7 +17,7 @@ importers:
 
   apps/admin-cms:
     dependencies:
-      '@ayele/shared':
+      '@artfashion/shared':
         specifier: workspace:*
         version: link:../../packages/shared
       '@tailwindcss/vite':
@@ -57,7 +57,7 @@ importers:
 
   apps/storefront:
     dependencies:
-      '@ayele/shared':
+      '@artfashion/shared':
         specifier: workspace:*
         version: link:../../packages/shared
       '@tailwindcss/vite':

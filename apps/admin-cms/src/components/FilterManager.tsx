@@ -10,7 +10,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useAdmin } from '../context/AdminContext';
-import { FilterGroup, FilterOption } from '@ayele/shared';
+import { FilterGroup, FilterOption } from '@artfashion/shared';
 import {
   Sliders,
   Plus,

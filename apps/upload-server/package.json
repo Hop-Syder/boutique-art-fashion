@@ -1,5 +1,5 @@
 {
-  "name": "@ayele/upload-server",
+  "name": "@artfashion/upload-server",
   "version": "1.0.0",
   "description": "ART FASHION — Micro-serveur upload images & persistance données VPS",
   "main": "server.js",

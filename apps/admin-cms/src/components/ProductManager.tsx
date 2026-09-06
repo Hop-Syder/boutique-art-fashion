@@ -10,7 +10,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useAdmin } from '../context/AdminContext';
-import { Product, ProductVariant } from '@ayele/shared';
+import { Product, ProductVariant } from '@artfashion/shared';
 import { ImageUploadInput } from './ImageUploadInput';
 import {
   Plus,
@@ -125,7 +125,7 @@ export const ProductManager: React.FC = () => {
     setGender('Homme');
     setDescription('');
     setImageUrl('');
-    setSku(`AYE-PRD-${Math.floor(100 + Math.random() * 900)}`);
+    setSku(`AF-PRD-${Math.floor(100 + Math.random() * 900)}`);
     setIsNew(true);
     setIsFeatured(true);
     setIsPromo(false);
@@ -201,7 +201,7 @@ export const ProductManager: React.FC = () => {
       is_new: isNew,
       is_featured: isFeatured,
       is_promo: isPromo,
-      sku: sku || `AYE-${productId}`,
+      sku: sku || `AF-${productId}`,
       variants: formattedVariants,
       created_at: editingProduct ? editingProduct.created_at : new Date().toISOString(),
     };

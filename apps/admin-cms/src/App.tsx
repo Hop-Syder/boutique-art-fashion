@@ -7,7 +7,7 @@ import { SectionImageManager } from './components/SectionImageManager';
 import { OrderManager } from './components/OrderManager';
 import { DeliveryZoneManager } from './components/DeliveryZoneManager';
 import { Settings, Save, Check, Download, Upload, RefreshCw } from 'lucide-react';
-import { StoreSettings, storageService } from '@ayele/shared';
+import { StoreSettings, storageService } from '@artfashion/shared';
 import { Tutorial, TUTORIAL_SEEN_KEY } from './components/Tutorial';
 
 const SettingsTab: React.FC = () => {

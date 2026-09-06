@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Product, ProductVariant } from '@ayele/shared';
+import { Product, ProductVariant } from '@artfashion/shared';
 import { useStore } from '../context/StoreContext';
 import { ShoppingBag, Eye, Check, Sparkles, MapPin } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';

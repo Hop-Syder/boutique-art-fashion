@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAdmin } from '../context/AdminContext';
 import { Image as ImageIcon, Save, Check, Plus, Trash2, Sparkles, RefreshCw, Eye, MessageSquare, LayoutTemplate, ShieldCheck, Box, CheckCircle2, PackageCheck } from 'lucide-react';
-import { SectionsConfig, TrustBadge, CarouselSlide, AboutDelivery } from '@ayele/shared';
+import { SectionsConfig, TrustBadge, CarouselSlide, AboutDelivery } from '@artfashion/shared';
 import { ImageUploadInput } from './ImageUploadInput';
 
 export const SectionImageManager: React.FC = () => {

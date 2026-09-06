@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAdmin } from '../context/AdminContext';
-import { DeliveryZone } from '@ayele/shared';
+import { DeliveryZone } from '@artfashion/shared';
 import { Truck, Plus, Edit2, Trash2, Check, MapPin, DollarSign, Clock } from 'lucide-react';
 
 export const DeliveryZoneManager: React.FC = () => {
