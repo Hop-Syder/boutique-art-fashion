@@ -16,6 +16,7 @@ import ftplib
 import urllib.request
 import datetime
 from pathlib import Path
+import argparse
 
 FTP_HOST = os.getenv("OVH_FTP_HOST", "ftp.cluster121.hosting.ovh.net")
 FTP_PORT = int(os.getenv("OVH_FTP_PORT", "21"))
@@ -26,6 +27,11 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 STOREFRONT_DIST = ROOT_DIR / "apps" / "storefront" / "dist"
 ADMIN_DIST = ROOT_DIR / "apps" / "admin-cms" / "dist"
 BACKUP_DIR = ROOT_DIR / ".dexty" / "backups"
+
+# Parse command‑line arguments
+parser = argparse.ArgumentParser(description="Deploy to OVH with optional wipe‑only mode")
+parser.add_argument("--wipe-only", action="store_true", help="Only wipe the /www directory on the remote server and exit")
+ARGS = parser.parse_args()
 
 
 def cd_or_create(ftp: ftplib.FTP, remote_dir: str):
@@ -54,6 +60,45 @@ def backup_remote_db(ftp: ftplib.FTP):
         print(f"💾 Sauvegarde sécurisée de db.json -> {backup_file.name}")
     except Exception as e:
         print(f"⚠️  Note sauvegarde db.json : {e}")
+
+def wipe_remote_www(ftp: ftplib.FTP):
+    """Supprime *tout* le contenu du répertoire /www sur le serveur FTP."""
+    def _delete_path(path: str):
+        try:
+            # Try deleting as file first
+            ftp.delete(path)
+            print(f"  🗑️  Deleted file {path}")
+        except ftplib.error_perm:
+            # Assume it's a directory; list its contents recursively
+            try:
+                ftp.cwd(path)
+                items = ftp.nlst()
+                for item in items:
+                    if item in (".", ".."):
+                        continue
+                    _delete_path(f"{path}/{item}")
+                ftp.cwd("..")
+                ftp.rmd(path)
+                print(f"  🗑️  Deleted directory {path}")
+            except Exception as e:
+                print(f"  ⚠️  Could not delete {path}: {e}")
+    # Ensure we start from root
+    ftp.cwd("/")
+    # List top‑level items under /www
+    try:
+        ftp.cwd("www")
+        items = ftp.nlst()
+        for item in items:
+            if item in (".", ".."):
+                continue
+            _delete_path(f"/www/{item}")
+        # Finally remove the /www directory itself if desired (optional)
+        ftp.cwd("..")
+        # Uncomment the next line to remove the /www folder itself
+        # ftp.rmd("www")
+        print("✅ Remote /www cleared.")
+    except Exception as e:
+        print(f"⚠️  Error while clearing /www: {e}")
 
 
 def upload_single_file(ftp: ftplib.FTP, local_file: Path, target_filename: str):
@@ -123,14 +168,33 @@ def main():
     ftp.login(FTP_USER, FTP_PASS)
     print("✅ Authentification FTP réussie !\n")
 
-    # 1. Sauvegarde automatique de db.json
+    # 1. Sauvegarde automatique de db.json si présent
     backup_remote_db(ftp)
+
+    if ARGS.wipe_only:
+        # Nettoyage complet du répertoire /www uniquement si explicitement demandé
+        wipe_remote_www(ftp)
+        print("✅ Nettoyage terminé. Sortie conforme à l'option --wipe-only.")
+        return
+
+    # 1c. Restauration automatique de db.json si absent sur le serveur distant
+    try:
+        ftp.cwd("/www")
+        remote_files = set(ftp.nlst())
+        if "db.json" not in remote_files:
+            backups = sorted(BACKUP_DIR.glob("db_backup_*.json"), key=lambda f: f.stat().st_mtime, reverse=True)
+            valid_backup = next((b for b in backups if b.stat().st_size > 0), None)
+            if valid_backup:
+                print(f"\n🔄 db.json absent de /www distant — Restauration depuis {valid_backup.name}...")
+                upload_single_file(ftp, valid_backup, "db.json")
+    except Exception as e:
+        print(f"⚠️  Note restauration db.json : {e}")
 
     # 2. Déploiement Storefront (Site Vitrine) -> /www
     print("\n" + "─" * 45)
     print("📦 Déploiement Storefront (/www)")
     print("─" * 45)
-    protected_files = {"_config.php", "db.json", "uploads", ".htaccess"}
+    protected_files = {"_config.php", "db.json", "uploads"}
     sync_folder(ftp, STOREFRONT_DIST, "/www", skip_files=protected_files, clean_old=False)
 
     # 3. Nettoyage spécifique des assets vitrine
