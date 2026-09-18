@@ -51,9 +51,13 @@ const CATEGORY_EMOJI: Record<string, string> = {
   'ceintures-cuir': '👖',
   'petite-maroquinerie-divers': '👛',
 
-  // ── Rétrocompatibilité ──
+  // ── Rétrocompatibilité & Sous-rayons ──
   hauts: '👕',
   bas: '👖',
+  pantalon: '👖',
+  pantalons: '👖',
+  culotte: '🩳',
+  culottes: '🩳',
   'vestes-manteaux': '🧥',
   'costumes-habille': '🤵',
   'sous-vetements': '🩲',

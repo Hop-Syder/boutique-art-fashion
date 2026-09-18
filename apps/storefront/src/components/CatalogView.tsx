@@ -32,6 +32,10 @@ const CATEGORY_ICONS: Record<string, string> = {
   'autre': '🎁',
   'hauts': '👕',
   'bas': '👖',
+  'pantalon': '👖',
+  'pantalons': '👖',
+  'culotte': '🩳',
+  'culottes': '🩳',
   'vestes-manteaux': '🧥',
   'costumes-habille': '🤵',
   'sous-vetements': '🩲',
@@ -41,11 +45,11 @@ const CATEGORY_ICONS: Record<string, string> = {
 };
 
 const LEGACY_CATEGORY_MAP: Record<string, string[]> = {
-  'pret-a-porter-masculin': ['hauts', 'bas', 'costumes-habille', 'vestes-manteaux', 'sous-vetements', 'vetements-de-sport', 'chemises', 'boubous'],
-  'elegance-ceremonie': ['costumes-habille', 'chemises', 'boubous', 'hauts'],
-  'casual-quotidien': ['hauts', 'bas'],
-  'saisonnier-exterieur': ['vestes-manteaux'],
-  'confort-detente': ['sous-vetements', 'vetements-de-sport'],
+  'pret-a-porter-masculin': ['hauts', 'bas', 'pantalon', 'pantalons', 'culotte', 'culottes', 'costumes-habille', 'vestes-manteaux', 'sous-vetements', 'vetements-de-sport', 'chemises', 'boubous'],
+  'elegance-ceremonie': ['costumes-habille', 'chemises', 'boubous', 'hauts', 'pantalon'],
+  'casual-quotidien': ['hauts', 'bas', 'pantalon', 'culotte', 'culottes'],
+  'saisonnier-exterieur': ['vestes-manteaux', 'culotte', 'culottes'],
+  'confort-detente': ['sous-vetements', 'vetements-de-sport', 'culotte'],
   'chaussures-souliers': ['chaussures'],
   'ville-habille': ['chaussures'],
   'accessoires-maroquinerie': ['accessoires'],

@@ -199,6 +199,32 @@ export const INITIAL_CATEGORIES: Category[] = [
     is_active: true,
     allowed_filter_ids: ['taille', 'couleur', 'coupe', 'matiere', 'marque'],
   },
+  {
+    id: 'pantalon',
+    name: 'Pantalons',
+    name_en: 'Trousers & Pants',
+    slug: 'pantalon',
+    image: '',
+    description: 'Pantalons sur-mesure, chinos élégants, pantalons à pinces et jeans haut de gamme.',
+    description_en: 'Tailored trousers, stylish chinos, pleated pants and premium jeans.',
+    parent_id: 'pret-a-porter-masculin',
+    order: 6,
+    is_active: true,
+    allowed_filter_ids: ['taille', 'couleur', 'coupe', 'matiere', 'marque'],
+  },
+  {
+    id: 'culotte',
+    name: 'Culottes & Shorts',
+    name_en: 'Shorts & Bermudas',
+    slug: 'culotte',
+    image: '',
+    description: 'Culottes habillées, bermudas de luxe et shorts d’été raffinés.',
+    description_en: 'Dress shorts, luxury bermudas and refined summer shorts.',
+    parent_id: 'pret-a-porter-masculin',
+    order: 7,
+    is_active: true,
+    allowed_filter_ids: ['taille', 'couleur', 'coupe', 'matiere', 'marque'],
+  },
 
   // ── 2. UNIVERS CHAUSSURES & SOULIERS HOMME ──
   {
@@ -520,6 +546,8 @@ export const TRANSLATIONS_FR: TranslationDictionary = {
   'cat.chaussures': '👞 Chaussures',
   'cat.accessoires': '💼 Accessoires',
   'cat.vetements_de_sport': '🏋️ Vêtements de sport',
+  'cat.pantalon': '👖 Pantalons',
+  'cat.culotte': '🩳 Culottes & Shorts',
   'cat.autre': '🎁 Autre',
 
   // Product Actions
@@ -587,6 +615,8 @@ export const TRANSLATIONS_EN: TranslationDictionary = {
   'cat.chaussures': '👞 Shoes',
   'cat.accessoires': '💼 Accessories',
   'cat.vetements_de_sport': '🏋️ Sportswear',
+  'cat.pantalon': '👖 Trousers & Pants',
+  'cat.culotte': '🩳 Shorts & Bermudas',
   'cat.autre': '🎁 Other',
 
   // Product Actions
