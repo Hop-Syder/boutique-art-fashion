@@ -1,11 +1,16 @@
 import React from 'react';
 import { useAdmin } from '../context/AdminContext';
-import { Package, Sliders, Image as ImageIcon, Truck, Settings } from 'lucide-react';
+import { ShoppingBag, Package, Sliders, Image as ImageIcon, Truck, Settings } from 'lucide-react';
 
 export const MobileBottomNav: React.FC = () => {
-  const { activeTab, setActiveTab } = useAdmin();
+  const { activeTab, setActiveTab, orders } = useAdmin();
+
+  const pendingCount = orders.filter(
+    (o) => o.status === 'NOUVELLE' || o.status === 'CONTACTÉE' || o.status === 'CONFIRMÉE'
+  ).length;
 
   const navItems = [
+    { id: 'orders', icon: ShoppingBag, label: 'Commandes', badge: pendingCount },
     { id: 'products', icon: Package, label: 'Produits' },
     { id: 'filters', icon: Sliders, label: 'Filtres' },
     { id: 'cms-sections', icon: ImageIcon, label: 'Éditeur' },
@@ -28,8 +33,13 @@ export const MobileBottomNav: React.FC = () => {
                 isActive ? 'text-red-600' : 'text-slate-500 hover:text-slate-900'
               }`}
             >
-              <div className={`p-1.5 rounded-full transition-all ${isActive ? 'bg-red-50' : 'bg-transparent'}`}>
+              <div className={`p-1.5 rounded-full transition-all relative ${isActive ? 'bg-red-50' : 'bg-transparent'}`}>
                 <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5px]' : 'stroke-2'}`} />
+                {Boolean(item.badge && item.badge > 0) && (
+                  <span className="absolute -top-0.5 -right-0.5 bg-red-600 text-white font-bold text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
+                    {item.badge}
+                  </span>
+                )}
               </div>
               <span className={`text-[10px] text-center leading-none ${isActive ? 'font-bold' : 'font-medium'}`}>
                 {item.label}

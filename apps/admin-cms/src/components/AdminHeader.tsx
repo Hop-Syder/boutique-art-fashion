@@ -79,6 +79,22 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onOpenHelp }) => {
         {/* Navigation Tabs (Desktop only) */}
         <div className="hidden md:flex items-center space-x-2 overflow-x-auto py-2.5">
           <button
+            onClick={() => setActiveTab('orders')}
+            className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${activeTab === 'orders'
+                ? 'bg-red-700 text-white shadow-md'
+                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+              }`}
+          >
+            <ShoppingBag className="w-4 h-4" />
+            <span>Commandes ({orders.length})</span>
+            {pendingOrdersCount > 0 && (
+              <span className="bg-amber-400 text-slate-900 font-extrabold text-[10px] px-1.5 py-0.5 rounded-full">
+                {pendingOrdersCount}
+              </span>
+            )}
+          </button>
+
+          <button
             onClick={() => setActiveTab('products')}
             className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${activeTab === 'products'
                 ? 'bg-red-700 text-white shadow-md'
