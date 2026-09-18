@@ -186,6 +186,19 @@ export const INITIAL_CATEGORIES: Category[] = [
     is_active: true,
     allowed_filter_ids: ['taille', 'couleur', 'matiere', 'marque'],
   },
+  {
+    id: 'hauts',
+    name: 'Hauts (Chemises, Boubous...)',
+    name_en: 'Tops (Shirts, Boubous...)',
+    slug: 'hauts',
+    image: '',
+    description: 'Chemises de luxe, grands boubous Bazin et hauts masculins raffinés.',
+    description_en: 'Luxury shirts, grand Bazin boubous and refined tops.',
+    parent_id: 'pret-a-porter-masculin',
+    order: 5,
+    is_active: true,
+    allowed_filter_ids: ['taille', 'couleur', 'coupe', 'matiere', 'marque'],
+  },
 
   // ── 2. UNIVERS CHAUSSURES & SOULIERS HOMME ──
   {

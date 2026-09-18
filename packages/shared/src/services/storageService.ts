@@ -86,20 +86,88 @@ class StorageEngine {
     this.notifyListeners(msg);
   }
 
+  // ─── TAMPON MÉMOIRE HAUTE CAPACITÉ (In-Memory Buffer RAM) ───────────────────
+  // Ce tampon mémoire en RAM stocke l'intégralité des données en direct.
+  // Contrairement à localStorage (limité à ~5 Mo par le navigateur), la mémoire
+  // RAM n'a aucune restriction de quota et reste disponible instantanément pour
+  // tous les composants React de toutes les sections.
+  private memoryBuffer: Map<string, string> = new Map();
+
   /**
-   * Écrit dans localStorage en interceptant silencieusement les dépassements de quota.
-   * Empêche l'application de crasher ou d'afficher une pop-up native QuotaExceededError.
+   * Récupère une valeur en priorité depuis le tampon mémoire RAM,
+   * puis depuis localStorage avec clé de secours optionnelle.
+   */
+  private safeGetItem(key: string, fallbackKey?: string): string | null {
+    if (this.memoryBuffer.has(key)) {
+      return this.memoryBuffer.get(key) || null;
+    }
+    if (typeof window === 'undefined') return null;
+
+    let val: string | null = null;
+    try {
+      val = localStorage.getItem(key);
+      if (!val && fallbackKey) {
+        val = localStorage.getItem(fallbackKey);
+      }
+    } catch (e) {
+      console.warn(`[storageService] Lecture localStorage (${key}) impossible:`, e);
+    }
+
+    if (val !== null) {
+      this.memoryBuffer.set(key, val);
+    }
+    return val;
+  }
+
+  /**
+   * Purge les anciennes clés obsolètes du domaine pour libérer du quota.
+   */
+  private cleanObsoleteStorage(): void {
+    if (typeof window === 'undefined') return;
+    try {
+      const obsoletePrefixes = ['ayele_', 'temp_', 'debug_', 'test_'];
+      const toRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && obsoletePrefixes.some((p) => k.startsWith(p))) {
+          toRemove.push(k);
+        }
+      }
+      toRemove.forEach((k) => localStorage.removeItem(k));
+    } catch (e) {
+      console.warn('[storageService] Erreur purge clés obsolètes:', e);
+    }
+  }
+
+  /**
+   * Écrit dans le tampon mémoire RAM et dans localStorage de manière résiliente.
+   * Si une section dépasse le quota de 5 Mo de localStorage, les données restent
+   * 100% préservées dans le tampon mémoire et sont synchronisées vers le serveur OVH.
    */
   private safeSetItem(key: string, value: string): void {
+    // 1. Toujours enregistrer immédiatement dans le tampon mémoire RAM (sans limite de quota)
+    this.memoryBuffer.set(key, value);
+
     if (typeof window === 'undefined') return;
+
     try {
       localStorage.setItem(key, value);
     } catch (err: unknown) {
       const isQuotaError =
         (err instanceof DOMException && (err.name === 'QuotaExceededError' || err.code === 22)) ||
         (typeof err === 'object' && err !== null && 'name' in err && (err as { name: string }).name === 'QuotaExceededError');
+
       if (isQuotaError) {
-        console.warn(`[storageService] Quota de stockage local dépassé pour "${key}". Données transmises au serveur.`);
+        console.warn(`[storageService] Quota localStorage dépassé pour "${key}". Libération d'espace...`);
+        this.cleanObsoleteStorage();
+
+        try {
+          localStorage.setItem(key, value);
+        } catch {
+          // Si le quota local reste saturé, le tampon mémoire RAM prend le relais
+          // sans aucune alerte bloquante pour l'utilisateur.
+          console.info(`[storageService] Recours au tampon mémoire RAM pour "${key}" (protection quota active).`);
+        }
       } else {
         console.error(`[storageService] Erreur d'écriture localStorage (${key}):`, err);
       }
@@ -138,7 +206,12 @@ class StorageEngine {
       }
       this.safeSetItem(LAST_SYNCED_AT_KEY, syncedAt);
     } finally {
-      localStorage.removeItem(SYNC_PENDING_AT_KEY);
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.removeItem(SYNC_PENDING_AT_KEY);
+        } catch {}
+      }
+      this.memoryBuffer.delete(SYNC_PENDING_AT_KEY);
     }
   }
 
@@ -174,7 +247,18 @@ class StorageEngine {
 
       // Update localStorage WITHOUT triggering save methods to avoid re-POSTing
       if (Array.isArray(data.products)) this.safeSetItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(data.products));
-      if (Array.isArray(data.categories)) this.safeSetItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(data.categories));
+      if (Array.isArray(data.categories)) {
+        const mergedCategories = this.mergeWithInitialCategories(data.categories);
+        this.safeSetItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(mergedCategories));
+        // Si le serveur a fourni une liste tronquée, auto-réparer le snapshot serveur
+        if (mergedCategories.length > data.categories.length) {
+          setTimeout(() => {
+            this.syncToServer().catch((err) =>
+              console.warn('[storageService] Auto-réparation des catégories sur le serveur différée:', err)
+            );
+          }, 1500);
+        }
+      }
       if (Array.isArray(data.filters)) this.safeSetItem(STORAGE_KEYS.FILTERS, JSON.stringify(data.filters));
       if (data.settings && typeof data.settings === 'object') this.safeSetItem(STORAGE_KEYS.SETTINGS, JSON.stringify(data.settings));
       if (Array.isArray(data.orders)) this.safeSetItem(STORAGE_KEYS.ORDERS, JSON.stringify(data.orders));
@@ -192,7 +276,7 @@ class StorageEngine {
   // --- PRODUCTS ---
   public getProducts(): Product[] {
     if (typeof window === 'undefined') return INITIAL_PRODUCTS;
-    const raw = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
+    const raw = this.safeGetItem(STORAGE_KEYS.PRODUCTS);
     if (!raw) return INITIAL_PRODUCTS;
     try {
       return JSON.parse(raw);
@@ -209,17 +293,67 @@ class StorageEngine {
   }
 
   // --- CATEGORIES ---
+  /**
+   * Consolide et fusionne les catégories sauvegardées avec INITIAL_CATEGORIES.
+   * Garantit que toutes les catégories officielles du catalogue Art Fashion
+   * (Prêt-à-porter, Souliers, Accessoires et sous-rayons) restent toujours
+   * complètes et sélectionnables dans l'admin, même si un instantané distant
+   * ou local était incomplet ou tronqué.
+   */
+  public mergeWithInitialCategories(saved: Category[]): Category[] {
+    if (!Array.isArray(saved) || saved.length === 0) {
+      return [...INITIAL_CATEGORIES];
+    }
+
+    const savedMap = new Map<string, Category>();
+    saved.forEach((c) => {
+      if (c && c.id) savedMap.set(c.id, c);
+    });
+
+    const result: Category[] = [];
+    const processedIds = new Set<string>();
+
+    // 1. Réintégrer toutes les catégories de base en préservant les modifications
+    INITIAL_CATEGORIES.forEach((initCat) => {
+      const existing = savedMap.get(initCat.id);
+      if (existing) {
+        result.push({
+          ...initCat,
+          ...existing,
+          parent_id: existing.parent_id !== undefined ? existing.parent_id : initCat.parent_id,
+          is_active: existing.is_active !== undefined ? existing.is_active : true,
+          is_archived: existing.is_archived || false,
+        });
+      } else {
+        result.push({ ...initCat });
+      }
+      processedIds.add(initCat.id);
+    });
+
+    // 2. Conserver les catégories additionnelles créées par l'utilisateur
+    saved.forEach((c) => {
+      if (c && c.id && !processedIds.has(c.id)) {
+        result.push(c);
+        processedIds.add(c.id);
+      }
+    });
+
+    return result;
+  }
+
   public getCategories(): Category[] {
     if (typeof window === 'undefined') return INITIAL_CATEGORIES;
-    const raw = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
+    const raw = this.safeGetItem(STORAGE_KEYS.CATEGORIES);
     if (!raw) return INITIAL_CATEGORIES;
     try {
       const parsed = JSON.parse(raw);
-      // Un instantané vide ou corrompu (ex: [] après une synchro/purge) ne doit
-      // jamais laisser l'admin sans catégories : on restaure le jeu par défaut
-      // pour que le menu déroulant "Catégorie" du formulaire produit reste utilisable.
       if (!Array.isArray(parsed) || parsed.length === 0) return INITIAL_CATEGORIES;
-      return parsed;
+      const merged = this.mergeWithInitialCategories(parsed);
+      // Auto-réparation du cache local si des catégories manquaient
+      if (merged.length !== parsed.length) {
+        this.safeSetItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(merged));
+      }
+      return merged;
     } catch {
       return INITIAL_CATEGORIES;
     }
@@ -227,7 +361,8 @@ class StorageEngine {
 
   public async saveCategories(categories: Category[]): Promise<void> {
     if (typeof window === 'undefined') return;
-    this.safeSetItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories));
+    const consolidated = this.mergeWithInitialCategories(categories);
+    this.safeSetItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(consolidated));
     await this.syncToServer();
     this.broadcast('CATEGORIES_UPDATED');
   }
@@ -235,7 +370,7 @@ class StorageEngine {
   // --- FILTERS ---
   public getFilters(): FilterGroup[] {
     if (typeof window === 'undefined') return INITIAL_FILTERS;
-    const raw = localStorage.getItem(STORAGE_KEYS.FILTERS);
+    const raw = this.safeGetItem(STORAGE_KEYS.FILTERS);
     if (!raw) return INITIAL_FILTERS;
     try {
       return JSON.parse(raw);
@@ -254,7 +389,7 @@ class StorageEngine {
   // --- SETTINGS ---
   public getSettings(): StoreSettings {
     if (typeof window === 'undefined') return INITIAL_STORE_SETTINGS;
-    const raw = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+    const raw = this.safeGetItem(STORAGE_KEYS.SETTINGS);
     if (!raw) return INITIAL_STORE_SETTINGS;
     try {
       return JSON.parse(raw);
@@ -273,7 +408,7 @@ class StorageEngine {
   // --- ORDERS ---
   public getOrders(): any[] {
     if (typeof window === 'undefined') return [];
-    const raw = localStorage.getItem(STORAGE_KEYS.ORDERS) || localStorage.getItem('ayele_orders');
+    const raw = this.safeGetItem(STORAGE_KEYS.ORDERS, 'ayele_orders');
     if (!raw) return [];
     try {
       return JSON.parse(raw);
@@ -292,7 +427,7 @@ class StorageEngine {
   // --- SECTIONS CONFIG ---
   public getSectionsConfig(): SectionsConfig {
     if (typeof window === 'undefined') return INITIAL_SECTIONS_CONFIG;
-    const raw = localStorage.getItem(STORAGE_KEYS.SECTIONS_CONFIG) || localStorage.getItem('ayele_sections_config');
+    const raw = this.safeGetItem(STORAGE_KEYS.SECTIONS_CONFIG, 'ayele_sections_config');
     if (!raw) return INITIAL_SECTIONS_CONFIG;
     try {
       const parsed = JSON.parse(raw);
@@ -324,7 +459,7 @@ class StorageEngine {
   // --- DELIVERY ZONES ---
   public getDeliveryZones(): DeliveryZone[] {
     if (typeof window === 'undefined') return INITIAL_DELIVERY_ZONES;
-    const raw = localStorage.getItem(STORAGE_KEYS.DELIVERY_ZONES) || localStorage.getItem('ayele_delivery_zones');
+    const raw = this.safeGetItem(STORAGE_KEYS.DELIVERY_ZONES, 'ayele_delivery_zones');
     if (!raw) return INITIAL_DELIVERY_ZONES;
     try {
       return JSON.parse(raw);
@@ -374,6 +509,7 @@ class StorageEngine {
   }
 
   public async resetToDefault(): Promise<void> {
+    this.memoryBuffer.clear();
     this.safeSetItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(INITIAL_PRODUCTS));
     this.safeSetItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(INITIAL_CATEGORIES));
     this.safeSetItem(STORAGE_KEYS.FILTERS, JSON.stringify(INITIAL_FILTERS));

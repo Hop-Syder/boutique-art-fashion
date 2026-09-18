@@ -91,6 +91,8 @@ export const ProductManager: React.FC = () => {
     return rows;
   }, [categories]);
 
+  const categoryMap = useMemo(() => new Map(categories.map((c) => [c.id, c])), [categories]);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -298,18 +300,30 @@ export const ProductManager: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
-          <label className="text-xs font-semibold text-slate-600">Catégorie :</label>
+          <label className="text-xs font-semibold text-slate-600 shrink-0">Catégorie :</label>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800"
+            className="w-full sm:w-auto p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 cursor-pointer"
           >
-            <option value="all">Toutes les catégories</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
+            <option value="all">Toutes les catégories ({products.length})</option>
+            {categoryTree.map((c) => {
+              const emoji = CATEGORY_EMOJI[c.id] ? `${CATEGORY_EMOJI[c.id]} ` : '';
+              const count = products.filter((p) => {
+                if (p.category_id === c.id) return true;
+                if (c.depth === 0) {
+                  return categories.some((sub) => sub.parent_id === c.id && sub.id === p.category_id);
+                }
+                return false;
+              }).length;
+              return (
+                <option key={c.id} value={c.id}>
+                  {c.depth > 0 ? '  ↳ ' : ''}
+                  {emoji}
+                  {c.name} {count > 0 ? `(${count})` : ''}
+                </option>
+              );
+            })}
           </select>
         </div>
       </div>
@@ -375,20 +389,28 @@ export const ProductManager: React.FC = () => {
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 cursor-pointer"
+                  required
                 >
                   {categoryTree.length === 0 && <option value="">Aucune catégorie disponible</option>}
                   {categoryTree.map((c) => {
                     const emoji = CATEGORY_EMOJI[c.id] ? `${CATEGORY_EMOJI[c.id]} ` : '';
                     return (
                       <option key={c.id} value={c.id}>
-                        {c.depth > 0 ? '  — ' : ''}
+                        {c.depth > 0 ? '  ↳ ' : ''}
                         {emoji}
                         {c.name}
+                        {c.depth === 0 ? ' (Rayon principal)' : ''}
                       </option>
                     );
                   })}
+                  {category && !categoryTree.some((c) => c.id === category) && (
+                    <option value={category}>🏷️ {category} (Catégorie actuelle)</option>
+                  )}
                 </select>
+                <p className="text-[11px] text-slate-400 mt-1">
+                  Sélectionnez le rayon principal ou le sous-rayon pour cette pièce.
+                </p>
               </div>
 
               <div>
@@ -609,10 +631,11 @@ export const ProductManager: React.FC = () => {
                       </div>
                     </td>
                     <td className="p-4 font-medium text-slate-700">
-                      <span className="bg-slate-100 px-2 py-0.5 rounded-md font-semibold text-[11px]">
-                        {p.category_id}
+                      <span className="bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md font-semibold text-[11px] inline-flex items-center gap-1">
+                        <span>{CATEGORY_EMOJI[p.category_id] || '🏷️'}</span>
+                        <span>{categoryMap.get(p.category_id)?.name || p.category_id}</span>
                       </span>
-                      <span className="ml-2 text-slate-500">{p.gender}</span>
+                      <span className="ml-2 text-slate-500 text-xs">{p.gender}</span>
                     </td>
                     <td className="p-4">
                       <span className="font-bold text-slate-900">{formatFCFA(p.price)}</span>
