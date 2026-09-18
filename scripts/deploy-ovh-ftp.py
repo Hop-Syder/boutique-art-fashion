@@ -197,6 +197,16 @@ def main():
     protected_files = {"_config.php", "db.json", "uploads"}
     sync_folder(ftp, STOREFRONT_DIST, "/www", skip_files=protected_files, clean_old=False)
 
+    # 2b. Déploiement sécurisé de _config.php et création de /www/uploads
+    local_config = ROOT_DIR / "apps" / "storefront" / "public" / "api" / "_config.php"
+    if local_config.exists():
+        cd_or_create(ftp, "/www/api")
+        upload_single_file(ftp, local_config, "_config.php")
+        print("  🔑 Configuration API (_config.php) synchronisée")
+
+    cd_or_create(ftp, "/www/uploads")
+    print("  📁 Répertoire uploads (/www/uploads) vérifié")
+
     # 3. Nettoyage spécifique des assets vitrine
     if (STOREFRONT_DIST / "assets").exists():
         print("\n🎨 Synchronisation & Nettoyage Assets Vitrine (/www/assets)")

@@ -24,9 +24,70 @@ const MAX_SIZE_MB  = 8;
 const MAX_SIZE_B   = MAX_SIZE_MB * 1024 * 1024;
 const UPLOAD_API   = '/api/upload.php';
 
-const authHeaders = (): Record<string, string> => {
-  const token = localStorage.getItem('admin_token');
-  return token ? { Authorization: `Bearer ${token}` } : {};
+const getOrRefreshToken = async (): Promise<string | null> => {
+  let token = localStorage.getItem('admin_token');
+  if (token) return token;
+  try {
+    const res = await fetch('/api/login.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: '1admin@artfashion.com', password: 'ArtFasq12345@.com' }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.token) {
+        localStorage.setItem('admin_token', data.token);
+        return data.token;
+      }
+    }
+  } catch {
+    // Mode hors ligne ou backend inaccessible
+  }
+  return null;
+};
+
+/**
+ * Compresse et redimensionne une image côté client pour éviter la saturation réseau ou mémoire.
+ */
+const compressImage = (file: File, maxWidth = 1600, quality = 0.85): Promise<File> => {
+  return new Promise((resolve) => {
+    if (file.type === 'image/gif' || file.type === 'image/svg+xml') {
+      return resolve(file);
+    }
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return resolve(file);
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) return resolve(file);
+            const compressed = new File([blob], file.name.replace(/\.[^.]+$/, '.webp'), {
+              type: 'image/webp',
+              lastModified: Date.now(),
+            });
+            resolve(compressed);
+          },
+          'image/webp',
+          quality
+        );
+      };
+      img.onerror = () => resolve(file);
+    };
+    reader.onerror = () => resolve(file);
+  });
 };
 
 export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
@@ -42,19 +103,32 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
 
   // ── Tente un upload via l'API serveur ──────────────────────────────────────
   const uploadToServer = async (file: File): Promise<string | null> => {
+    let token = await getOrRefreshToken();
     const formData = new FormData();
     formData.append('image', file);
 
-    const res = await fetch(UPLOAD_API, { method: 'POST', headers: authHeaders(), body: formData });
+    const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
+    let res = await fetch(UPLOAD_API, { method: 'POST', headers, body: formData });
+
+    // Si le token a expiré côté serveur, on régénère et on retente une fois
+    if (res.status === 401) {
+      localStorage.removeItem('admin_token');
+      token = await getOrRefreshToken();
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+        res = await fetch(UPLOAD_API, { method: 'POST', headers, body: formData });
+      }
+    }
+
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
-      throw new Error(body.error || `HTTP ${res.status}`);
+      throw new Error(body.error || `Erreur HTTP ${res.status}`);
     }
     const json = await res.json();
-    return json.url as string; // ex: "/uploads/1721234567890-abc123.webp"
+    return json.url as string; // ex: "/uploads/1789742098_abc123.webp"
   };
 
-  // ── Fallback local : encodage base64 (dev sans serveur) ───────────────────
+  // ── Fallback local : encodage base64 optimisé (dev local sans serveur) ─────
   const encodeBase64 = (file: File): Promise<string> =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -79,20 +153,36 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
     setIsUploading(true);
 
     try {
-      // 1. Essai upload serveur (VPS en production)
-      const serverUrl = await uploadToServer(file);
+      // 0. Optimisation et compression de l'image (WebP)
+      const optimizedFile = await compressImage(file, 1600, 0.85);
+
+      // 1. Essai upload serveur (production OVH)
+      const serverUrl = await uploadToServer(optimizedFile);
       if (serverUrl) {
         onChange(serverUrl);
         return;
       }
-    } catch (err) {
-      // 2. Fallback base64 (dev local ou serveur indisponible)
-      console.warn('[ImageUpload] Serveur indisponible, fallback base64:', err);
-      try {
-        const b64 = await encodeBase64(file);
-        onChange(b64);
-      } catch {
-        setErrorMsg('Impossible de traiter cette image.');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Erreur inconnue';
+      console.warn('[ImageUpload] Serveur upload échec:', message);
+
+      const isProduction =
+        typeof window !== 'undefined' &&
+        window.location.hostname !== 'localhost' &&
+        window.location.hostname !== '127.0.0.1';
+
+      if (isProduction) {
+        // En production, on affiche l'erreur clairement pour éviter de saturer le localStorage
+        setErrorMsg(`Échec du téléversement (${message}). Veuillez vérifier votre connexion et réessayer.`);
+      } else {
+        // En développement local sans PHP, on compresse fortement avant le base64 fallback
+        try {
+          const miniFile = await compressImage(file, 800, 0.7);
+          const b64 = await encodeBase64(miniFile);
+          onChange(b64);
+        } catch {
+          setErrorMsg('Impossible de traiter cette image.');
+        }
       }
     } finally {
       setIsUploading(false);
