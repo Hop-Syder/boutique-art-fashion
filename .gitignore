@@ -5,8 +5,8 @@
 
 # ─── Dépendances ──────────────────────────────────────────────────────────────
 node_modules/
-jspm_packages/
 .pnpm-store/
+jspm_packages/
 
 # ─── Build / Dist ─────────────────────────────────────────────────────────────
 dist/
@@ -19,8 +19,11 @@ out/
 
 # ─── Cache Turborepo / Vite / TypeScript ─────────────────────────────────────
 .turbo/
+**/.turbo/
 .vite/
+**/.vite/
 *.tsbuildinfo
+.eslintcache
 
 # ─── Logs ─────────────────────────────────────────────────────────────────────
 logs/
@@ -31,58 +34,70 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# ─── Runtime / Processus ──────────────────────────────────────────────────────
+# ─── Runtime / Processus / Fichiers temporaires ───────────────────────────────
 pids/
 *.pid
 *.seed
 *.pid.lock
+*.tmp
+*.tmp.*
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # ─── Tests / Couverture ───────────────────────────────────────────────────────
 coverage/
 .nyc_output/
 
-# ─── Variables d'environnement (SECRETS) ─────────────────────────────────────
+# ─── Variables d'environnement & Secrets ──────────────────────────────────────
 .env
 .env.*
 !.env.example
+!.env*.example
+*.pem
+*.key
+*.cert
+*.pfx
 
-# ─── Fichiers de configuration sensibles / Déploiement ───────────────────────
-scripts/deploy.mjs
-scripts/deploy-ovh-ftp.py
+# ─── Fichiers de configuration sensibles & Déploiement ────────────────────────
 apps/storefront/public/api/_config.php
+apps/storefront/dist/api/_config.php
 apps/upload-server/.env
+scripts/deploy.mjs
+deploy.mjs
+deploy.env
+deploy-secrets.*
 
-# ─── Base de données locale ───────────────────────────────────────────────────
-db.json
+# ─── Base de données locale & Données SQLite ──────────────────────────────────
+/db.json
+*.sqlite
+*.sqlite3
+*.db
 
-# ─── Archives / Backups auto ──────────────────────────────────────────────────
+# ─── Uploads / Médias générés localement ──────────────────────────────────────
+uploads/
+**/uploads/*
+!**/uploads/.gitkeep
+
+# ─── Archives / Backups automatiques ──────────────────────────────────────────
 *.bak
 *.backup
-.dexty/backups/
 *.sql.gz
+*.tar.gz
+*.zip
 
-# ─── Paquets npm ─────────────────────────────────────────────────────────────
-*.tgz
-.yarn-integrity
-.npm/
-.eslintcache
-.node_repl_history
+# ─── Agents IA & Outils d'assistance ──────────────────────────────────────────
+.dexty/
+.gemini/
+.claude/
+.cursor/
 
-# ─── OS ───────────────────────────────────────────────────────────────────────
-.DS_Store
-.DS_Store?
-._*
-Thumbs.db
-ehthumbs.db
-desktop.ini
-
-# ─── Éditeurs ─────────────────────────────────────────────────────────────────
+# ─── Éditeurs & IDE ───────────────────────────────────────────────────────────
 .idea/
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
 !.vscode/launch.json
+.vscode/sftp.json
+apps/*/.vscode/sftp.json
 *.suo
 *.ntvs*
 *.njsproj
@@ -91,22 +106,20 @@ desktop.ini
 *.swp
 *.swx
 
-# ─── SFTP / Déploiement VS Code ───────────────────────────────────────────────
-.vscode/sftp.json
-apps/*/.vscode/sftp.json
+# ─── Système d'exploitation ───────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+desktop.ini
 
-# ─── Agents IA / Assistants ───────────────────────────────────────────────────
-.dexty/
-.gemini/
-.claude/
-.cursor/
-
-# ─── Docker (fichiers locaux) ─────────────────────────────────────────────────
+# ─── Docker (surcharges locales) ──────────────────────────────────────────────
 docker-compose.override.yml
 .docker/
 
-# ─── Divers ───────────────────────────────────────────────────────────────────
-*.zip
-*.tar.gz
-.storybook/
-storybook-static/
+# ─── Paquets npm locaux ───────────────────────────────────────────────────────
+*.tgz
+.yarn-integrity
+.npm/
+.node_repl_history
