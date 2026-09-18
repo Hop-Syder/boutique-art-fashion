@@ -61,6 +61,38 @@ def backup_remote_db(ftp: ftplib.FTP):
     except Exception as e:
         print(f"⚠️  Note sauvegarde db.json : {e}")
 
+def consolidate_remote_db_categories(ftp: ftplib.FTP):
+    """Vérifie si db.json distant contient toutes les catégories du catalogue officiel, et le consolide si besoin."""
+    try:
+        ftp.cwd("/www")
+        import json, io
+        buffer = io.BytesIO()
+        ftp.retrbinary("RETR db.json", buffer.write)
+        content = buffer.getvalue().decode('utf-8')
+        data = json.loads(content)
+        
+        canonical_backup = BACKUP_DIR / "db_backup_20260918_153733.json"
+        if canonical_backup.exists():
+            with open(canonical_backup, "r", encoding="utf-8") as f:
+                canonical_data = json.load(f)
+            ref_cats = canonical_data.get("categories", [])
+            existing_cats = data.get("categories", [])
+            existing_ids = {c.get("id") for c in existing_cats if isinstance(c, dict)}
+            
+            needs_update = False
+            for rc in ref_cats:
+                if rc.get("id") not in existing_ids:
+                    existing_cats.append(rc)
+                    needs_update = True
+            
+            if needs_update or len(existing_cats) < len(ref_cats):
+                data["categories"] = existing_cats
+                new_payload = json.dumps(data, indent=2, ensure_ascii=False).encode('utf-8')
+                ftp.storbinary("STOR db.json", io.BytesIO(new_payload))
+                print(f"✨ db.json distant consolidé avec succès ({len(existing_cats)} catégories)")
+    except Exception as e:
+        print(f"⚠️  Note consolidation db.json : {e}")
+
 def wipe_remote_www(ftp: ftplib.FTP):
     """Supprime *tout* le contenu du répertoire /www sur le serveur FTP."""
     def _delete_path(path: str):
@@ -189,6 +221,9 @@ def main():
                 upload_single_file(ftp, valid_backup, "db.json")
     except Exception as e:
         print(f"⚠️  Note restauration db.json : {e}")
+
+    # 1d. Consolidation automatique des catégories officielles dans db.json distant
+    consolidate_remote_db_categories(ftp)
 
     # 2. Déploiement Storefront (Site Vitrine) -> /www
     print("\n" + "─" * 45)
